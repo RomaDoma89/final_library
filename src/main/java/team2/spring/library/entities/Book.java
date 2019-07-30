@@ -1,7 +1,6 @@
 package team2.spring.library.entities;
 
 import lombok.*;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,7 +9,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Entity
 @Table(name = "book")
 public class Book {
@@ -22,8 +20,7 @@ public class Book {
   @Column(name = "title", length = 225, unique = true, nullable = false)
   private String title;
 
-  @ToString.Exclude
-  @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(
       name = "book_author",
       joinColumns = {@JoinColumn(name = "id_book", nullable = false)},
@@ -32,5 +29,13 @@ public class Book {
 
   public Book(String title) {
     this.title = title;
+  }
+
+  @Override
+  public String toString() {
+    return "Book{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            '}';
   }
 }

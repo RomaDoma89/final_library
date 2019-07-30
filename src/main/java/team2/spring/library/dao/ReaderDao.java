@@ -46,7 +46,7 @@ public class ReaderDao implements ReaderDaoInfs {
   public List<Reader> findAll() {
     List<Reader> readers = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      readers = session.createQuery("SELECT r FROM reader r", Reader.class).getResultList();
+      readers = session.createQuery("SELECT r FROM Reader r", Reader.class).getResultList();
     }
     return readers;
   }
@@ -78,7 +78,7 @@ public class ReaderDao implements ReaderDaoInfs {
   public List<Reader> findByName(String name) throws NoResultException {
     List<Reader> readers = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      readers = session.createQuery("SELECT r FROM reader r WHERE r.name = ?1")
+      readers = session.createQuery("SELECT r FROM Reader r WHERE r.name = ?1")
               .setParameter(1, name)
               .getResultList();
     }

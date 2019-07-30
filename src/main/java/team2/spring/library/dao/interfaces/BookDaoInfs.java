@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface BookDaoInfs extends Dao<Book> {
 
-  List<Book> findByTitle(String title) throws NoResultException;
+  Book findByTitle(String title) throws NoResultException;
 
   List<Book> findBooksByAuthor(Author author);
 }

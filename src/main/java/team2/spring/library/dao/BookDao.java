@@ -1,5 +1,6 @@
 package team2.spring.library.dao;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class BookDao implements BookDaoInfs {
   public List<Book> findAll() throws NoResultException {
     List<Book> books = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      books = session.createQuery("SELECT b FROM book b", Book.class).getResultList();
+      books = session.createQuery("SELECT b FROM Book b", Book.class).getResultList();
     }
     return books;
   }
@@ -76,13 +77,13 @@ public class BookDao implements BookDaoInfs {
   }
 
   @Override
-  public List<Book> findByTitle(String title) throws NoResultException {
-    List<Book> books = null;
+  public Book findByTitle(String title) throws NoResultException {
+    Book book = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      books = session.createQuery("SELECT b FROM book b WHERE b.title = ?1")
+      book = (Book) session.createQuery("SELECT b FROM Book b WHERE b.title = ?1")
               .setParameter(1, title)
-              .getResultList();
-      return books;
+              .getSingleResult();
+      return book;
     }
   }
 

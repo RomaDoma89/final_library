@@ -47,7 +47,7 @@ public class CopyDao implements CopyDaoInfs {
   public List<Copy> findAll() {
     List<Copy> copies = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      copies = session.createQuery("SELECT c FROM copy c", Copy.class).getResultList();
+      copies = session.createQuery("SELECT c FROM Copy c", Copy.class).getResultList();
     }
     return copies;
   }

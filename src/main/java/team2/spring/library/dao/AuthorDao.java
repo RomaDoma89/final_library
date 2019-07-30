@@ -78,7 +78,7 @@ public class AuthorDao implements AuthorDaoInfs {
   public List<Author> findByName(String name) throws NoResultException {
     List<Author> authors = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      authors = session.createQuery("SELECT a FROM author a WHERE a.name = ?1")
+      authors = session.createQuery("SELECT a FROM Author a WHERE a.name = ?1")
               .setParameter(1, name)
               .getResultList();
       return authors;

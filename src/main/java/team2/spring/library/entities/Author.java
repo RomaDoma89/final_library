@@ -6,11 +6,9 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Entity
 @Table(name = "author")
 public class Author {
@@ -22,8 +20,7 @@ public class Author {
   @Column(name = "name", length = 100, unique = true, nullable = false)
   private String name;
 
-  @ToString.Exclude
-  @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
+  @ManyToMany(mappedBy = "authors")
   private Set<Book> books = new HashSet<>();
 
   public Author(String name) {

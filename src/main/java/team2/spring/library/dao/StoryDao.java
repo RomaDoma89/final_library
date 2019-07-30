@@ -44,7 +44,7 @@ public class StoryDao implements StoryDaoInfs {
   public List<Story> findAll() {
     List<Story> stories = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      stories = session.createQuery("SELECT s FROM story s", Story.class).getResultList();
+      stories = session.createQuery("SELECT s FROM Story s", Story.class).getResultList();
     }
     return stories;
   }
