@@ -3,14 +3,15 @@ package team2.spring.library.dao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
+import team2.spring.library.dao.interfaces.ReaderDaoInfs;
+import team2.spring.library.entities.Book;
+import team2.spring.library.entities.Reader;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.List;
-
-import team2.spring.library.dao.interfaces.ReaderDaoInfs;
-import team2.spring.library.entities.Reader;
 
 @Transactional
 @Repository
@@ -26,29 +27,23 @@ public class ReaderDao implements ReaderDaoInfs {
 
   @Override
   public int insert(Reader reader) {
-    int id = -1;
     try (Session session = sessionFactory.getCurrentSession()) {
-      id = (int) session.save(reader);
+      return (int) session.save(reader);
     }
-    return id;
   }
 
   @Override
   public Reader findById(int id) {
-    Reader reader = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      reader = session.find(Reader.class, id);
+      return session.find(Reader.class, id);
     }
-    return reader;
   }
 
   @Override
   public List<Reader> findAll() {
-    List<Reader> readers = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      readers = session.createQuery("SELECT r FROM Reader r", Reader.class).getResultList();
+      return session.createQuery("SELECT r FROM Reader r", Reader.class).getResultList();
     }
-    return readers;
   }
 
   /**
@@ -59,12 +54,10 @@ public class ReaderDao implements ReaderDaoInfs {
    */
   @Override
   public Reader update(Reader reader) {
-    Reader updated = null;
     try (Session session = sessionFactory.getCurrentSession()) {
       session.update(reader);
-      updated = session.find(Reader.class, reader.getId());
+      return session.find(Reader.class, reader.getId());
     }
-    return updated;
   }
 
   /**
@@ -75,15 +68,11 @@ public class ReaderDao implements ReaderDaoInfs {
    */
   @Override
   public boolean delete(int id) {
-    boolean isDeleted = false;
     try (Session session = sessionFactory.getCurrentSession()) {
       Reader reader = session.find(Reader.class, id);
       session.delete(reader);
-      if (null == session.find(Reader.class, id)) {
-        isDeleted = true;
-      }
+      return (null == session.find(Reader.class, id));
     }
-    return isDeleted;
   }
 
   /**
@@ -95,16 +84,32 @@ public class ReaderDao implements ReaderDaoInfs {
    */
   @Override
   public List<Reader> findByName(String name) throws NoResultException {
-    List<Reader> readers = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      readers = session.createQuery("SELECT r FROM Reader r WHERE r.name = ?1")
-              .setParameter(1, name)
-              .getResultList();
+      return findReaderByName(session, name);
     }
-    return readers;
   }
 
-  public List<Reader> getBlackList() throws NoResultException {
+  public List<Reader> getBlackList() {
     return null;
+  }
+
+  //  3. Переглянути статистику по читачу (які книжки брав, які на руках, скільки часу користується
+  // послугами бібліотеки)
+
+  public List<Book> listOfTookBook(String readerName) {
+    return null;
+  }
+
+  /**
+   * Finds all readers by the given name. Uses an instance of the session.
+   *
+   * @param session - an instance of the current session.
+   * @param name of the reader to find.
+   * @return a list of Reader object with given name.
+   */
+  private List<Reader> findReaderByName(Session session, String name) {
+    return (List<Reader>) session.createQuery("SELECT r FROM Reader r WHERE r.name = ?1")
+            .setParameter(1, name)
+            .getSingleResult();
   }
 }
