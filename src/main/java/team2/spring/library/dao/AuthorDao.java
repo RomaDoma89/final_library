@@ -12,6 +12,7 @@ import java.util.List;
 
 @Transactional
 @Repository
+
 public class AuthorDao implements AuthorDaoInfs {
 
   private static final String TAG = AuthorDao.class.getName();
