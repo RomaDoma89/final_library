@@ -87,5 +87,7 @@ public class Main {
     sessionFactory.getCurrentSession().getTransaction().begin();
     long availableCount = bookDao.isBookAvailable("Effective Java");
     Log.debug(TAG, availableCount + " ");
+
+
   }
 }

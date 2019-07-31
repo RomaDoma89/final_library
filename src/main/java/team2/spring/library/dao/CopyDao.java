@@ -4,7 +4,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import team2.spring.library.dao.interfaces.BookDaoInfs;
 import team2.spring.library.dao.interfaces.CopyDaoInfs;
 import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Copy;
