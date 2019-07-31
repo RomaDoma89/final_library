@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class BookDto {
     private int id;
     private String title;
+    private long available;
 }
