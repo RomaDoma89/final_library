@@ -28,20 +28,16 @@ public class BookDao implements BookDaoInfs {
 
   @Override
   public int insert(Book book) {
-    int id = -1;
     try (Session session = sessionFactory.getCurrentSession()) {
-      id = (int) session.save(book);
+      return (int) session.save(book);
     }
-    return id;
   }
 
   @Override
   public Book findById(int id) {
-    Book book = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      book = session.find(Book.class, id);
+      return session.find(Book.class, id);
     }
-    return book;
   }
 
   @Transactional(propagation = Propagation.NEVER)
@@ -62,12 +58,10 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public Book update(Book book) {
-    Book updated = null;
     try (Session session = sessionFactory.getCurrentSession()) {
       session.update(book);
-      updated = session.find(Book.class, book.getId());
+      return session.find(Book.class, book.getId());
     }
-    return updated;
   }
 
   /**
@@ -78,15 +72,11 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public boolean delete(int id) {
-    boolean isDeleted = false;
     try (Session session = sessionFactory.getCurrentSession()) {
       Book book = session.find(Book.class, id);
       session.delete(book);
-      if (null == session.find(Book.class, id)) {
-        isDeleted = true;
-      }
+      return  (null == session.find(Book.class, id));
     }
-    return isDeleted;
   }
 
   /**
@@ -94,28 +84,23 @@ public class BookDao implements BookDaoInfs {
    *
    * @param title of the book.
    * @return an object of the found book.
-   * @throws NoResultException if there is no book with the given name.
    */
   @Override
-  public Book findByTitle(String title) throws NoResultException {
-    Book book = null;
+  public Book findByTitle(String title) {
     try (Session session = sessionFactory.getCurrentSession()) {
-      book = findBookByTitle(session, title);
-      return book;
+      return findBookByTitle(session, title);
     }
   }
 
   @Override
   public List<Book> findBooksByAuthor(Author author) {
-    List<Book> books = null;
     try (Session session = sessionFactory.getCurrentSession()) {
       TypedQuery<Book> query =
           session.createQuery(
               "SELECT DISTINCT b FROM Author a LEFT JOIN a.books b WHERE a = :author", Book.class);
       query.setParameter("author", author);
-      books = query.getResultList();
+      return query.getResultList();
     }
-    return books;
   }
 
   /**
@@ -126,7 +111,6 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public long isBookAvailable(String title) {
-    long availableCount = 0;
     try (Session session = sessionFactory.getCurrentSession()) {
       Book book = findBookByTitle(session, title);
       TypedQuery<Long> query =
@@ -135,9 +119,8 @@ public class BookDao implements BookDaoInfs {
                   + "JOIN c.book b WHERE b = :book AND c.available =: available");
       query.setParameter("book", book);
       query.setParameter("available", true);
-      availableCount = query.getSingleResult();
+      return query.getSingleResult();
     }
-    return availableCount;
   }
 
   /**
@@ -145,12 +128,10 @@ public class BookDao implements BookDaoInfs {
    *
    * @param session - an instance of the current session.
    * @param title of book to find.
-   * @return the found book object.
+   * @return the found book.
    */
   private Book findBookByTitle(Session session, String title) {
-    return (Book)
-        session
-            .createQuery("SELECT b FROM Book b WHERE b.title = ?1")
+    return (Book) session.createQuery("SELECT b FROM Book b WHERE b.title = ?1")
             .setParameter(1, title)
             .getSingleResult();
   }

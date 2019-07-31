@@ -4,14 +4,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import team2.spring.library.dao.interfaces.CopyDaoInfs;
+import team2.spring.library.entities.Book;
+import team2.spring.library.entities.Copy;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.List;
-
-import team2.spring.library.dao.interfaces.CopyDaoInfs;
-import team2.spring.library.entities.Book;
-import team2.spring.library.entities.Copy;
 
 @Transactional
 @Repository
@@ -27,29 +26,23 @@ public class CopyDao implements CopyDaoInfs {
 
   @Override
   public int insert(Copy copy) {
-    int id = -1;
     try (Session session = sessionFactory.getCurrentSession()) {
-      id = (int) session.save(copy);
+      return (int) session.save(copy);
     }
-    return id;
   }
 
   @Override
   public Copy findById(int id) {
-    Copy copy = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      copy = session.find(Copy.class, id);
+      return session.find(Copy.class, id);
     }
-    return copy;
   }
 
   @Override
   public List<Copy> findAll() {
-    List<Copy> copies = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      copies = session.createQuery("SELECT c FROM Copy c", Copy.class).getResultList();
+      return session.createQuery("SELECT c FROM Copy c", Copy.class).getResultList();
     }
-    return copies;
   }
 
   /**
@@ -60,12 +53,10 @@ public class CopyDao implements CopyDaoInfs {
    */
   @Override
   public Copy update(Copy copy) {
-    Copy updated = null;
     try (Session session = sessionFactory.getCurrentSession()) {
       session.update(copy);
-      updated = session.find(Copy.class, copy.getId());
+      return session.find(Copy.class, copy.getId());
     }
-    return updated;
   }
 
   /**
@@ -76,15 +67,11 @@ public class CopyDao implements CopyDaoInfs {
    */
   @Override
   public boolean delete(int id) {
-    boolean isDeleted = false;
     try (Session session = sessionFactory.getCurrentSession()) {
       Copy copy = session.find(Copy.class, id);
       session.delete(copy);
-      if (null == session.find(Copy.class, id)) {
-        isDeleted = true;
-      }
+      return (null == session.find(Copy.class, id));
     }
-    return isDeleted;
   }
 
   @Override
