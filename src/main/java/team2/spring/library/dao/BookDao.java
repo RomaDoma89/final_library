@@ -1,12 +1,12 @@
 package team2.spring.library.dao;
 
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -80,15 +80,27 @@ public class BookDao implements BookDaoInfs {
   public Book findByTitle(String title) throws NoResultException {
     Book book = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      book = (Book) session.createQuery("SELECT b FROM Book b WHERE b.title = ?1")
-              .setParameter(1, title)
-              .getSingleResult();
+      book =
+          (Book)
+              session
+                  .createQuery("SELECT b FROM Book b WHERE b.title = ?1")
+                  .setParameter(1, title)
+                  .getSingleResult();
       return book;
     }
   }
 
   @Override
   public List<Book> findBooksByAuthor(Author author) {
-    return null;
+    List<Book> books = null;
+    try (Session session = sessionFactory.getCurrentSession()) {
+
+      TypedQuery<Book> query =
+          session.createQuery(
+              "SELECT DISTINCT b FROM Author a LEFT JOIN a.books b WHERE a = :author", Book.class);
+      query.setParameter("author", author);
+      books = query.getResultList();
+    }
+    return books;
   }
 }

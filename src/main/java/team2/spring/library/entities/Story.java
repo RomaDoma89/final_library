@@ -9,7 +9,6 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Entity
 @Table(name = "reader_story")
 public class Story {
@@ -44,5 +43,14 @@ public class Story {
     this.book = book;
     this.copy = copy;
     this.timeTake = timeTake;
+  }
+
+  @Override
+  public String toString() {
+    return "Story{" +
+            "id=" + id +
+            ", timeTake=" + timeTake +
+            ", timeReturn=" + timeReturn +
+            '}';
   }
 }
