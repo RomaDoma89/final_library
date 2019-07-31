@@ -75,13 +75,13 @@ public class AuthorDao implements AuthorDaoInfs {
   }
 
   @Override
-  public List<Author> findByName(String name) throws NoResultException {
-    List<Author> authors = null;
+  public Author findByName(String name) throws NoResultException {
+    Author author = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      authors = session.createQuery("SELECT a FROM Author a WHERE a.name = ?1")
+      author = (Author) session.createQuery("SELECT a FROM Author a WHERE a.name = ?1")
               .setParameter(1, name)
-              .getResultList();
-      return authors;
+              .getSingleResult();
+      return author;
     }
   }
 }
