@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import team2.spring.library.dao.interfaces.AuthorDaoInfs;
 import team2.spring.library.entities.Author;
 
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -25,29 +24,23 @@ public class AuthorDao implements AuthorDaoInfs {
 
   @Override
   public int insert(Author author) {
-    int id = -1;
     try (Session session = sessionFactory.getCurrentSession()) {
-      id = (int) session.save(author);
+      return (int) session.save(author);
     }
-    return id;
   }
 
   @Override
   public Author findById(int id) {
-    Author author = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      author = session.find(Author.class, id);
+      return session.find(Author.class, id);
     }
-    return author;
   }
 
   @Override
-  public List<Author> findAll() throws NoResultException {
-    List<Author> authors = null;
+  public List<Author> findAll() {
     try (Session session = sessionFactory.getCurrentSession()) {
-      authors = session.createQuery("SELECT a FROM Author a", Author.class).getResultList();
+      return session.createQuery("SELECT a FROM Author a", Author.class).getResultList();
     }
-    return authors;
   }
 
   /**
@@ -58,12 +51,10 @@ public class AuthorDao implements AuthorDaoInfs {
    */
   @Override
   public Author update(Author author) {
-    Author updated = null;
     try (Session session = sessionFactory.getCurrentSession()) {
       session.update(author);
-      updated = session.find(Author.class, author.getId());
+      return session.find(Author.class, author.getId());
     }
-    return updated;
   }
 
   /**
@@ -74,15 +65,11 @@ public class AuthorDao implements AuthorDaoInfs {
    */
   @Override
   public boolean delete(int id) {
-    boolean isDeleted = false;
     try (Session session = sessionFactory.getCurrentSession()) {
       Author author = session.find(Author.class, id);
       session.delete(author);
-      if (null == session.find(Author.class, id)) {
-        isDeleted = true;
-      }
+      return (null == session.find(Author.class, id));
     }
-    return isDeleted;
   }
 
   /**
@@ -90,16 +77,24 @@ public class AuthorDao implements AuthorDaoInfs {
    *
    * @param name of the author.
    * @return an object of the found author.
-   * @throws NoResultException if there is no author with the given name.
    */
   @Override
-  public Author findByName(String name) throws NoResultException {
-    Author author = null;
+  public Author findByName(String name) {
     try (Session session = sessionFactory.getCurrentSession()) {
-      author = (Author) session.createQuery("SELECT a FROM Author a WHERE a.name = ?1")
-                  .setParameter(1, name)
-                  .getSingleResult();
-      return author;
+      return findAuthorByName(session, name);
     }
+  }
+
+  /**
+   * Finds an author by the given name. Uses an instance of the session.
+   *
+   * @param session - an instance of the current session.
+   * @param name of author to find.
+   * @return the found author.
+   */
+  private Author findAuthorByName(Session session, String name) {
+    return (Author) session.createQuery("SELECT a FROM Author a WHERE a.name = ?1")
+            .setParameter(1, name)
+            .getSingleResult();
   }
 }

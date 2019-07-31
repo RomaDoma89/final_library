@@ -24,29 +24,23 @@ public class StoryDao implements StoryDaoInfs {
 
   @Override
   public int insert(Story story) {
-    int id = -1;
     try (Session session = sessionFactory.getCurrentSession()) {
-      id = (int) session.save(story);
+      return (int) session.save(story);
     }
-    return id;
   }
 
   @Override
   public Story findById(int id) {
-    Story story = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      story = session.find(Story.class, id);
+      return session.find(Story.class, id);
     }
-    return story;
   }
 
   @Override
   public List<Story> findAll() {
-    List<Story> stories = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      stories = session.createQuery("SELECT s FROM Story s", Story.class).getResultList();
+      return session.createQuery("SELECT s FROM Story s", Story.class).getResultList();
     }
-    return stories;
   }
 
   /**
@@ -57,12 +51,10 @@ public class StoryDao implements StoryDaoInfs {
    */
   @Override
   public Story update(Story story) {
-    Story updated = null;
     try (Session session = sessionFactory.getCurrentSession()) {
       session.update(story);
-      updated = session.find(Story.class, story.getId());
+      return session.find(Story.class, story.getId());
     }
-    return updated;
   }
 
   /**
@@ -73,14 +65,10 @@ public class StoryDao implements StoryDaoInfs {
    */
   @Override
   public boolean delete(int id) {
-    boolean isDeleted = false;
     try (Session session = sessionFactory.getCurrentSession()) {
       Story story = session.find(Story.class, id);
       session.delete(story);
-      if (null == session.find(Story.class, id)) {
-        isDeleted = true;
-      }
+      return (null == session.find(Story.class, id));
     }
-    return isDeleted;
   }
 }
