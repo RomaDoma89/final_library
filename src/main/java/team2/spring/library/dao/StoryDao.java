@@ -31,11 +31,9 @@ public class StoryDao implements StoryDaoInfs {
 
   @Override
   public Story findById(int id) {
-    Story story = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      story = session.find(Story.class, id);
+      return session.find(Story.class, id);
     }
-    return story;
   }
 
   @Override

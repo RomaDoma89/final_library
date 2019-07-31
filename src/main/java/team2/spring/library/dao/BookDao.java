@@ -28,20 +28,16 @@ public class BookDao implements BookDaoInfs {
 
   @Override
   public int insert(Book book) {
-    int id = -1;
     try (Session session = sessionFactory.getCurrentSession()) {
-      id = (int) session.save(book);
+      return (int) session.save(book);
     }
-    return id;
   }
 
   @Override
   public Book findById(int id) {
-    Book book = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      book = session.find(Book.class, id);
+      return session.find(Book.class, id);
     }
-    return book;
   }
 
   @Transactional(propagation = Propagation.NEVER)
