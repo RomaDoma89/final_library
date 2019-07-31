@@ -6,7 +6,8 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -25,5 +26,10 @@ public class Author {
 
   public Author(String name) {
     this.name = name;
+  }
+
+  @Override
+  public String toString() {
+    return "Author{" + "id=" + id + ", name='" + name + '\'' + '}';
   }
 }

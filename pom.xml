@@ -7,6 +7,7 @@
     <groupId>library</groupId>
     <artifactId>team2.spring.library</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <name>team2.spring.library</name>
 

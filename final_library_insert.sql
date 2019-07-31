@@ -7,6 +7,7 @@ INSERT INTO book (id, title) values (6, 'The Tao of Programming');
 INSERT INTO book (id, title) values (7, 'Effective Java');
 INSERT INTO book (id, title) values (8, 'The Art of Computer Programming');
 INSERT INTO book (id, title) values (9, 'Pro Spring 5: An In-Depth Guide to the Spring Framework and Its Tools 5th ed. Edition');
+INSERT INTO book (id, title) values (10, 'Java Concurrency in Practice');
 
 
 INSERT INTO author (id, name) values (1, 'Steve McConnell');
@@ -39,6 +40,7 @@ INSERT INTO book_author (id_book, id_author) values (9, 11);
 INSERT INTO book_author (id_book, id_author) values (9, 12);
 INSERT INTO book_author (id_book, id_author) values (9, 13);
 INSERT INTO book_author (id_book, id_author) values (9, 14);
+INSERT INTO book_author (id_book, id_author) values (10, 9);
 
 
 INSERT INTO book_copy (book, id, available) values (1, 1, true);
@@ -67,6 +69,8 @@ INSERT INTO book_copy (book, id, available) values (8, 23, true);
 INSERT INTO book_copy (book, id, available) values (9, 24, false);
 INSERT INTO book_copy (book, id, available) values (9, 25, false);
 INSERT INTO book_copy (book, id, available) values (9, 26, false);
+INSERT INTO book_copy (book, id, available) values (10, 27, true);
+INSERT INTO book_copy (book, id, available) values (10, 28, true);
 
 
 INSERT INTO reader (id, name, birthday) values (1, 'Jack Edwards', '1981-04-21');

@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Entity
 @Table(name = "book_copy")
 public class Copy {
@@ -27,5 +26,13 @@ public class Copy {
   public Copy(Book book, boolean available) {
     this.book = book;
     this.available = available;
+  }
+
+  @Override
+  public String toString() {
+    return "Copy{" +
+            "id=" + id +
+            ", available=" + available +
+            '}';
   }
 }

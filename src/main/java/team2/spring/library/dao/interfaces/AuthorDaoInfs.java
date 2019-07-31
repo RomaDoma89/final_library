@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface AuthorDaoInfs extends Dao<Author> {
 
-    List<Author> findByName(String name) throws NoResultException;
+    Author findByName(String name) throws NoResultException;
 }
