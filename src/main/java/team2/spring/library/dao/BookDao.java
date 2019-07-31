@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import team2.spring.library.dao.interfaces.BookDaoInfs;
 import team2.spring.library.entities.Author;
 import team2.spring.library.entities.Book;
+import team2.spring.library.entities.Copy;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -76,7 +77,7 @@ public class BookDao implements BookDaoInfs {
     try (Session session = sessionFactory.getCurrentSession()) {
       Book book = session.find(Book.class, id);
       session.delete(book);
-      return  (null == session.find(Book.class, id));
+      return (null == session.find(Book.class, id));
     }
   }
 
@@ -133,8 +134,23 @@ public class BookDao implements BookDaoInfs {
    * @return the found book.
    */
   private Book findBookByTitle(Session session, String title) {
-    return (Book) session.createQuery("SELECT b FROM Book b WHERE b.title = ?1")
+    return (Book)
+        session
+            .createQuery("SELECT b FROM Book b WHERE b.title = ?1")
             .setParameter(1, title)
             .getSingleResult();
+  }
+
+  /**
+   * @param title
+   * @return List<Copy>
+   */
+  public List<Copy> getCopiesInfo(String title) {
+    try (Session session = sessionFactory.getCurrentSession()) {
+      Book book = findBookByTitle(session,title);
+      return session
+          .createQuery("SELECT c FROM Copy c WHERE c.book = book ")
+          .getResultList();
+    }
   }
 }
