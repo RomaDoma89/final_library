@@ -51,6 +51,12 @@ public class ReaderDao implements ReaderDaoInfs {
     return readers;
   }
 
+  /**
+   * Updates an entity in database.
+   *
+   * @param reader with updated fields.
+   * @return updated entity.
+   */
   @Override
   public Reader update(Reader reader) {
     Reader updated = null;
@@ -61,6 +67,12 @@ public class ReaderDao implements ReaderDaoInfs {
     return updated;
   }
 
+  /**
+   * Deletes an entity with given <code>id</code> from database.
+   *
+   * @param id of the entity to delete.
+   * @return true if the entity was successfully deleted.
+   */
   @Override
   public boolean delete(int id) {
     boolean isDeleted = false;
@@ -74,6 +86,13 @@ public class ReaderDao implements ReaderDaoInfs {
     return isDeleted;
   }
 
+  /**
+   * Finds a reader by given name.
+   *
+   * @param name of the reader.
+   * @return an object of the found reader.
+   * @throws NoResultException if there is no reader with the given name.
+   */
   @Override
   public List<Reader> findByName(String name) throws NoResultException {
     List<Reader> readers = null;
