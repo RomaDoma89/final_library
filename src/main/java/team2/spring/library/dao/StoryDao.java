@@ -49,6 +49,12 @@ public class StoryDao implements StoryDaoInfs {
     return stories;
   }
 
+  /**
+   * Updates an entity in database.
+   *
+   * @param story with updated fields.
+   * @return updated entity.
+   */
   @Override
   public Story update(Story story) {
     Story updated = null;
@@ -59,6 +65,12 @@ public class StoryDao implements StoryDaoInfs {
     return updated;
   }
 
+  /**
+   * Deletes an entity with given <code>id</code> from database.
+   *
+   * @param id of the entity to delete.
+   * @return true if the entity was successfully deleted.
+   */
   @Override
   public boolean delete(int id) {
     boolean isDeleted = false;
