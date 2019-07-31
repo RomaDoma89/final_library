@@ -40,6 +40,7 @@ public class AuthorDao implements AuthorDaoInfs {
   @Override
   public List<Author> findAll() {
     try (Session session = sessionFactory.getCurrentSession()) {
+//      session.getTransaction().begin();
       return session.createQuery("SELECT a FROM Author a", Author.class).getResultList();
     }
   }

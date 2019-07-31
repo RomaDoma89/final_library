@@ -1,6 +1,7 @@
 package team2.spring.library.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +16,8 @@ import javax.validation.Valid;
  * Controller witch operate all request of book */
 
 @Controller
-@AllArgsConstructor
 public class BookController {
-
+@Autowired
  private BookService bookService;
   /**
    * @param model prepare dto for Jsp
