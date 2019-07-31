@@ -6,6 +6,7 @@ import team2.spring.library.dao.*;
 import team2.spring.library.dao.interfaces.*;
 import team2.spring.library.entities.*;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class Main {
@@ -20,7 +21,8 @@ public class Main {
             .addAnnotatedClass(team2.spring.library.entities.Reader.class)
             .addAnnotatedClass(team2.spring.library.entities.Story.class)
             .setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver")
-            .setProperty("hibernate.connection.url",
+            .setProperty(
+                "hibernate.connection.url",
                 "jdbc:mysql://localhost:3306/library_spring?createDatabaseIfNotExist=true&serverTimezone=UTC")
             .setProperty("hibernate.current_session_context_class", "thread")
             .setProperty("hibernate.connection.username", "root")
@@ -66,7 +68,6 @@ public class Main {
     List<Story> stories = storyDao.findAll();
     Log.debug(TAG, stories.toString());
 
-
     // book by title
     sessionFactory.getCurrentSession().getTransaction().begin();
     Book book = bookDao.findByTitle("Effective Java");
@@ -85,6 +86,8 @@ public class Main {
     // is book available
     sessionFactory.getCurrentSession().getTransaction().begin();
     long availableCount = bookDao.isBookAvailable("Effective Java");
-    Log.debug(TAG, availableCount+" ");
+    Log.debug(TAG, availableCount + " ");
+
+
   }
 }
