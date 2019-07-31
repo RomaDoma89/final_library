@@ -11,8 +11,13 @@ import team2.spring.library.entities.Reader;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
+import team2.spring.library.dao.interfaces.ReaderDaoInfs;
+import team2.spring.library.entities.Reader;
+
+/** */
 @Transactional
 @Repository
 public class ReaderDao implements ReaderDaoInfs {
@@ -80,17 +85,21 @@ public class ReaderDao implements ReaderDaoInfs {
    *
    * @param name of the reader.
    * @return an object of the found reader.
-   * @throws NoResultException if there is no reader with the given name.
    */
   @Override
-  public List<Reader> findByName(String name) throws NoResultException {
+  public List<Reader> findByName(String name) {
     try (Session session = sessionFactory.getCurrentSession()) {
       return findReaderByName(session, name);
     }
   }
 
+  /** @return List<Reader> */
   public List<Reader> getBlackList() {
-    return null;
+    try (Session session = sessionFactory.getCurrentSession()) {
+      return session
+          .createQuery("SELECT s.reader FROM Story s WHERE s.timeReturn IS NULL ")
+          .getResultList();
+    }
   }
 
   //  3. Переглянути статистику по читачу (які книжки брав, які на руках, скільки часу користується
@@ -108,7 +117,9 @@ public class ReaderDao implements ReaderDaoInfs {
    * @return a list of Reader object with given name.
    */
   private List<Reader> findReaderByName(Session session, String name) {
-    return (List<Reader>) session.createQuery("SELECT r FROM Reader r WHERE r.name = ?1")
+    return (List<Reader>)
+        session
+            .createQuery("SELECT r FROM Reader r WHERE r.name = ?1")
             .setParameter(1, name)
             .getSingleResult();
   }
