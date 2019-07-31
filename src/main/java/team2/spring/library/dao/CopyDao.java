@@ -52,6 +52,12 @@ public class CopyDao implements CopyDaoInfs {
     return copies;
   }
 
+  /**
+   * Updates an entity in database.
+   *
+   * @param copy with updated fields.
+   * @return updated entity.
+   */
   @Override
   public Copy update(Copy copy) {
     Copy updated = null;
@@ -62,6 +68,12 @@ public class CopyDao implements CopyDaoInfs {
     return updated;
   }
 
+  /**
+   * Deletes an entity with given <code>id</code> from database.
+   *
+   * @param id of the entity to delete.
+   * @return true if the entity was successfully deleted.
+   */
   @Override
   public boolean delete(int id) {
     boolean isDeleted = false;

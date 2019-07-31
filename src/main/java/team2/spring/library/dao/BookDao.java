@@ -4,15 +4,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
-import java.util.List;
-
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import team2.spring.library.dao.interfaces.BookDaoInfs;
 import team2.spring.library.entities.Author;
 import team2.spring.library.entities.Book;
+
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Transactional
 @Repository
@@ -44,6 +44,7 @@ public class BookDao implements BookDaoInfs {
     return book;
   }
 
+  @Transactional(propagation = Propagation.NEVER)
   @Override
   public List<Book> findAll() throws NoResultException {
     List<Book> books = null;
@@ -53,6 +54,12 @@ public class BookDao implements BookDaoInfs {
     return books;
   }
 
+  /**
+   * Updates an entity in database.
+   *
+   * @param book with updated fields.
+   * @return updated entity.
+   */
   @Override
   public Book update(Book book) {
     Book updated = null;
@@ -63,6 +70,12 @@ public class BookDao implements BookDaoInfs {
     return updated;
   }
 
+  /**
+   * Deletes an entity with given <code>id</code> from database.
+   *
+   * @param id of the entity to delete.
+   * @return true if the entity was successfully deleted.
+   */
   @Override
   public boolean delete(int id) {
     boolean isDeleted = false;
@@ -76,16 +89,18 @@ public class BookDao implements BookDaoInfs {
     return isDeleted;
   }
 
+  /**
+   * Finds a book by given title.
+   *
+   * @param title of the book.
+   * @return an object of the found book.
+   * @throws NoResultException if there is no book with the given name.
+   */
   @Override
   public Book findByTitle(String title) throws NoResultException {
     Book book = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-      book =
-          (Book)
-              session
-                  .createQuery("SELECT b FROM Book b WHERE b.title = ?1")
-                  .setParameter(1, title)
-                  .getSingleResult();
+      book = findBookByTitle(session, title);
       return book;
     }
   }
@@ -94,7 +109,6 @@ public class BookDao implements BookDaoInfs {
   public List<Book> findBooksByAuthor(Author author) {
     List<Book> books = null;
     try (Session session = sessionFactory.getCurrentSession()) {
-
       TypedQuery<Book> query =
           session.createQuery(
               "SELECT DISTINCT b FROM Author a LEFT JOIN a.books b WHERE a = :author", Book.class);
@@ -102,5 +116,42 @@ public class BookDao implements BookDaoInfs {
       books = query.getResultList();
     }
     return books;
+  }
+
+  /**
+   * Checks if a book is available.
+   *
+   * @param title of book to find.
+   * @return a count of the available book copies
+   */
+  @Override
+  public long isBookAvailable(String title) {
+    long availableCount = 0;
+    try (Session session = sessionFactory.getCurrentSession()) {
+      Book book = findBookByTitle(session, title);
+      TypedQuery<Long> query =
+          session.createQuery(
+              "SELECT count(c) FROM Copy c "
+                  + "JOIN c.book b WHERE b = :book AND c.available =: available");
+      query.setParameter("book", book);
+      query.setParameter("available", true);
+      availableCount = query.getSingleResult();
+    }
+    return availableCount;
+  }
+
+  /**
+   * Finds a book by the given title. Uses an instance of the session.
+   *
+   * @param session - an instance of the current session.
+   * @param title of book to find.
+   * @return the found book object.
+   */
+  private Book findBookByTitle(Session session, String title) {
+    return (Book)
+        session
+            .createQuery("SELECT b FROM Book b WHERE b.title = ?1")
+            .setParameter(1, title)
+            .getSingleResult();
   }
 }

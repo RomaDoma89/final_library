@@ -6,10 +6,8 @@ import team2.spring.library.dao.*;
 import team2.spring.library.dao.interfaces.*;
 import team2.spring.library.entities.*;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
-@Transactional
 public class Main {
   private static String TAG = "Main";
 
@@ -36,9 +34,6 @@ public class Main {
     SessionFactory sessionFactory = cfg.buildSessionFactory();
 
     Log.debug(TAG, "Create spring_library scheme!");
-
-
-
 
     BookDaoInfs bookDao = new BookDao(sessionFactory);
     AuthorDaoInfs authorDao = new AuthorDao(sessionFactory);
@@ -86,5 +81,10 @@ public class Main {
     sessionFactory.getCurrentSession().getTransaction().begin();
     List<Book> bookList = bookDao.findBooksByAuthor(authors.get(0));
     Log.debug(TAG, bookList.toString());
+
+    // is book available
+    sessionFactory.getCurrentSession().getTransaction().begin();
+    long availableCount = bookDao.isBookAvailable("Effective Java");
+    Log.debug(TAG, availableCount+" ");
   }
 }
