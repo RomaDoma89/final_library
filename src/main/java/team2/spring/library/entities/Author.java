@@ -21,7 +21,7 @@ public class Author {
   @Column(name = "name", length = 100, unique = true, nullable = false)
   private String name;
 
-  @ManyToMany(mappedBy = "authors")
+  @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
   private Set<Book> books = new HashSet<>();
 
   public Author(String name) {
