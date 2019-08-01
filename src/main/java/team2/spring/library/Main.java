@@ -96,7 +96,7 @@ public class Main {
     List<Reader> bList = readerDao.getBlackList();
     Log.debug(TAG, bList.toString());
 
-    //average age by book
+    // average age by book
     double value = bookDao.getReaderAvg("Hooked on Java");
     Log.debug(TAG, Double.toString(value));
   }

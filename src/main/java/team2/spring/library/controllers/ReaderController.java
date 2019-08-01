@@ -25,15 +25,26 @@ public class ReaderController {
     model.addAttribute("readerBlackList", readerService.getBlackList());
     return "getBlackList";
   }
-  
+
+  /**
+   * @param model
+   * @return
+   */
   @GetMapping("/userStatisticForm")
-    public String findUserStatisticForm(Model model){
+  public String findUserStatisticForm(Model model) {
         model.addAttribute("readerStatisticDto", new ReaderStatisticDto());
         return "userStatisticForm";
     }
 
-    @PostMapping("/userStatistic")
-    public String getUserStatistic (@Valid@ModelAttribute("readerStatisticDto")ReaderStatisticDto readerStatisticDto,Model model){
+  /**
+   * @param readerStatisticDto
+   * @param model
+   * @return
+   */
+  @PostMapping("/userStatistic")
+  public String getUserStatistic(
+      @Valid @ModelAttribute("readerStatisticDto") ReaderStatisticDto readerStatisticDto,
+      Model model) {
        model.addAttribute("readerStatisticDto",readerService.getUserStatistic(readerStatisticDto));
         return "userStatistic";
     }
