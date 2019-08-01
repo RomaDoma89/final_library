@@ -82,6 +82,7 @@ public class BookDao implements BookDaoInfs {
    * @return an object of the found book.
    */
   @Override
+  //todo two method find book by title
   public Book findByTitle(String title) {
     try (Session session = sessionFactory.openSession()) {
       return findBookByTitle(session, title);
