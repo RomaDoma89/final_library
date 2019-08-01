@@ -13,21 +13,21 @@ import java.util.List;
 @AllArgsConstructor
 public class BookServiceImpl implements BookService {
 
-  private BookDaoInfs bookDao;
+  private BookDaoInfs bookDaoInfs;
 
   @Override
   public BookDto isBookAvailable(BookDto bookDto) {
-    bookDto.setAvailable(bookDao.isBookAvailable(bookDto.getTitle()));
+    bookDto.setAvailable(bookDaoInfs.isBookAvailable(bookDto.getTitle()));
     return bookDto;
   }
 
   @Override
   public List<Book> findAll() {
-    return bookDao.findAll();
+    return bookDaoInfs.findAll();
   }
 
   @Override
   public List<Book> findBooksByAuthor(Author author) {
-    return bookDao.findBooksByAuthor(author);
+    return bookDaoInfs.findBooksByAuthor(author);
   }
 }

@@ -116,7 +116,6 @@ public class BookDao implements BookDaoInfs {
   @Override
   public long isBookAvailable(String title) {
     try (Session session = sessionFactory.getCurrentSession()) {
-      session.getTransaction().begin();
       Book book = findBookByTitle(session, title);
       TypedQuery<Long> query =
           session.createQuery(
