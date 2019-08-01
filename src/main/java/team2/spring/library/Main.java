@@ -6,8 +6,9 @@ import team2.spring.library.dao.*;
 import team2.spring.library.dao.interfaces.*;
 import team2.spring.library.entities.*;
 
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
   private static String TAG = "Main";
@@ -44,52 +45,51 @@ public class Main {
     StoryDaoInfs storyDao = new StoryDao(sessionFactory);
 
     // all books
-    sessionFactory.getCurrentSession().getTransaction().begin();
     List<Book> books = bookDao.findAll();
     Log.debug(TAG, books.toString());
 
     // all copies
-    sessionFactory.getCurrentSession().getTransaction().begin();
     List<Copy> copies = copyDao.findAll();
     Log.debug(TAG, copies.toString());
 
     // all authors
-    sessionFactory.getCurrentSession().getTransaction().begin();
     List<Author> authors = authorDao.findAll();
     Log.debug(TAG, authors.toString());
 
     // all readers
-    sessionFactory.getCurrentSession().getTransaction().begin();
     List<Reader> readers = readerDao.findAll();
     Log.debug(TAG, readers.toString());
 
     // all stories
-    sessionFactory.getCurrentSession().getTransaction().begin();
     List<Story> stories = storyDao.findAll();
     Log.debug(TAG, stories.toString());
 
     // book by title
-    sessionFactory.getCurrentSession().getTransaction().begin();
     Book book = bookDao.findByTitle("Effective Java");
     Log.debug(TAG, book.toString());
 
     // author by name
-    sessionFactory.getCurrentSession().getTransaction().begin();
     Author author = authorDao.findByName("Joshua Bloch");
     Log.debug(TAG, author.toString());
 
     // book for the author
-    sessionFactory.getCurrentSession().getTransaction().begin();
     List<Book> bookList = bookDao.findBooksByAuthor(authors.get(0));
     Log.debug(TAG, bookList.toString());
 
     // is book available
-    sessionFactory.getCurrentSession().getTransaction().begin();
     long availableCount = bookDao.isBookAvailable("Effective Java");
-    Log.debug(TAG, availableCount + " ");
+    Log.debug(TAG, availableCount+" ");
 
-    sessionFactory.getCurrentSession().getTransaction().begin();
-    List<Reader> list = bookDao.getReaderAvg("Hooked on Java");
-    Log.debug(TAG, list.toString());
+    // list of book took for a reader
+    Map<Reader, List<Book>> tookBooks = readerDao.listOfTookBook("Margaret Watkins");
+    Log.debug(TAG, tookBooks.toString());
+
+    // list of not returned book for a reader
+    Map<Reader, List<Book>> notReturnedBooks = readerDao.listOfNotReturnedBook("Margaret Watkins");
+    Log.debug(TAG, notReturnedBooks.toString());
+
+    // list of not returned book for a reader
+    Map<Reader, Date> registrationDates = readerDao.findRegistrationDate("Margaret Watkins");
+    Log.debug(TAG, registrationDates.toString());
   }
 }
