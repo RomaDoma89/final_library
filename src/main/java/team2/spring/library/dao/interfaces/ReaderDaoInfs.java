@@ -18,4 +18,6 @@ public interface ReaderDaoInfs extends Dao<Reader> {
   Map<Reader, List<Book>> listOfNotReturnedBook(String readerName);
 
   Map<Reader, Date> findRegistrationDate(String readerName);
+
+  double getAvgReader();
 }

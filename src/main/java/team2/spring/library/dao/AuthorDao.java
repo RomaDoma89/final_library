@@ -86,6 +86,17 @@ public class AuthorDao implements AuthorDaoInfs {
   }
 
   /**
+   * Find average age of readers by author
+   *
+   * @param author
+   * @return double
+   */
+  @Override
+  public double getAvgByAuthor(String author) {
+    return 0;
+  }
+
+  /**
    * Finds an author by the given name. Uses an instance of the session.
    *
    * @param session - an instance of the current session.
@@ -93,7 +104,9 @@ public class AuthorDao implements AuthorDaoInfs {
    * @return the found author.
    */
   private Author findAuthorByName(Session session, String name) {
-    return (Author) session.createQuery("SELECT a FROM Author a WHERE a.name = ?1")
+    return (Author)
+        session
+            .createQuery("SELECT a FROM Author a WHERE a.name = ?1")
             .setParameter(1, name)
             .getSingleResult();
   }

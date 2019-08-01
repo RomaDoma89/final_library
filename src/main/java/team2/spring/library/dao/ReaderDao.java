@@ -185,6 +185,20 @@ public class ReaderDao implements ReaderDaoInfs {
   }
 
   /**
+   * Return average by reader
+   *
+   * @return */
+  @Override
+  public double getAvgReader() {
+    try (Session session = sessionFactory.openSession()) {
+      return (double)
+          session
+              .createQuery("SELECT AVG (YEAR(current_date) - YEAR(r.birthday)) FROM Reader r")
+              .getSingleResult();
+    }
+  }
+
+  /**
    * Finds all readers by the given name. Uses an instance of the session.
    *
    * @param session - an instance of the current session.

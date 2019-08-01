@@ -164,7 +164,7 @@ public class BookDao implements BookDaoInfs {
    * @return double
    */
   @Override
-  public double getReaderAvg(String title) {
+  public double getReaderAvgByBook(String title) {
     try (Session session = sessionFactory.openSession()) {
       return (double)
           session
