@@ -25,15 +25,26 @@ public class ReaderController {
     model.addAttribute("readerBlackList", readerService.getBlackList());
     return "/readersJsp/getBList";
   }
-  
+
+  /**
+   * @param model  set readerStatisticDto in jsp
+   * @return page with form
+   */
   @GetMapping("/readerStatisticForm")
-    public String findUserStatisticForm(Model model){
+  public String findUserStatisticForm(Model model) {
         model.addAttribute("readerStatisticDto", new ReaderStatisticDto());
         return "readersJsp/readerStatisticForm";
     }
 
-    @PostMapping("/readerStatistic")
-    public String getUserStatistic (@Valid@ModelAttribute("readerStatisticDto")ReaderStatisticDto readerStatisticDto,Model model){
+  /**
+   * @param readerStatisticDto return name of reader
+   * @param model return statistic of reader
+   * @return page with user statistic
+   */
+  @PostMapping("/readerStatistic")
+  public String getUserStatistic(
+      @Valid @ModelAttribute("readerStatisticDto") ReaderStatisticDto readerStatisticDto,
+      Model model) {
        model.addAttribute("readerStatisticDto",readerService.getUserStatistic(readerStatisticDto));
         return "readersJsp/readerStatistic";
     }
