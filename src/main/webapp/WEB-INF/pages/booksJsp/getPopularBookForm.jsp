@@ -5,7 +5,6 @@
 <html>
 <head>
     <title>Title</title>
-    <%@include file="/WEB-INF/pages/menu.jsp"%>
 </head>
 <body>
 <%@include file="../menu.jsp" %>

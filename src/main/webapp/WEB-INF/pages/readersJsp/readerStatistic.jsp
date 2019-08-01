@@ -18,15 +18,39 @@
 
 <c:if test="${readerStatisticDto.select =='read'}">
     <div style="text-align: center">
-        <h1>Прочитані книги користувача ${readerStatisticDto.name} </h1>
+        <h1>Прочитані книги </h1>
     </div>
 </c:if>
+
+<c:if test="${readerStatisticDto.select =='date'}">
+        <table class="simple-little-table" cellspacing='0' style="text-align: center; margin: auto; margin-top: 50px">
+            <thead>
+            <tr>
+                <th>Читачі  </th>
+                <th>Дата реєстрації</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="reader" items="${readerStatisticDto.readerDateMap}" varStatus="loop">
+                <tr>
+                    <td>${reader.key.name}</td>
+                    <td> ${reader.value}</td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+</c:if>
+
 <c:if test="${readerStatisticDto.select =='ordered'}">
     <div style="text-align: center">
-        <h1>Не повернтуі книги користувача </h1>
+        <h1>Не повернуті</h1>
     </div>
 </c:if>
 <c:forEach items="${readerStatisticDto.readerListMap}" var="reder">
+    <div style="text-align: center">
+        <h1>Читач: ${reder.key.name}</h1>
+    </div>
+
     <table class="simple-little-table" cellspacing='0' style="text-align: center; margin: auto; margin-top: 50px">
         <thead>
         <tr>

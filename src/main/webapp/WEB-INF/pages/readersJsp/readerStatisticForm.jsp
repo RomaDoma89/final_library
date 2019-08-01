@@ -21,7 +21,7 @@
     <form:input  path="name" value="Jack Edwards"  style="text-align: center"/>    <br>
     <form:select path="select">
         <form:option selected="selected" value="read">Read book</form:option>
-        <form:option value="ordered">Ordered book</form:option>
+        <form:option value="ordered">Not returned</form:option>
         <form:option  value="date">registration date</form:option>
     </form:select>
     <br>

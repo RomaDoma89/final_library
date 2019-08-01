@@ -52,7 +52,7 @@ public class ReaderServiceImpl implements ReaderService {
       readerStatisticDto.setReaderListMap(readerDaoInfs.listOfNotReturnedBook(readerStatisticDto.getName()));
       return readerStatisticDto;
     } else {
-      readerStatisticDto.setReaderListMap(readerDaoInfs.listOfNotReturnedBook(readerStatisticDto.getName()));
+      readerStatisticDto.setReaderDateMap(readerDaoInfs.findRegistrationDate(readerStatisticDto.getName()));
       return readerStatisticDto;
     }
   }

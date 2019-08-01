@@ -181,6 +181,7 @@ public class ReaderDao implements ReaderDaoInfs {
           readerRegistryDate.put(reader, query.getSingleResult());
         }
       }
+    Log.debug(TAG,readerRegistryDate.toString());
     }
     return readerRegistryDate;
   }
