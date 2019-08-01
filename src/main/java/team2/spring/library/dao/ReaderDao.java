@@ -17,6 +17,10 @@ import team2.spring.library.dao.interfaces.ReaderDaoInfs;
 import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Reader;
 
+import team2.spring.library.dao.interfaces.ReaderDaoInfs;
+import team2.spring.library.entities.Reader;
+
+/** */
 @Transactional
 @Repository
 public class ReaderDao implements ReaderDaoInfs {
@@ -84,7 +88,6 @@ public class ReaderDao implements ReaderDaoInfs {
    *
    * @param name of the reader.
    * @return an object of the found reader.
-   * @throws NoResultException if there is no reader with the given name.
    */
   @Override
   public List<Reader> findByName(String name) throws NoResultException {
@@ -93,8 +96,13 @@ public class ReaderDao implements ReaderDaoInfs {
     }
   }
 
+  /** @return List<Reader> */
   public List<Reader> getBlackList() {
-    return null;
+    try (Session session = sessionFactory.openSession()) {
+      return session
+          .createQuery("SELECT s.reader FROM Story s WHERE s.timeReturn IS NULL", Reader.class)
+          .getResultList();
+    }
   }
 
   /**
@@ -185,6 +193,7 @@ public class ReaderDao implements ReaderDaoInfs {
    * @return a list of Reader object with given name.
    */
   private List<Reader> findReaderByName(Session session, String name) {
+
     TypedQuery<Reader> query =
         session.createQuery("SELECT r FROM Reader r WHERE r.name = ?1", Reader.class);
     query.setParameter(1, name);

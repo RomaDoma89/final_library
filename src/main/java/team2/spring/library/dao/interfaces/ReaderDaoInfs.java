@@ -9,13 +9,13 @@ import java.util.Map;
 
 public interface ReaderDaoInfs extends Dao<Reader> {
 
-    List<Reader> findByName(String name);
+  List<Reader> findByName(String name);
 
-    List<Reader> getBlackList();
+  List<Reader> getBlackList();
 
-    Map<Reader, List<Book>> listOfTookBook(String readerName);
+  Map<Reader, List<Book>> listOfTookBook(String readerName);
 
-    Map<Reader, List<Book>> listOfNotReturnedBook(String readerName);
+  Map<Reader, List<Book>> listOfNotReturnedBook(String readerName);
 
-    Map<Reader, Date> findRegistrationDate(String readerName);
+  Map<Reader, Date> findRegistrationDate(String readerName);
 }

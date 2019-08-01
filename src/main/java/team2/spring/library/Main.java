@@ -22,7 +22,8 @@ public class Main {
             .addAnnotatedClass(team2.spring.library.entities.Reader.class)
             .addAnnotatedClass(team2.spring.library.entities.Story.class)
             .setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver")
-            .setProperty("hibernate.connection.url",
+            .setProperty(
+                "hibernate.connection.url",
                 "jdbc:mysql://localhost:3306/library_spring?createDatabaseIfNotExist=true&serverTimezone=UTC")
             .setProperty("hibernate.current_session_context_class", "thread")
             .setProperty("hibernate.connection.username", "root")
@@ -62,7 +63,6 @@ public class Main {
     // all stories
     List<Story> stories = storyDao.findAll();
     Log.debug(TAG, stories.toString());
-
 
     // book by title
     Book book = bookDao.findByTitle("Effective Java");
