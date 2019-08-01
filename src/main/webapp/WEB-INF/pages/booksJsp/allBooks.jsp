@@ -18,7 +18,7 @@
     <thead>
     <tr>
       <th>#</th>
-      <th>Title</th>
+      <th>Назва</th>
     </tr>
     </thead>
     <tbody>

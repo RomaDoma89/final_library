@@ -16,7 +16,7 @@
 </head>
 <body>
     <form:form action="booksByAuthor" method="post" modelAttribute="author" cssStyle="text-align: center">
-    <p>Введіть назву книги :</p>
+    <p>Введіть ім'я автора:</p>
     <br>
         <form:label path="name" style="text-align: center" >Author </form:label>
         <form:input  path="name" value="Steve McConnell"  style="text-align: center"/>
