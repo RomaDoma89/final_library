@@ -142,11 +142,26 @@ public class BookDao implements BookDaoInfs {
    */
   public List<Copy> getCopiesInfo(String title) {
     try (Session session = sessionFactory.openSession()) {
-      Book book = findBookByTitle(session, title);
       return session
-          .createQuery("SELECT c FROM Copy c WHERE c.book = book", Copy.class)
-          .setParameter("book", book)
+          .createQuery("SELECT c FROM Copy c WHERE c.book.title = ?1", Copy.class)
+          .setParameter(1, title)
           .getResultList();
+    }
+  }
+
+  /**
+   * @param title
+   * @return double
+   */
+  @Override
+  public double getReaderAvg(String title) {
+    try (Session session = sessionFactory.openSession()) {
+      return (double)
+          session
+              .createQuery(
+                  "SELECT AVG (YEAR(current_date) - YEAR(s.reader.birthday)) FROM Story s WHERE s.book.title = ?1")
+              .setParameter(1, title)
+              .getSingleResult();
     }
   }
 }

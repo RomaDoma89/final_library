@@ -15,4 +15,6 @@ public interface BookDaoInfs extends Dao<Book> {
   long isBookAvailable(String title);
 
   List<Copy> getCopiesInfo(String title);
+
+  double getReaderAvg(String title);
 }
