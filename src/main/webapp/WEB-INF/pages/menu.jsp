@@ -22,10 +22,10 @@
                     </li>
                     <li><a href="userStatisticForm">Інформація про користувача</a>
                     </li>
-                    <li><a href="inputGetByPeriod">Дістати список книг виданих по періоду</a></li>
-                    <li><a href="inputBookStat">Статистика по певній книзі(к-ть використань)</a>
+                    <li><a href="getByPeriodForm">Дістати список книг виданих по періоду</a></li>
+                    <li><a href="getBookStatForm">Статистика по певній книзі(к-ть використань)</a>
                     </li>
-                    <li><a href="inputGetPopular">Дістати по популярності</a>
+                    <li><a href="getPopularForm">Дістати по популярності</a>
                     </li>
                     <li><a href="getBlackList">Отримати "чорний список" користувачів</a></li>
                     <li><a href="#">Статистика по читачам</a>
