@@ -78,7 +78,7 @@ public class Main {
 
     // is book available
     long availableCount = bookDao.isBookAvailable("Effective Java");
-    Log.debug(TAG, availableCount+" ");
+    Log.debug(TAG, availableCount + " ");
 
     // list of book took for a reader
     Map<Reader, List<Book>> tookBooks = readerDao.listOfTookBook("Margaret Watkins");
@@ -91,5 +91,13 @@ public class Main {
     // list of not returned book for a reader
     Map<Reader, Date> registrationDates = readerDao.findRegistrationDate("Margaret Watkins");
     Log.debug(TAG, registrationDates.toString());
+
+    // list of readers whose don't return book
+    List<Reader> bList = readerDao.getBlackList();
+    Log.debug(TAG, bList.toString());
+
+    //average age by book
+    double value = bookDao.getReaderAvg("Hooked on Java");
+    Log.debug(TAG, Double.toString(value));
   }
 }
