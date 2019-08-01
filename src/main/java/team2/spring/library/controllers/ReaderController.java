@@ -23,7 +23,7 @@ public class ReaderController {
   @GetMapping("/getBlackList")
   public String getBlackList(Model model) {
     model.addAttribute("readerBlackList", readerService.getBlackList());
-    return "/readersJsp/getBList";
+    return "/readersJsp/getBlackList";
   }
 
   /**
