@@ -18,15 +18,15 @@ public class Story {
   @Column(name = "id", unique = true, nullable = false)
   private int id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "reader", nullable = false)
   private Reader reader;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "copy", nullable = false)
   private Copy copy;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "book", nullable = false)
   private Book book;
 
