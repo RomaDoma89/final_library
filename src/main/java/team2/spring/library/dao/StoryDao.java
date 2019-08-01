@@ -24,21 +24,21 @@ public class StoryDao implements StoryDaoInfs {
 
   @Override
   public int insert(Story story) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       return (int) session.save(story);
     }
   }
 
   @Override
   public Story findById(int id) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       return session.find(Story.class, id);
     }
   }
 
   @Override
   public List<Story> findAll() {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       return session.createQuery("SELECT s FROM Story s", Story.class).getResultList();
     }
   }
@@ -51,7 +51,7 @@ public class StoryDao implements StoryDaoInfs {
    */
   @Override
   public Story update(Story story) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       session.update(story);
       return session.find(Story.class, story.getId());
     }
@@ -65,7 +65,7 @@ public class StoryDao implements StoryDaoInfs {
    */
   @Override
   public boolean delete(int id) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       Story story = session.find(Story.class, id);
       session.delete(story);
       return (null == session.find(Story.class, id));
