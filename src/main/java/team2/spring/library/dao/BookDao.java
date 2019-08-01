@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import team2.spring.library.Log;
 import team2.spring.library.dao.interfaces.BookDaoInfs;
 import team2.spring.library.entities.Author;
 import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Copy;
+import team2.spring.library.entities.Reader;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -145,9 +147,22 @@ public class BookDao implements BookDaoInfs {
    */
   public List<Copy> getCopiesInfo(String title) {
     try (Session session = sessionFactory.getCurrentSession()) {
-      Book book = findBookByTitle(session,title);
+      Book book = findBookByTitle(session, title);
       return session
-          .createQuery("SELECT c FROM Copy c WHERE c.book = book ")
+          .createQuery("SELECT c FROM Copy c WHERE c.book = ?1 ")
+          .setParameter(1, book)
+          .getResultList();
+    }
+  }
+
+  @Override
+  public List<Reader> getReaderAvg(String title) {
+    try (Session session = sessionFactory.getCurrentSession()) {
+      Book book = findBookByTitle(session, title);
+      return session
+          .createQuery(
+              "SELECT AVG (YEAR(current_date) - YEAR(s.reader.birthday)) FROM Story s WHERE s.book = ?1")
+          .setParameter(1, book)
           .getResultList();
     }
   }

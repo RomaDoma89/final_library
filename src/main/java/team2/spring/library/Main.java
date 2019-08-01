@@ -88,6 +88,8 @@ public class Main {
     long availableCount = bookDao.isBookAvailable("Effective Java");
     Log.debug(TAG, availableCount + " ");
 
-
+    sessionFactory.getCurrentSession().getTransaction().begin();
+    List<Reader> list = bookDao.getReaderAvg("Hooked on Java");
+    Log.debug(TAG, list.toString());
   }
 }

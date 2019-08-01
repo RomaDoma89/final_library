@@ -3,19 +3,12 @@ package team2.spring.library.dao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 import team2.spring.library.dao.interfaces.ReaderDaoInfs;
 import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Reader;
-
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
-
-import team2.spring.library.dao.interfaces.ReaderDaoInfs;
-import team2.spring.library.entities.Reader;
 
 /** */
 @Transactional
