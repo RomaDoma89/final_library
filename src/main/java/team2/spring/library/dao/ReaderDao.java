@@ -4,10 +4,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import team2.spring.library.Log;
-import team2.spring.library.dao.interfaces.ReaderDaoInfs;
-import team2.spring.library.entities.Book;
-import team2.spring.library.entities.Reader;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -16,6 +12,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import team2.spring.library.dao.interfaces.ReaderDaoInfs;
+import team2.spring.library.entities.Book;
+import team2.spring.library.entities.Reader;
 
 /** */
 @Transactional
@@ -96,11 +96,10 @@ public class ReaderDao implements ReaderDaoInfs {
   /** @return List<Reader> */
   public List<Reader> getBlackList() {
     try (Session session = sessionFactory.openSession()) {
-      TypedQuery<Reader> q = session
-          .createQuery("SELECT s.reader FROM Story s WHERE s.timeReturn IS NULL", Reader.class);
-          List<Reader> readers = q.getResultList();
-      Log.debug(TAG, readers.toString());
-    return readers;}
+      return session
+          .createQuery("SELECT s.reader FROM Story s WHERE s.timeReturn IS NULL", Reader.class)
+          .getResultList();
+    }
   }
 
   /**
@@ -181,7 +180,6 @@ public class ReaderDao implements ReaderDaoInfs {
           readerRegistryDate.put(reader, query.getSingleResult());
         }
       }
-    Log.debug(TAG,readerRegistryDate.toString());
     }
     return readerRegistryDate;
   }
