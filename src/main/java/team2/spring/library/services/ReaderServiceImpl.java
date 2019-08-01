@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import team2.spring.library.dao.interfaces.ReaderDaoInfs;
 import team2.spring.library.dto.ReaderStatisticDto;
+import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Reader;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -39,16 +41,18 @@ public class ReaderServiceImpl implements ReaderService {
    * registration
    *
    * @param readerStatisticDto Name of reader and select with type of returned information
-   * @return Dto with certain information depends on  select
+   * @return Dto with certain information depends on select
    */
   @Override
   public ReaderStatisticDto getUserStatistic(ReaderStatisticDto readerStatisticDto) {
-    if (readerStatisticDto.getSelect().equals("")) {
+    if (readerStatisticDto.getSelect().equals("read")) {
+      readerStatisticDto.setReaderListMap(readerDaoInfs.listOfTookBook(readerStatisticDto.getName()));
       return readerStatisticDto;
-    } else if (readerStatisticDto.getSelect().equals("")) {
+    } else if (readerStatisticDto.getSelect().equals("ordered")) {
+      readerStatisticDto.setReaderListMap(readerDaoInfs.listOfNotReturnedBook(readerStatisticDto.getName()));
       return readerStatisticDto;
     } else {
-
+      readerStatisticDto.setReaderListMap(readerDaoInfs.listOfNotReturnedBook(readerStatisticDto.getName()));
       return readerStatisticDto;
     }
   }

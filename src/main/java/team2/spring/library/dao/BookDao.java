@@ -96,6 +96,7 @@ public class BookDao implements BookDaoInfs {
           session.createQuery(
               "SELECT DISTINCT b FROM Author a LEFT JOIN a.books b WHERE a = :author", Book.class);
       query.setParameter("author", author);
+
       return query.getResultList();
     }
   }

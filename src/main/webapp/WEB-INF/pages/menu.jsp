@@ -20,7 +20,7 @@
                     </li>
                     <li><a href="booksByAuthorForm">Вивести всі книжки по автору</a>
                     </li>
-                    <li><a href="userStatisticForm">Інформація про користувача</a>
+                    <li><a href="readerStatisticForm">Інформація про користувача</a>
                     </li>
                     <li><a href="getByPeriodForm">Дістати список книг виданих по періоду</a></li>
                     <li><a href="getBookStatForm">Статистика по певній книзі(к-ть використань)</a>
