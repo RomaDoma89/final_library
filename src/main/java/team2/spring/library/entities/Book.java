@@ -20,7 +20,7 @@ public class Book {
   @Column(name = "title", length = 225, unique = true, nullable = false)
   private String title;
 
-  @ManyToMany(cascade = CascadeType.ALL)
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinTable(
       name = "book_author",
       joinColumns = {@JoinColumn(name = "id_book", nullable = false)},

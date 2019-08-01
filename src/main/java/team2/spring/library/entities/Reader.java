@@ -29,4 +29,6 @@ public class Reader {
     this.name = name;
     this.birthday = birthday;
   }
+
+  //TODO override by @Data
 }

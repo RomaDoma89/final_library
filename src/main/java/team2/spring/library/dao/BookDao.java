@@ -11,6 +11,7 @@ import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Copy;
 
 import javax.persistence.TypedQuery;
+import java.util.Date;
 import java.util.List;
 
 @Transactional
@@ -20,7 +21,7 @@ public class BookDao implements BookDaoInfs {
   private static final String TAG = BookDao.class.getName();
   private SessionFactory sessionFactory;
 
-  @Autowired
+//  @Autowired
   public BookDao(SessionFactory sessionFactory) {
     this.sessionFactory = sessionFactory;
   }
@@ -82,7 +83,7 @@ public class BookDao implements BookDaoInfs {
    * @return an object of the found book.
    */
   @Override
-  //todo two method find book by title
+  // todo two method find book by title
   public Book findByTitle(String title) {
     try (Session session = sessionFactory.openSession()) {
       return findBookByTitle(session, title);
@@ -94,7 +95,7 @@ public class BookDao implements BookDaoInfs {
     try (Session session = sessionFactory.openSession()) {
       TypedQuery<Book> query =
           session.createQuery(
-              "SELECT DISTINCT b FROM Author a LEFT JOIN a.books b WHERE a = :author", Book.class);
+              "SELECT b FROM Author a LEFT JOIN a.books b WHERE a = :author", Book.class);
       query.setParameter("author", author);
       return query.getResultList();
     }
@@ -122,6 +123,41 @@ public class BookDao implements BookDaoInfs {
   }
 
   /**
+   * @param title
+   * @return List<Copy>
+   */
+  @Override
+  public List<Copy> getCopiesInfo(String title) {
+    try (Session session = sessionFactory.openSession()) {
+      Book book = findBookByTitle(session, title);
+      return session
+          .createQuery("SELECT c FROM Copy c WHERE c.book = book", Copy.class)
+          .setParameter("book", book)
+          .getResultList();
+    }
+  }
+
+  /**
+   * Finds how many books in the library have been took over a period of time
+   *
+   * @param fromDate start of the period.
+   * @param toDate end of the period.
+   * @return count of took book.
+   */
+  @Override
+  public long getCountOfBookByPeriod(Date fromDate, Date toDate) {
+    try (Session session = sessionFactory.openSession()) {
+      TypedQuery<Long> query =
+          session.createQuery(
+              "SELECT count(s.book) FROM Story s WHERE s.timeTake BETWEEN :fromDate AND :toDate",
+              Long.class);
+      query.setParameter("fromDate", fromDate);
+      query.setParameter("toDate", toDate);
+      return query.getSingleResult();
+    }
+  }
+
+  /**
    * Finds a book by the given title. Uses an instance of the session.
    *
    * @param session - an instance of the current session.
@@ -134,19 +170,5 @@ public class BookDao implements BookDaoInfs {
             .createQuery("SELECT b FROM Book b WHERE b.title = ?1")
             .setParameter(1, title)
             .getSingleResult();
-  }
-
-  /**
-   * @param title
-   * @return List<Copy>
-   */
-  public List<Copy> getCopiesInfo(String title) {
-    try (Session session = sessionFactory.openSession()) {
-      Book book = findBookByTitle(session, title);
-      return session
-          .createQuery("SELECT c FROM Copy c WHERE c.book = book", Copy.class)
-          .setParameter("book", book)
-          .getResultList();
-    }
   }
 }

@@ -6,9 +6,7 @@ import team2.spring.library.dao.*;
 import team2.spring.library.dao.interfaces.*;
 import team2.spring.library.entities.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Main {
   private static String TAG = "Main";
@@ -91,5 +89,11 @@ public class Main {
     // list of not returned book for a reader
     Map<Reader, Date> registrationDates = readerDao.findRegistrationDate("Margaret Watkins");
     Log.debug(TAG, registrationDates.toString());
+
+    // count of books published in the period;
+    Date fromDate = new GregorianCalendar(2018, Calendar.FEBRUARY, 11).getTime();
+    Date toDate = new GregorianCalendar(2019, Calendar.DECEMBER, 11).getTime();
+    long countOfTookBookForPeriod = bookDao.getCountOfBookByPeriod(fromDate, toDate);
+    Log.debug(TAG, countOfTookBookForPeriod+" ");
   }
 }

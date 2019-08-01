@@ -16,7 +16,7 @@ public class Copy {
   @Column(name = "id", unique = true, nullable = false)
   private int id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "book", nullable = false)
   private Book book;
 
