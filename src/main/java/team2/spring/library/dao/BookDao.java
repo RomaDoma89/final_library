@@ -2,7 +2,6 @@ package team2.spring.library.dao;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import team2.spring.library.dao.interfaces.BookDaoInfs;
@@ -21,7 +20,7 @@ public class BookDao implements BookDaoInfs {
   private static final String TAG = BookDao.class.getName();
   private SessionFactory sessionFactory;
 
-//  @Autowired
+  //  @Autowired
   public BookDao(SessionFactory sessionFactory) {
     this.sessionFactory = sessionFactory;
   }
@@ -123,21 +122,6 @@ public class BookDao implements BookDaoInfs {
   }
 
   /**
-   * @param title
-   * @return List<Copy>
-   */
-  @Override
-  public List<Copy> getCopiesInfo(String title) {
-    try (Session session = sessionFactory.openSession()) {
-      Book book = findBookByTitle(session, title);
-      return session
-          .createQuery("SELECT c FROM Copy c WHERE c.book = book", Copy.class)
-          .setParameter("book", book)
-          .getResultList();
-    }
-  }
-
-  /**
    * Finds how many books in the library have been took over a period of time
    *
    * @param fromDate start of the period.
@@ -158,6 +142,36 @@ public class BookDao implements BookDaoInfs {
   }
 
   /**
+   * @param title
+   * @return List<Copy>
+   */
+  @Override
+  public List<Copy> getCopiesInfo(String title) {
+    try (Session session = sessionFactory.openSession()) {
+      return session
+          .createQuery("SELECT c FROM Copy c WHERE c.book.title = ?1", Copy.class)
+          .setParameter(1, title)
+          .getResultList();
+    }
+  }
+
+  /**
+   * @param title
+   * @return double
+   */
+  @Override
+  public double getReaderAvg(String title) {
+    try (Session session = sessionFactory.openSession()) {
+      return (double)
+          session
+              .createQuery(
+                  "SELECT AVG (YEAR(current_date) - YEAR(s.reader.birthday)) FROM Story s WHERE s.book.title = ?1")
+              .setParameter(1, title)
+              .getSingleResult();
+    }
+  }
+
+  /**
    * Finds a book by the given title. Uses an instance of the session.
    *
    * @param session - an instance of the current session.
@@ -166,9 +180,9 @@ public class BookDao implements BookDaoInfs {
    */
   private Book findBookByTitle(Session session, String title) {
     return (Book)
-        session
-            .createQuery("SELECT b FROM Book b WHERE b.title = ?1")
-            .setParameter(1, title)
-            .getSingleResult();
+            session
+                    .createQuery("SELECT b FROM Book b WHERE b.title = ?1")
+                    .setParameter(1, title)
+                    .getSingleResult();
   }
 }

@@ -17,9 +17,6 @@ import team2.spring.library.dao.interfaces.ReaderDaoInfs;
 import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Reader;
 
-import team2.spring.library.dao.interfaces.ReaderDaoInfs;
-import team2.spring.library.entities.Reader;
-
 /** */
 @Transactional
 @Repository
@@ -176,7 +173,9 @@ public class ReaderDao implements ReaderDaoInfs {
       if (null != readers) {
         for (Reader reader : readers) {
           TypedQuery<Date> query =
-              session.createQuery("SELECT min(s.timeTake) FROM Story s JOIN s.reader r WHERE r = :reader", Date.class);
+              session.createQuery(
+                  "SELECT min(s.timeTake) FROM Story s JOIN s.reader r WHERE r = :reader",
+                  Date.class);
           query.setParameter("reader", reader);
           readerRegistryDate.put(reader, query.getSingleResult());
         }

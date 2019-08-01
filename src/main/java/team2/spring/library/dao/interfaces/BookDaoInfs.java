@@ -18,4 +18,6 @@ public interface BookDaoInfs extends Dao<Book> {
   List<Copy> getCopiesInfo(String title);
 
   long getCountOfBookByPeriod(Date fromDate, Date toDate);
+
+  double getReaderAvg(String title);
 }

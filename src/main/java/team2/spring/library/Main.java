@@ -76,7 +76,7 @@ public class Main {
 
     // is book available
     long availableCount = bookDao.isBookAvailable("Effective Java");
-    Log.debug(TAG, availableCount+" ");
+    Log.debug(TAG, availableCount + " ");
 
     // list of book took for a reader
     Map<Reader, List<Book>> tookBooks = readerDao.listOfTookBook("Margaret Watkins");
@@ -94,6 +94,14 @@ public class Main {
     Date fromDate = new GregorianCalendar(2018, Calendar.FEBRUARY, 11).getTime();
     Date toDate = new GregorianCalendar(2019, Calendar.DECEMBER, 11).getTime();
     long countOfTookBookForPeriod = bookDao.getCountOfBookByPeriod(fromDate, toDate);
-    Log.debug(TAG, countOfTookBookForPeriod+" ");
+    Log.debug(TAG, countOfTookBookForPeriod + " ");
+
+    // list of readers whose don't return book
+    List<Reader> bList = readerDao.getBlackList();
+    Log.debug(TAG, bList.toString());
+
+    // average age by book
+    double value = bookDao.getReaderAvg("Hooked on Java");
+    Log.debug(TAG, Double.toString(value));
   }
 }
