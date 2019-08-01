@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface AuthorDaoInfs extends Dao<Author> {
 
-    Author findByName(String name);
+  Author findByName(String name);
 }

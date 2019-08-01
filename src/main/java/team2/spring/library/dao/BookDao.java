@@ -1,24 +1,20 @@
 package team2.spring.library.dao;
 
-import lombok.AllArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import team2.spring.library.dao.interfaces.BookDaoInfs;
 import team2.spring.library.entities.Author;
 import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Copy;
 
-import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Transactional
 @Repository
-
 public class BookDao implements BookDaoInfs {
 
   private static final String TAG = BookDao.class.getName();
@@ -31,26 +27,23 @@ public class BookDao implements BookDaoInfs {
 
   @Override
   public int insert(Book book) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       return (int) session.save(book);
     }
   }
 
   @Override
   public Book findById(int id) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       return session.find(Book.class, id);
     }
   }
 
   @Override
-  //todo delete exception ?
-  public List<Book> findAll() throws NoResultException {
-    List<Book> books = null;
-    try (Session session = sessionFactory.getCurrentSession()) {
-      books = session.createQuery("SELECT b FROM Book b", Book.class).getResultList();
+  public List<Book> findAll() {
+    try (Session session = sessionFactory.openSession()) {
+      return session.createQuery("SELECT b FROM Book b", Book.class).getResultList();
     }
-    return books;
   }
 
   /**
@@ -61,7 +54,7 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public Book update(Book book) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       session.update(book);
       return session.find(Book.class, book.getId());
     }
@@ -75,7 +68,7 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public boolean delete(int id) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       Book book = session.find(Book.class, id);
       session.delete(book);
       return (null == session.find(Book.class, id));
@@ -91,14 +84,14 @@ public class BookDao implements BookDaoInfs {
   @Override
   //todo two method find book by title
   public Book findByTitle(String title) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       return findBookByTitle(session, title);
     }
   }
 
   @Override
   public List<Book> findBooksByAuthor(Author author) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       TypedQuery<Book> query =
           session.createQuery(
               "SELECT DISTINCT b FROM Author a LEFT JOIN a.books b WHERE a = :author", Book.class);
@@ -115,12 +108,13 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public long isBookAvailable(String title) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       Book book = findBookByTitle(session, title);
       TypedQuery<Long> query =
           session.createQuery(
               "SELECT count(c) FROM Copy c "
-                  + "JOIN c.book b WHERE b = :book AND c.available =: available");
+                  + "JOIN c.book b WHERE b = :book AND c.available =: available",
+              Long.class);
       query.setParameter("book", book);
       query.setParameter("available", true);
       return query.getSingleResult();
@@ -147,10 +141,11 @@ public class BookDao implements BookDaoInfs {
    * @return List<Copy>
    */
   public List<Copy> getCopiesInfo(String title) {
-    try (Session session = sessionFactory.getCurrentSession()) {
-      Book book = findBookByTitle(session,title);
+    try (Session session = sessionFactory.openSession()) {
+      Book book = findBookByTitle(session, title);
       return session
-          .createQuery("SELECT c FROM Copy c WHERE c.book = book ")
+          .createQuery("SELECT c FROM Copy c WHERE c.book = book", Copy.class)
+          .setParameter("book", book)
           .getResultList();
     }
   }

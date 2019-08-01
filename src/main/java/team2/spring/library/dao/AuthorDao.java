@@ -12,7 +12,6 @@ import java.util.List;
 
 @Transactional
 @Repository
-
 public class AuthorDao implements AuthorDaoInfs {
 
   private static final String TAG = AuthorDao.class.getName();
@@ -25,22 +24,21 @@ public class AuthorDao implements AuthorDaoInfs {
 
   @Override
   public int insert(Author author) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       return (int) session.save(author);
     }
   }
 
   @Override
   public Author findById(int id) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       return session.find(Author.class, id);
     }
   }
 
   @Override
   public List<Author> findAll() {
-    try (Session session = sessionFactory.getCurrentSession()) {
-//      session.getTransaction().begin();
+    try (Session session = sessionFactory.openSession()) {
       return session.createQuery("SELECT a FROM Author a", Author.class).getResultList();
     }
   }
@@ -53,7 +51,7 @@ public class AuthorDao implements AuthorDaoInfs {
    */
   @Override
   public Author update(Author author) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       session.update(author);
       return session.find(Author.class, author.getId());
     }
@@ -67,7 +65,7 @@ public class AuthorDao implements AuthorDaoInfs {
    */
   @Override
   public boolean delete(int id) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       Author author = session.find(Author.class, id);
       session.delete(author);
       return (null == session.find(Author.class, id));
@@ -82,7 +80,7 @@ public class AuthorDao implements AuthorDaoInfs {
    */
   @Override
   public Author findByName(String name) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       return findAuthorByName(session, name);
     }
   }
