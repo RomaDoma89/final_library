@@ -96,4 +96,15 @@ public class BookController {
     model.addAttribute("book", book);
     return "addBook";
   }
+
+  @GetMapping("/getPopularBookForm")
+  public String getPopularBookForm(Model model){
+    model.addAttribute("bookDto",new BookDto());
+      return "/booksJsp/getPopularBookForm";
+  }
+  @PostMapping("/getPopularBook")
+  public String getPopularBook(@ModelAttribute("book")Book book,Model model){
+//    model.addAttribute("",);
+    return "getPopularBook";
+  }
 }
