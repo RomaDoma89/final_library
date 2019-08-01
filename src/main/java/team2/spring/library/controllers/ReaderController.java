@@ -23,29 +23,29 @@ public class ReaderController {
   @GetMapping("/getBlackList")
   public String getBlackList(Model model) {
     model.addAttribute("readerBlackList", readerService.getBlackList());
-    return "getBlackList";
+    return "/readersJsp/getBlackList";
   }
 
   /**
-   * @param model
-   * @return
+   * @param model  set readerStatisticDto in jsp
+   * @return page with form
    */
-  @GetMapping("/userStatisticForm")
+  @GetMapping("/readerStatisticForm")
   public String findUserStatisticForm(Model model) {
         model.addAttribute("readerStatisticDto", new ReaderStatisticDto());
-        return "userStatisticForm";
+        return "readersJsp/readerStatisticForm";
     }
 
   /**
-   * @param readerStatisticDto
-   * @param model
-   * @return
+   * @param readerStatisticDto return name of reader
+   * @param model return statistic of reader
+   * @return page with user statistic
    */
-  @PostMapping("/userStatistic")
+  @PostMapping("/readerStatistic")
   public String getUserStatistic(
       @Valid @ModelAttribute("readerStatisticDto") ReaderStatisticDto readerStatisticDto,
       Model model) {
        model.addAttribute("readerStatisticDto",readerService.getUserStatistic(readerStatisticDto));
-        return "userStatistic";
+        return "readersJsp/readerStatistic";
     }
 }
