@@ -101,7 +101,10 @@ public class Main {
     Log.debug(TAG, bList.toString());
 
     // average age by book
-    double value = bookDao.getReaderAvg("Hooked on Java");
+    double value = bookDao.getReaderAvgByBook("Hooked on Java");
     Log.debug(TAG, Double.toString(value));
+
+    double avg = readerDao.getAvgReader();
+    Log.debug(TAG, Double.toString(avg));
   }
 }

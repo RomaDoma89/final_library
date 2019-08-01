@@ -19,5 +19,5 @@ public interface BookDaoInfs extends Dao<Book> {
 
   long getCountOfBookByPeriod(Date fromDate, Date toDate);
 
-  double getReaderAvg(String title);
+  double getReaderAvgByBook(String title);
 }
