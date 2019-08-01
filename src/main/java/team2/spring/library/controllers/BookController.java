@@ -104,7 +104,6 @@ public class BookController {
   }
   @PostMapping("/getPopularBook")
   public String getPopularBook(@ModelAttribute("book")Book book,Model model){
-//    model.addAttribute("",);
     return "getPopularBook";
   }
 }

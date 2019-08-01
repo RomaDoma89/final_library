@@ -29,7 +29,7 @@ public class BookServiceImpl implements BookService {
 
   @Override
   public List<Book> findBooksByAuthor(Author author) {
-    Author author1 = authorDaoInfs.findByName(author.getName());
-    return bookDaoInfs.findBooksByAuthor(author1);
+    Author authorFromDao = authorDaoInfs.findByName(author.getName());
+    return bookDaoInfs.findBooksByAuthor(authorFromDao);
   }
 }
