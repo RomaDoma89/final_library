@@ -26,21 +26,21 @@ public class CopyDao implements CopyDaoInfs {
 
   @Override
   public int insert(Copy copy) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       return (int) session.save(copy);
     }
   }
 
   @Override
   public Copy findById(int id) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       return session.find(Copy.class, id);
     }
   }
 
   @Override
   public List<Copy> findAll() {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       return session.createQuery("SELECT c FROM Copy c", Copy.class).getResultList();
     }
   }
@@ -53,7 +53,7 @@ public class CopyDao implements CopyDaoInfs {
    */
   @Override
   public Copy update(Copy copy) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       session.update(copy);
       return session.find(Copy.class, copy.getId());
     }
@@ -67,7 +67,7 @@ public class CopyDao implements CopyDaoInfs {
    */
   @Override
   public boolean delete(int id) {
-    try (Session session = sessionFactory.getCurrentSession()) {
+    try (Session session = sessionFactory.openSession()) {
       Copy copy = session.find(Copy.class, id);
       session.delete(copy);
       return (null == session.find(Copy.class, id));
