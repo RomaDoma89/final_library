@@ -11,7 +11,9 @@ import team2.spring.library.entities.Copy;
 
 import javax.persistence.TypedQuery;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 @Repository
@@ -42,7 +44,7 @@ public class BookDao implements BookDaoInfs {
   @Override
   public List<Book> findAll() {
     try (Session session = sessionFactory.openSession()) {
-      return session.createQuery("SELECT b FROM Book b", Book.class).getResultList();
+      return session.createQuery("SELECT b FROM Book b", Book.class).list();
     }
   }
 
@@ -82,7 +84,6 @@ public class BookDao implements BookDaoInfs {
    * @return an object of the found book.
    */
   @Override
-  // todo two method find book by title
   public Book findByTitle(String title) {
     try (Session session = sessionFactory.openSession()) {
       return findBookByTitle(session, title);
@@ -176,6 +177,81 @@ public class BookDao implements BookDaoInfs {
   }
 
   /**
+   * Finds a book by given title and counts how many times the book has been taken.
+   *
+   * <p>5. Скільки разів брали певну книжку (в загальному)
+   *
+   * @param title of book to find.
+   * @return how many times the book has taken.
+   */
+  @Override
+  public long getTotalUsageCount(String title) {
+    try (Session session = sessionFactory.openSession()) {
+      Book book = findBookByTitle(session, title);
+      return session
+          .createQuery("SELECT count(s.book) FROM Story s WHERE s.book = :book", Long.class)
+          .setParameter("book", book)
+          .uniqueResult();
+    }
+  }
+
+  /**
+   * Finds a book by given title and counts how many times the book has been taken.
+   *
+   * <p>5. Скільки разів брали певну книжку ( по примірникам)
+   *
+   * @param title of book to find.
+   * @return how many times the book has taken.
+   */
+  public Map<Copy, Long> getUsageCountForCopies(String title) {
+    try (Session session = sessionFactory.openSession()) {
+      Map<Copy, Long> resultMap = new HashMap<>();
+
+      Book book = findBookByTitle(session, title);
+
+      List<Copy> copies =
+          session
+              .createQuery("SELECT c FROM Copy c WHERE c.book = :book", Copy.class)
+              .setParameter("book", book)
+              .list();
+
+      if (null != copies) {
+        for (Copy copy : copies) {
+          Long count =
+              session
+                  .createQuery("SELECT count(s.id) FROM Story s WHERE s.copy = :copy", Long.class)
+                  .setParameter("copy", copy)
+                  .uniqueResult();
+          resultMap.put(copy, count);
+        }
+      }
+      return resultMap;
+    }
+  }
+
+  /**
+   * Finds a book by given title and counts an average time of reading.
+   *
+   * <p>5. Скільки разів брали певну книжку ( СЕРЕДНІЙ ЧАС ЧИТАННЯ)
+   *
+   * @param title of book to find.
+   * @return an average time of reading.
+   */
+  public Double getAvgTimeOfUsage(String title) {
+    try (Session session = sessionFactory.openSession()) {
+      Book book = findBookByTitle(session, title);
+      List<Integer> days =
+          session
+              .createQuery(
+                  "SELECT (DATEDIFF(s.timeReturn, s.timeTake)) FROM Story s WHERE s.book = :book AND s.timeReturn IS NOT NULL",
+                  Integer.class)
+              .setParameter("book", book)
+              .list();
+      return days.stream().mapToInt(i -> i).average().orElse(0);
+    }
+  }
+
+  /**
    * Finds a book by the given title. Uses an instance of the session.
    *
    * @param session - an instance of the current session.
@@ -183,10 +259,9 @@ public class BookDao implements BookDaoInfs {
    * @return the found book.
    */
   private Book findBookByTitle(Session session, String title) {
-    return (Book)
-            session
-                    .createQuery("SELECT b FROM Book b WHERE b.title = ?1")
-                    .setParameter(1, title)
-                    .getSingleResult();
+    return session
+        .createQuery("SELECT b FROM Book b WHERE b.title = :title", Book.class)
+        .setParameter("title", title)
+        .uniqueResult();
   }
 }

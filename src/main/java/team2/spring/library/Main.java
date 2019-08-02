@@ -104,6 +104,20 @@ public class Main {
     double value = bookDao.getReaderAvgByBook("Hooked on Java");
     Log.debug(TAG, Double.toString(value));
 
+    // how many times the book has been taken.
+    long countOfUsageForBook = bookDao.getTotalUsageCount("Hooked on Java");
+    Log.debug(TAG, Long.toString(countOfUsageForBook));
+
+    // how many times all copies of the book have been taken.
+    Map<Copy, Long> copyTookCount =
+        bookDao.getUsageCountForCopies(
+            "Pro Spring 5: An In-Depth Guide to the Spring Framework and Its Tools 5th ed. Edition");
+    Log.debug(TAG, copyTookCount.toString());
+
+    // an average time of reading of the bool
+    Log.debug(TAG, String.valueOf(bookDao.getAvgTimeOfUsage("Hooked on Java")));
+
+    // an average age of readers
     double avg = readerDao.getAvgReader();
     Log.debug(TAG, Double.toString(avg));
   }
