@@ -86,13 +86,6 @@ public class AuthorDao implements AuthorDaoInfs {
   }
 
   /**
-   * Find average age of readers by author
-   *
-   * @param author
-   * @return double
-   */
-
-  /**
    * Finds an author by the given name. Uses an instance of the session.
    *
    * @param session - an instance of the current session.

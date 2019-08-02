@@ -110,3 +110,8 @@ INSERT INTO reader_story (id, reader, book, copy, time_take, time_return) values
 INSERT INTO reader_story (id, reader, book, copy, time_take, time_return) values (22, 6, 8, 21, '2018-07-16', '2018-08-20');
 INSERT INTO reader_story (id, reader, book, copy, time_take, time_return) values (23, 5, 6, 16, '2018-07-16', '2018-08-20');
 INSERT INTO reader_story (id, reader, book, copy, time_take, time_return) values (24, 3, 4, 12, '2018-07-16', '2018-08-20');
+INSERT INTO reader_story (book, copy, reader, time_take, time_return) values (7, 18, 3, '2019-02-10', '2019-02-23');
+INSERT INTO reader_story (book, copy, reader, time_take, time_return) values (7, 19, 9, '2019-01-16', '2019-02-28');
+INSERT INTO reader_story (book, copy, reader, time_take, time_return) values (7, 20, 5, '2019-03-15', '2019-03-25');
+INSERT INTO reader_story (book, copy, reader, time_take, time_return) values (10, 27, 8, '2019-03-25', '2019-04-05');
+INSERT INTO reader_story (book, copy, reader, time_take, time_return) values (10, 28, 2, '2019-04-15', '2019-05-25');
