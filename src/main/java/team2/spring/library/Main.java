@@ -137,5 +137,8 @@ public class Main {
     // using period
     Map<Reader, LocalDate> getUsingPeriod = readerDao.getUsingPeriod();
     Log.debug(TAG, getUsingPeriod.toString());
+    //  count of visiting
+    long avgCountOfVisiting = storyDao.getCountOfVisiting(firstPeriod,secondPeriod);
+    Log.debug(TAG, Long.toString(avgCountOfVisiting));
   }
 }
