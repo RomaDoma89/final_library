@@ -143,6 +143,8 @@ public class BookDao implements BookDaoInfs {
   }
 
   /**
+   * Find all copies of book and return total info about copy
+   *
    * @param title
    * @return List<Copy>
    */
@@ -157,11 +159,13 @@ public class BookDao implements BookDaoInfs {
   }
 
   /**
+   * Find average age of readers whose have read this book
+   *
    * @param title
    * @return double
    */
   @Override
-  public double getReaderAvg(String title) {
+  public double getReaderAvgByBook(String title) {
     try (Session session = sessionFactory.openSession()) {
       return (double)
           session

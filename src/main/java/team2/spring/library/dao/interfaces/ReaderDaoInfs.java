@@ -1,5 +1,6 @@
 package team2.spring.library.dao.interfaces;
 
+import team2.spring.library.dao.interfaces.Dao;
 import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Reader;
 
@@ -18,4 +19,6 @@ public interface ReaderDaoInfs extends Dao<Reader> {
   Map<Reader, List<Book>> listOfNotReturnedBook(String readerName);
 
   Map<Reader, Date> findRegistrationDate(String readerName);
+
+  double getAvgReader();
 }

@@ -86,6 +86,17 @@ public class AuthorDao implements AuthorDaoInfs {
   }
 
   /**
+   * Find average age of readers by author
+   *
+   * @param author
+   * @return double
+   */
+  @Override
+  public double getAvgByAuthor(String author) {
+    return 0;
+  }
+
+  /**
    * Finds an author by the given name. Uses an instance of the session.
    *
    * @param session - an instance of the current session.

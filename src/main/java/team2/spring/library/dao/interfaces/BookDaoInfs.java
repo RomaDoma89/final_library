@@ -20,11 +20,11 @@ public interface BookDaoInfs extends Dao<Book> {
 
   long getCountOfBookByPeriod(Date fromDate, Date toDate);
 
-  double getReaderAvg(String title);
-
   long getTotalUsageCount(String title);
 
   Map<Copy, Long> getUsageCountForCopies(String title);
 
   Double getAvgTimeOfUsage(String title);
+
+  double getReaderAvgByBook(String title);
 }
