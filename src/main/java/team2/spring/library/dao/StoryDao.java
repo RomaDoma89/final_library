@@ -4,7 +4,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 
 import team2.spring.library.dao.interfaces.StoryDaoInfs;
@@ -69,6 +71,27 @@ public class StoryDao implements StoryDaoInfs {
       Story story = session.find(Story.class, id);
       session.delete(story);
       return (null == session.find(Story.class, id));
+    }
+  }
+
+  /**
+   * Find count of visiting by period
+   *
+   * @param firstPeriod
+   * @param secondPeriod
+   * @return Long
+   */
+  @Override
+  public Long getCountOfVisiting(LocalDate firstPeriod, LocalDate secondPeriod) {
+    try (Session session = sessionFactory.openSession()) {
+      return session
+          .createQuery(
+              "SELECT COUNT(s.timeTake) FROM Story s"
+                  + " WHERE s.timeTake BETWEEN :firstPeriod AND :secondPeriod",
+              Long.class)
+          .setParameter("firstPeriod", firstPeriod)
+          .setParameter("secondPeriod", secondPeriod)
+          .getSingleResult();
     }
   }
 }
