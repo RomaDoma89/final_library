@@ -2,7 +2,9 @@ package team2.spring.library.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import team2.spring.library.dao.interfaces.BookDaoInfs;
 import team2.spring.library.dao.interfaces.ReaderDaoInfs;
+import team2.spring.library.dto.GeneralStatisticDto;
 import team2.spring.library.dto.ReaderStatisticDto;
 import team2.spring.library.entities.Reader;
 
@@ -12,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ReaderServiceImpl implements ReaderService {
   ReaderDaoInfs readerDaoInfs;
+  BookDaoInfs bookDaoInfs;
 
   /**
    * Finds a reader by given name.
@@ -57,4 +60,13 @@ public class ReaderServiceImpl implements ReaderService {
       return readerStatisticDto;
     }
   }
+
+  /**
+   *  @return statistics about  average age of readers
+   *
+   */
+  public GeneralStatisticDto getGeneralStatisticDto() {
+    GeneralStatisticDto generalStatisticDto = new GeneralStatisticDto();
+//    generalStatisticDto.setAvgAgeOfReaders(bookDaoInfs.getReaderAvg());
+    return generalStatisticDto;}
 }
