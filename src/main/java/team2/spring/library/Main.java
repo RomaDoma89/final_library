@@ -127,5 +127,9 @@ public class Main {
     LocalDate secondPeriod = LocalDate.of(2019, Calendar.AUGUST, 11);
     Map<Book, Long> popular = bookDao.getPopular(firstPeriod, secondPeriod);
     Log.debug(TAG, popular.toString());
+
+    // using period
+    Map<Reader, LocalDate> getUsingPeriod = readerDao.getUsingPeriod();
+    Log.debug(TAG, getUsingPeriod.toString());
   }
 }
