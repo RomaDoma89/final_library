@@ -122,6 +122,12 @@ public class Main {
     double avg = readerDao.getAvgReader();
     Log.debug(TAG, Double.toString(avg));
 
+    // an average age of readers by list of books belongs to a specific author.
+    double avgAgeByAuthor = readerDao.getAvgAgeByAuthor(
+            bookDao.findBooksByAuthor(
+                    authorDao.findByName("Joshua Bloch")));
+    Log.debug(TAG, String.valueOf(avgAgeByAuthor));
+
     // popular book
     LocalDate firstPeriod = LocalDate.of(2019, Calendar.FEBRUARY, 11);
     LocalDate secondPeriod = LocalDate.of(2019, Calendar.AUGUST, 11);
