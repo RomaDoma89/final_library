@@ -39,7 +39,7 @@ public class StoryDao implements StoryDaoInfs {
   @Override
   public List<Story> findAll() {
     try (Session session = sessionFactory.openSession()) {
-      return session.createQuery("SELECT s FROM Story s", Story.class).getResultList();
+      return session.createQuery("SELECT s FROM Story s", Story.class).list();
     }
   }
 

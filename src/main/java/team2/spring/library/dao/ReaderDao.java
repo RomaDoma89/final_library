@@ -47,7 +47,7 @@ public class ReaderDao implements ReaderDaoInfs {
   @Override
   public List<Reader> findAll() {
     try (Session session = sessionFactory.openSession()) {
-      return session.createQuery("SELECT r FROM Reader r", Reader.class).getResultList();
+      return session.createQuery("SELECT r FROM Reader r", Reader.class).list();
     }
   }
 
@@ -192,10 +192,9 @@ public class ReaderDao implements ReaderDaoInfs {
    * @return a list of Reader object with given name.
    */
   private List<Reader> findReaderByName(Session session, String name) {
-
-    TypedQuery<Reader> query =
-        session.createQuery("SELECT r FROM Reader r WHERE r.name = ?1", Reader.class);
-    query.setParameter(1, name);
-    return query.getResultList();
+    return session
+        .createQuery("SELECT r FROM Reader r WHERE r.name = :name", Reader.class)
+        .setParameter("name", name)
+        .list();
   }
 }

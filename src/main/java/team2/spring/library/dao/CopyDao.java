@@ -41,7 +41,7 @@ public class CopyDao implements CopyDaoInfs {
   @Override
   public List<Copy> findAll() {
     try (Session session = sessionFactory.openSession()) {
-      return session.createQuery("SELECT c FROM Copy c", Copy.class).getResultList();
+      return session.createQuery("SELECT c FROM Copy c", Copy.class).list();
     }
   }
 

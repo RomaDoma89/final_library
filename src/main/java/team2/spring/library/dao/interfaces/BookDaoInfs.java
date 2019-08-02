@@ -6,6 +6,7 @@ import team2.spring.library.entities.Copy;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface BookDaoInfs extends Dao<Book> {
 
@@ -20,4 +21,10 @@ public interface BookDaoInfs extends Dao<Book> {
   long getCountOfBookByPeriod(Date fromDate, Date toDate);
 
   double getReaderAvg(String title);
+
+  long getTotalUsageCount(String title);
+
+  Map<Copy, Long> getUsageCountForCopies(String title);
+
+  Double getAvgTimeOfUsage(String title);
 }

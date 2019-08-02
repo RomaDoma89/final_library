@@ -39,7 +39,7 @@ public class AuthorDao implements AuthorDaoInfs {
   @Override
   public List<Author> findAll() {
     try (Session session = sessionFactory.openSession()) {
-      return session.createQuery("SELECT a FROM Author a", Author.class).getResultList();
+      return session.createQuery("SELECT a FROM Author a", Author.class).list();
     }
   }
 
@@ -93,8 +93,9 @@ public class AuthorDao implements AuthorDaoInfs {
    * @return the found author.
    */
   private Author findAuthorByName(Session session, String name) {
-    return (Author) session.createQuery("SELECT a FROM Author a WHERE a.name = ?1")
-            .setParameter(1, name)
-            .getSingleResult();
+    return session
+        .createQuery("SELECT a FROM Author a WHERE a.name = :name", Author.class)
+        .setParameter("name", name)
+        .uniqueResult();
   }
 }
