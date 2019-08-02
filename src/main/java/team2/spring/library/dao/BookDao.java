@@ -10,7 +10,7 @@ import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Copy;
 
 import javax.persistence.TypedQuery;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,7 +130,7 @@ public class BookDao implements BookDaoInfs {
    * @return count of took book.
    */
   @Override
-  public long getCountOfBookByPeriod(Date fromDate, Date toDate) {
+  public long getCountOfBookByPeriod(LocalDate fromDate, LocalDate toDate) {
     try (Session session = sessionFactory.openSession()) {
       TypedQuery<Long> query =
           session.createQuery(
@@ -184,7 +184,7 @@ public class BookDao implements BookDaoInfs {
    * @return Map<Book, Long>
    */
   @Override
-  public Map<Book, Long> getPopular(Date firstPeriod, Date secondPeriod) {
+  public Map<Book, Long> getPopular(LocalDate firstPeriod, LocalDate secondPeriod) {
     try (Session session = sessionFactory.openSession()) {
       Map<Book, Long> resultMap = new HashMap<>();
 

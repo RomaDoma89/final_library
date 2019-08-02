@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -165,17 +165,17 @@ public class ReaderDao implements ReaderDaoInfs {
    * @param readerName the name of the reader.
    * @return a map of readers and their dates of registration.
    */
-  public Map<Reader, Date> findRegistrationDate(String readerName) {
-    Map<Reader, Date> readerRegistryDate = new HashMap<>();
+  public Map<Reader, LocalDate> findRegistrationDate(String readerName) {
+    Map<Reader, LocalDate> readerRegistryDate = new HashMap<>();
 
     try (Session session = sessionFactory.openSession()) {
       List<Reader> readers = findReaderByName(session, readerName);
       if (null != readers) {
         for (Reader reader : readers) {
-          TypedQuery<Date> query =
+          TypedQuery<LocalDate> query =
               session.createQuery(
                   "SELECT min(s.timeTake) FROM Story s JOIN s.reader r WHERE r = :reader",
-                  Date.class);
+                      LocalDate.class);
           query.setParameter("reader", reader);
           readerRegistryDate.put(reader, query.getSingleResult());
         }

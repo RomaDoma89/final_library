@@ -3,7 +3,7 @@ package team2.spring.library.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -21,11 +21,10 @@ public class Reader {
   @Column(name = "name", length = 100, unique = true, nullable = false)
   private String name;
 
-  @Temporal(TemporalType.DATE)
   @Column(name = "birthday", nullable = false)
-  private Date birthday;
+  private LocalDate birthday;
 
-  public Reader(String name, Date birthday) {
+  public Reader(String name, LocalDate birthday) {
     this.name = name;
     this.birthday = birthday;
   }
