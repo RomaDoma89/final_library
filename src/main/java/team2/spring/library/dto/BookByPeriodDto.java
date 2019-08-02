@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookByPeriodDto {
 
-  private String dateFrom;
-  private String dateTo;
+  private LocalDate dateFrom;
+  private LocalDate  dateTo;
   private long countOfBookByPeriod;
 }

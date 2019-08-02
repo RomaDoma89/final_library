@@ -67,6 +67,6 @@ public class ReaderServiceImpl implements ReaderService {
    */
   public GeneralStatisticDto getGeneralStatisticDto() {
     GeneralStatisticDto generalStatisticDto = new GeneralStatisticDto();
-//    generalStatisticDto.setAvgAgeOfReaders(bookDaoInfs.getReaderAvg());
+    generalStatisticDto.setAvgAgeOfReaders(readerDaoInfs.getAvgReader());
     return generalStatisticDto;}
 }

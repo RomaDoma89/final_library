@@ -1,21 +1,19 @@
 package team2.spring.library.services;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.stereotype.Service;
-import sun.util.resources.LocaleData;
 import team2.spring.library.dao.interfaces.AuthorDaoInfs;
 import team2.spring.library.dao.interfaces.BookDaoInfs;
+import team2.spring.library.dto.BookByPeriodDto;
 import team2.spring.library.dto.BookDto;
+import team2.spring.library.dto.BookStatisticDto;
 import team2.spring.library.entities.Author;
 import team2.spring.library.entities.Book;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.SimpleTimeZone;
 
 @Service
 @AllArgsConstructor
@@ -41,12 +39,23 @@ public class BookServiceImpl implements BookService {
   }
 
   @Override
-  public long getCountOfBookByPeriod(String fromDate, String toDate) throws ParseException {
-    Date dateFrom=new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
-    Date dateTo=new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
-    if(dateFrom.compareTo(dateTo)>0||dateFrom.compareTo(dateTo)==0){
-      throw new ParseException("date to is lover then date from ",0);
+  public long getCountOfBookByPeriod(BookByPeriodDto bookByPeriodDto) throws ParseException {
+    System.out.println(bookByPeriodDto);
+    if (bookByPeriodDto.getDateFrom().compareTo(bookByPeriodDto.getDateTo()) > 0 || bookByPeriodDto.getDateFrom().compareTo(bookByPeriodDto.getDateTo()) == 0) {
+      throw new ParseException("date to is lover then date from ", 0);
     }
-    return bookDaoInfs.getCountOfBookByPeriod(dateFrom, dateTo);
+//    bookByPeriodDto.setCountOfBookByPeriod(bookDaoInfs.getCountOfBookByPeriod(bookByPeriodDto.getDateFrom(),bookByPeriodDto.getDateTo()));
+    return 0;
+  }
+
+  @Override
+  public BookStatisticDto getBookStatisticDto(BookStatisticDto bookStatisticDto) {
+    bookStatisticDto.setGetAvgTimeOfUsage(
+        bookDaoInfs.getAvgTimeOfUsage(bookStatisticDto.getTitle()));
+    bookStatisticDto.setGetUsageCountForCopies(
+        bookDaoInfs.getUsageCountForCopies(bookStatisticDto.getTitle()));
+    bookStatisticDto.setTotalUsageCount(
+        bookDaoInfs.getTotalUsageCount(bookStatisticDto.getTitle()));
+    return bookStatisticDto;
   }
 }

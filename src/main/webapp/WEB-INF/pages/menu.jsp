@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!doctype html>
@@ -29,15 +29,11 @@
                     </li>
                     <li><a href="getBlackList">Отримати "чорний список" користувачів</a></li>
                     <li><a href="generalStatistic">Статистика по читачам</a>
-                        <ul>
-                            <li><a href="readerRegistration">Середній час читання</a></li>
-                            <li><a href="averageAgeOfReader">Середній вік </a></li>
-                            <li><a href="appealStatistic">Кількість звернень </a></li>
-                        </ul>
                     </li>
                     <li><a href="inputAvgAge">Ортимати середній вік читачів</a>
                     </li>
-                    <li><a href="inputInfo">Вивести дані по назві книжки, кількість екземплярів з інформацією про них</a></li>
+                    <li><a href="inputInfo">Вивести дані по назві книжки, кількість екземплярів з інформацією про
+                        них</a></li>
 
                 </ul>
             </li>

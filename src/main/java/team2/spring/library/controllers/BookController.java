@@ -6,15 +6,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import team2.spring.library.dto.BookByPeriodDto;
 import team2.spring.library.dto.BookDto;
+import team2.spring.library.dto.BookStatisticDto;
 import team2.spring.library.entities.Author;
 import team2.spring.library.entities.Book;
 import team2.spring.library.services.BookService;
 
 import javax.validation.Valid;
 import java.text.ParseException;
-import java.util.Date;
+import java.time.LocalDate;
 
 /** Controller witch operate all request of book */
 @Controller
@@ -102,8 +104,8 @@ public class BookController {
 
   @GetMapping("/getPopularBookForm")
   public String getPopularBookForm(Model model) {
-    model.addAttribute("bookDto", new BookDto());
-    return "/booksJsp/getPopularBookForm";
+    model.addAttribute("bookStatisticDto", new BookStatisticDto());
+    return "booksJsp/bookStatistic";
   }
 
   @PostMapping("/getPopularBook")
@@ -111,26 +113,27 @@ public class BookController {
     return "getPopularBook";
   }
 
-  /**
-   * @param model
-   * @return
-   */
+  /** @return */
   @GetMapping("/getCountBookByPeriodForm")
   public String getCountBookByPeriodForm(Model model) {
-    model.addAttribute("bookByPeriodDto", new BookByPeriodDto());
     return "/booksJsp/getCountBookByPeriodForm";
   }
 
   @PostMapping("/getCountBookByPeriod")
-  public String getCountBookByPeriod(@Valid @ModelAttribute("bookByPeriodDto") BookByPeriodDto bookByPeriodDto,Model model) {
+  public String getCountBookByPeriod(
+      @RequestParam String dateFrom, @RequestParam String dateTo, Model model) {
+    System.out.println(dateFrom);
+    System.out.println(dateTo);
+    BookByPeriodDto bookByPeriodDto = new BookByPeriodDto();
+    bookByPeriodDto.setDateFrom(LocalDate.parse(dateFrom));
+    bookByPeriodDto.setDateTo(LocalDate.parse(dateTo));
     try {
-      bookByPeriodDto.setCountOfBookByPeriod(bookService.getCountOfBookByPeriod(bookByPeriodDto.getDateFrom(),bookByPeriodDto.getDateTo()));
-      System.out.println(bookByPeriodDto);
+      bookByPeriodDto.setCountOfBookByPeriod(bookService.getCountOfBookByPeriod(bookByPeriodDto));
     } catch (ParseException e) {
       e.printStackTrace();
       return "error";
     }
-    model.addAttribute("bookByPeriodDto",bookByPeriodDto);
+    model.addAttribute("bookByPeriodDto", bookByPeriodDto);
     return "booksJsp/getCountBookByPeriodForm";
   }
 }
