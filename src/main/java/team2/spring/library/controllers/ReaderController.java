@@ -27,14 +27,14 @@ public class ReaderController {
   }
 
   /**
-   * @param model  set readerStatisticDto in jsp
+   * @param model set readerStatisticDto in jsp
    * @return page with form
    */
   @GetMapping("/readerStatisticForm")
   public String findUserStatisticForm(Model model) {
-        model.addAttribute("readerStatisticDto", new ReaderStatisticDto());
-        return "readersJsp/readerStatisticForm";
-    }
+    model.addAttribute("readerStatisticDto", new ReaderStatisticDto());
+    return "readersJsp/readerStatisticForm";
+  }
 
   /**
    * @param readerStatisticDto return name of reader
@@ -45,7 +45,7 @@ public class ReaderController {
   public String getUserStatistic(
       @Valid @ModelAttribute("readerStatisticDto") ReaderStatisticDto readerStatisticDto,
       Model model) {
-       model.addAttribute("readerStatisticDto",readerService.getUserStatistic(readerStatisticDto));
-        return "readersJsp/readerStatistic";
-    }
+    model.addAttribute("readerStatisticDto", readerService.getUserStatistic(readerStatisticDto));
+    return "readersJsp/readerStatistic";
+  }
 }

@@ -91,10 +91,6 @@ public class AuthorDao implements AuthorDaoInfs {
    * @param author
    * @return double
    */
-  @Override
-  public double getAvgByAuthor(String author) {
-    return 0;
-  }
 
   /**
    * Finds an author by the given name. Uses an instance of the session.

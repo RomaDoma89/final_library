@@ -6,6 +6,9 @@ import team2.spring.library.dao.*;
 import team2.spring.library.dao.interfaces.*;
 import team2.spring.library.entities.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Main {
@@ -114,11 +117,17 @@ public class Main {
             "Pro Spring 5: An In-Depth Guide to the Spring Framework and Its Tools 5th ed. Edition");
     Log.debug(TAG, copyTookCount.toString());
 
-    // an average time of reading of the bool
+    // an average time of reading of the book
     Log.debug(TAG, String.valueOf(bookDao.getAvgTimeOfUsage("Hooked on Java")));
 
     // an average age of readers
     double avg = readerDao.getAvgReader();
     Log.debug(TAG, Double.toString(avg));
+
+    // popular book
+    Date firstPeriod = new GregorianCalendar(2018, Calendar.JANUARY, 1).getTime();
+    Date secondPeriod = new GregorianCalendar(2019, Calendar.AUGUST, 11).getTime();
+    Map<Book, Long> popular = bookDao.getPopular(firstPeriod, secondPeriod);
+    Log.debug(TAG, popular.toString());
   }
 }
