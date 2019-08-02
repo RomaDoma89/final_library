@@ -212,7 +212,6 @@ public class ReaderDao implements ReaderDaoInfs {
   @Override
   public double getAvgAgeByAuthor(List<Book> books) {
     try (Session session = sessionFactory.openSession()) {
-      Log.debug(TAG, books.toString());
       return session
           .createQuery(
               "SELECT AVG(YEAR(current_date) - YEAR(s.reader.birthday)) "
