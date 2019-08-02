@@ -10,7 +10,7 @@ import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Copy;
 
 import javax.persistence.TypedQuery;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,7 +130,7 @@ public class BookDao implements BookDaoInfs {
    * @return count of took book.
    */
   @Override
-  public long getCountOfBookByPeriod(Date fromDate, Date toDate) {
+  public long getCountOfBookByPeriod(LocalDate fromDate, LocalDate toDate) {
     try (Session session = sessionFactory.openSession()) {
       TypedQuery<Long> query =
           session.createQuery(
@@ -173,6 +173,43 @@ public class BookDao implements BookDaoInfs {
                   "SELECT AVG (YEAR(current_date) - YEAR(s.reader.birthday)) FROM Story s WHERE s.book.title = ?1")
               .setParameter(1, title)
               .getSingleResult();
+    }
+  }
+
+  /**
+   * Return list of books and their counter of reading
+   *
+   * @param firstPeriod
+   * @param secondPeriod
+   * @return Map<Book, Long>
+   */
+  @Override
+  public Map<Book, Long> getPopular(LocalDate firstPeriod, LocalDate secondPeriod) {
+    try (Session session = sessionFactory.openSession()) {
+      Map<Book, Long> resultMap = new HashMap<>();
+
+      List<Book> bookList =
+          session
+              .createQuery(
+                  "SELECT DISTINCT s.book FROM Story s "
+                      + "WHERE s.timeTake between :date1 AND :date2",
+                  Book.class)
+              .setParameter("date1", firstPeriod)
+              .setParameter("date2", secondPeriod)
+              .list();
+      if (bookList != null) {
+        for (Book book : bookList) {
+          Long count =
+              session
+                  .createQuery(
+                      "SELECT count(s.timeTake) " + "FROM Story s" + " WHERE s.book = :book",
+                      Long.class)
+                  .setParameter("book", book)
+                  .getSingleResult();
+          resultMap.put(book, count);
+        }
+      }
+      return resultMap;
     }
   }
 

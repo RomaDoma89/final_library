@@ -6,6 +6,7 @@ import team2.spring.library.dao.*;
 import team2.spring.library.dao.interfaces.*;
 import team2.spring.library.entities.*;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class Main {
@@ -87,12 +88,12 @@ public class Main {
     Log.debug(TAG, notReturnedBooks.toString());
 
     // list of not returned book for a reader
-    Map<Reader, Date> registrationDates = readerDao.findRegistrationDate("Margaret Watkins");
+    Map<Reader, LocalDate> registrationDates = readerDao.findRegistrationDate("Margaret Watkins");
     Log.debug(TAG, registrationDates.toString());
 
     // count of books published in the period;
-    Date fromDate = new GregorianCalendar(2018, Calendar.FEBRUARY, 11).getTime();
-    Date toDate = new GregorianCalendar(2019, Calendar.DECEMBER, 11).getTime();
+    LocalDate fromDate = LocalDate.of(2018, Calendar.FEBRUARY, 11);
+    LocalDate toDate = LocalDate.of(2019, Calendar.DECEMBER, 11);
     long countOfTookBookForPeriod = bookDao.getCountOfBookByPeriod(fromDate, toDate);
     Log.debug(TAG, countOfTookBookForPeriod + " ");
 
@@ -114,11 +115,27 @@ public class Main {
             "Pro Spring 5: An In-Depth Guide to the Spring Framework and Its Tools 5th ed. Edition");
     Log.debug(TAG, copyTookCount.toString());
 
-    // an average time of reading of the bool
+    // an average time of reading of the book
     Log.debug(TAG, String.valueOf(bookDao.getAvgTimeOfUsage("Hooked on Java")));
 
     // an average age of readers
     double avg = readerDao.getAvgReader();
     Log.debug(TAG, Double.toString(avg));
+
+    // an average age of readers by list of books belongs to a specific author.
+    double avgAgeByAuthor = readerDao.getAvgAgeByAuthor(
+            bookDao.findBooksByAuthor(
+                    authorDao.findByName("Joshua Bloch")));
+    Log.debug(TAG, String.valueOf(avgAgeByAuthor));
+
+    // popular book
+    LocalDate firstPeriod = LocalDate.of(2019, Calendar.FEBRUARY, 11);
+    LocalDate secondPeriod = LocalDate.of(2019, Calendar.AUGUST, 11);
+    Map<Book, Long> popular = bookDao.getPopular(firstPeriod, secondPeriod);
+    Log.debug(TAG, popular.toString());
+
+    // using period
+    Map<Reader, LocalDate> getUsingPeriod = readerDao.getUsingPeriod();
+    Log.debug(TAG, getUsingPeriod.toString());
   }
 }

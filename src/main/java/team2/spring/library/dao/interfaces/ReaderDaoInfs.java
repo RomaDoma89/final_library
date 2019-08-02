@@ -1,10 +1,9 @@
 package team2.spring.library.dao.interfaces;
 
-import team2.spring.library.dao.interfaces.Dao;
 import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Reader;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +17,11 @@ public interface ReaderDaoInfs extends Dao<Reader> {
 
   Map<Reader, List<Book>> listOfNotReturnedBook(String readerName);
 
-  Map<Reader, Date> findRegistrationDate(String readerName);
+  Map<Reader, LocalDate> findRegistrationDate(String readerName);
 
   double getAvgReader();
+
+  double getAvgAgeByAuthor(List<Book> books);
+
+  Map<Reader, LocalDate> getUsingPeriod();
 }

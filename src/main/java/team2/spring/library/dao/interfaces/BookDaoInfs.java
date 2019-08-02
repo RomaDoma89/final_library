@@ -4,7 +4,7 @@ import team2.spring.library.entities.Author;
 import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Copy;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +18,7 @@ public interface BookDaoInfs extends Dao<Book> {
 
   List<Copy> getCopiesInfo(String title);
 
-  long getCountOfBookByPeriod(Date fromDate, Date toDate);
+  long getCountOfBookByPeriod(LocalDate fromDate, LocalDate toDate);
 
   long getTotalUsageCount(String title);
 
@@ -27,4 +27,6 @@ public interface BookDaoInfs extends Dao<Book> {
   Double getAvgTimeOfUsage(String title);
 
   double getReaderAvgByBook(String title);
+
+  Map<Book, Long> getPopular(LocalDate firstPeriod, LocalDate secondPeriod);
 }

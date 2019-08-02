@@ -4,18 +4,18 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import team2.spring.library.Log;
+import team2.spring.library.dao.interfaces.ReaderDaoInfs;
+import team2.spring.library.entities.Book;
+import team2.spring.library.entities.Reader;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import team2.spring.library.dao.interfaces.ReaderDaoInfs;
-import team2.spring.library.entities.Book;
-import team2.spring.library.entities.Reader;
 
 /** */
 @Transactional
@@ -165,17 +165,17 @@ public class ReaderDao implements ReaderDaoInfs {
    * @param readerName the name of the reader.
    * @return a map of readers and their dates of registration.
    */
-  public Map<Reader, Date> findRegistrationDate(String readerName) {
-    Map<Reader, Date> readerRegistryDate = new HashMap<>();
+  public Map<Reader, LocalDate> findRegistrationDate(String readerName) {
+    Map<Reader, LocalDate> readerRegistryDate = new HashMap<>();
 
     try (Session session = sessionFactory.openSession()) {
       List<Reader> readers = findReaderByName(session, readerName);
       if (null != readers) {
         for (Reader reader : readers) {
-          TypedQuery<Date> query =
+          TypedQuery<LocalDate> query =
               session.createQuery(
                   "SELECT min(s.timeTake) FROM Story s JOIN s.reader r WHERE r = :reader",
-                  Date.class);
+                  LocalDate.class);
           query.setParameter("reader", reader);
           readerRegistryDate.put(reader, query.getSingleResult());
         }
@@ -187,7 +187,8 @@ public class ReaderDao implements ReaderDaoInfs {
   /**
    * Return average by reader
    *
-   * @return */
+   * @return
+   */
   @Override
   public double getAvgReader() {
     try (Session session = sessionFactory.openSession()) {
@@ -195,6 +196,56 @@ public class ReaderDao implements ReaderDaoInfs {
           session
               .createQuery("SELECT AVG (YEAR(current_date) - YEAR(r.birthday)) FROM Reader r")
               .getSingleResult();
+    }
+  }
+
+  // 9.2 TASK TODO remove this staff
+  // 1. Author a = authorDao.findAuthorByName;
+  // 2. List<Book> books = bookDao.findBooksByAuthor(author);
+  // 3. THIS METHOD
+  /**
+   * Finds an average age of readers by list of books belongs to a specific author.
+   *
+   * @param books of the specific author.
+   * @return an average age of readers of the specific author.
+   */
+  @Override
+  public double getAvgAgeByAuthor(List<Book> books) {
+    try (Session session = sessionFactory.openSession()) {
+      return session
+          .createQuery(
+              "SELECT AVG(YEAR(current_date) - YEAR(s.reader.birthday)) "
+                  + "FROM Story s WHERE s.book IN (:books)",
+              Double.class)
+          .setParameter("books", books)
+          .uniqueResult();
+    }
+  }
+
+  /**
+   * Method to find time of using library from registration day to now
+   *
+   * @return Map<Reader, LocalDate>
+   */
+  @Override
+  public Map<Reader, LocalDate> getUsingPeriod() {
+    try (Session session = sessionFactory.openSession()) {
+      Map<Reader, LocalDate> resultMap = new HashMap<>();
+      List<Reader> listOfReaders =
+          session.createQuery("SELECT DISTINCT s.reader FROM Story s", Reader.class).list();
+
+      if (listOfReaders != null) {
+        for (Reader reader : listOfReaders) {
+          LocalDate registration =
+              (LocalDate)
+                  session
+                      .createQuery("SELECT MIN(s.timeTake) FROM Story s WHERE s.reader = :reader")
+                      .setParameter("reader", reader)
+                      .getSingleResult();
+          resultMap.put(reader, registration);
+        }
+      }
+      return resultMap;
     }
   }
 
