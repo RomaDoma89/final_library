@@ -3,7 +3,7 @@ package team2.spring.library.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -30,15 +30,13 @@ public class Story {
   @JoinColumn(name = "book", nullable = false)
   private Book book;
 
-  @Temporal(TemporalType.DATE)
   @Column(name = "time_take", nullable = false)
-  private Date timeTake;
+  private LocalDate timeTake;
 
-  @Temporal(TemporalType.DATE)
   @Column(name = "time_return")
-  private Date timeReturn;
+  private LocalDate timeReturn;
 
-  public Story(Reader reader, Book book, Copy copy, Date timeTake) {
+  public Story(Reader reader, Book book, Copy copy, LocalDate timeTake) {
     this.reader=reader;
     this.book = book;
     this.copy = copy;
