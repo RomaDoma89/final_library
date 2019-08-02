@@ -20,4 +20,6 @@ public interface ReaderDaoInfs extends Dao<Reader> {
   Map<Reader, LocalDate> findRegistrationDate(String readerName);
 
   double getAvgReader();
+
+  double getAvgAgeByAuthor(List<Book> books);
 }

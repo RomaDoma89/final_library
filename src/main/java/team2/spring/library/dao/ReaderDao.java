@@ -4,6 +4,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import team2.spring.library.Log;
+import team2.spring.library.dao.interfaces.ReaderDaoInfs;
+import team2.spring.library.entities.Book;
+import team2.spring.library.entities.Reader;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -12,10 +16,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import team2.spring.library.dao.interfaces.ReaderDaoInfs;
-import team2.spring.library.entities.Book;
-import team2.spring.library.entities.Reader;
 
 /** */
 @Transactional
@@ -175,7 +175,7 @@ public class ReaderDao implements ReaderDaoInfs {
           TypedQuery<LocalDate> query =
               session.createQuery(
                   "SELECT min(s.timeTake) FROM Story s JOIN s.reader r WHERE r = :reader",
-                      LocalDate.class);
+                  LocalDate.class);
           query.setParameter("reader", reader);
           readerRegistryDate.put(reader, query.getSingleResult());
         }
@@ -187,7 +187,8 @@ public class ReaderDao implements ReaderDaoInfs {
   /**
    * Return average by reader
    *
-   * @return */
+   * @return
+   */
   @Override
   public double getAvgReader() {
     try (Session session = sessionFactory.openSession()) {
@@ -195,6 +196,30 @@ public class ReaderDao implements ReaderDaoInfs {
           session
               .createQuery("SELECT AVG (YEAR(current_date) - YEAR(r.birthday)) FROM Reader r")
               .getSingleResult();
+    }
+  }
+
+  // 9.2 TASK TODO remove this staff
+  // 1. Author a = authorDao.findAuthorByName;
+  // 2. List<Book> books = bookDao.findBooksByAuthor(author);
+  // 3. THIS METHOD
+  /**
+   * Finds an average age of readers by list of books belongs to a specific author.
+   *
+   * @param books of the specific author.
+   * @return an average age of readers of the specific author.
+   */
+  @Override
+  public double getAvgAgeByAuthor(List<Book> books) {
+    try (Session session = sessionFactory.openSession()) {
+      Log.debug(TAG, books.toString());
+      return session
+          .createQuery(
+              "SELECT AVG(YEAR(current_date) - YEAR(s.reader.birthday)) "
+                  + "FROM Story s WHERE s.book IN (:books)",
+              Double.class)
+          .setParameter("books", books)
+          .uniqueResult();
     }
   }
 
