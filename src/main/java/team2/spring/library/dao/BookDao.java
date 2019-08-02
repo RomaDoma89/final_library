@@ -177,6 +177,43 @@ public class BookDao implements BookDaoInfs {
   }
 
   /**
+   * Return list of books and their counter of reading
+   *
+   * @param firstPeriod
+   * @param secondPeriod
+   * @return Map<Book, Long>
+   */
+  @Override
+  public Map<Book, Long> getPopular(LocalDate firstPeriod, LocalDate secondPeriod) {
+    try (Session session = sessionFactory.openSession()) {
+      Map<Book, Long> resultMap = new HashMap<>();
+
+      List<Book> bookList =
+          session
+              .createQuery(
+                  "SELECT DISTINCT s.book FROM Story s "
+                      + "WHERE s.timeTake between :date1 AND :date2",
+                  Book.class)
+              .setParameter("date1", firstPeriod)
+              .setParameter("date2", secondPeriod)
+              .list();
+      if (bookList != null) {
+        for (Book book : bookList) {
+          Long count =
+              session
+                  .createQuery(
+                      "SELECT count(s.timeTake) " + "FROM Story s" + " WHERE s.book = :book",
+                      Long.class)
+                  .setParameter("book", book)
+                  .getSingleResult();
+          resultMap.put(book, count);
+        }
+      }
+      return resultMap;
+    }
+  }
+
+  /**
    * Finds a book by given title and counts how many times the book has been taken.
    *
    * <p>5. Скільки разів брали певну книжку (в загальному)

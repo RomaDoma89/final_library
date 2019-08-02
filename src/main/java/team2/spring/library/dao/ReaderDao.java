@@ -223,6 +223,33 @@ public class ReaderDao implements ReaderDaoInfs {
   }
 
   /**
+   * Method to find time of using library from registration day to now
+   *
+   * @return Map<Reader, LocalDate>
+   */
+  @Override
+  public Map<Reader, LocalDate> getUsingPeriod() {
+    try (Session session = sessionFactory.openSession()) {
+      Map<Reader, LocalDate> resultMap = new HashMap<>();
+      List<Reader> listOfReaders =
+          session.createQuery("SELECT DISTINCT s.reader FROM Story s", Reader.class).list();
+
+      if (listOfReaders != null) {
+        for (Reader reader : listOfReaders) {
+          LocalDate registration =
+              (LocalDate)
+                  session
+                      .createQuery("SELECT MIN(s.timeTake) FROM Story s WHERE s.reader = :reader")
+                      .setParameter("reader", reader)
+                      .getSingleResult();
+          resultMap.put(reader, registration);
+        }
+      }
+      return resultMap;
+    }
+  }
+
+  /**
    * Finds all readers by the given name. Uses an instance of the session.
    *
    * @param session - an instance of the current session.

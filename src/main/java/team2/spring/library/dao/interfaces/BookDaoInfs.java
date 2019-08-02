@@ -27,4 +27,6 @@ public interface BookDaoInfs extends Dao<Book> {
   Double getAvgTimeOfUsage(String title);
 
   double getReaderAvgByBook(String title);
+
+  Map<Book, Long> getPopular(LocalDate firstPeriod, LocalDate secondPeriod);
 }
