@@ -22,13 +22,13 @@
                     </li>
                     <li><a href="readerStatisticForm">Інформація про користувача</a>
                     </li>
-                    <li><a href="getByPeriodForm">Дістати список книг виданих по періоду</a></li>
+                    <li><a href="getCountBookByPeriodForm">Дістати список книг виданих по періоду</a></li>
                     <li><a href="getBookStatForm">Статистика по певній книзі(к-ть використань)</a>
                     </li>
                     <li><a href="getPopularBookForm">Дістати по популярності</a>
                     </li>
                     <li><a href="getBlackList">Отримати "чорний список" користувачів</a></li>
-                    <li><a href="#">Статистика по читачам</a>
+                    <li><a href="generalStatistic">Статистика по читачам</a>
                         <ul>
                             <li><a href="readerRegistration">Середній час читання</a></li>
                             <li><a href="averageAgeOfReader">Середній вік </a></li>

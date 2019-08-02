@@ -6,12 +6,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import team2.spring.library.dto.BookByPeriodDto;
 import team2.spring.library.dto.BookDto;
 import team2.spring.library.entities.Author;
 import team2.spring.library.entities.Book;
 import team2.spring.library.services.BookService;
 
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.util.Date;
 
 /** Controller witch operate all request of book */
 @Controller
@@ -98,12 +101,36 @@ public class BookController {
   }
 
   @GetMapping("/getPopularBookForm")
-  public String getPopularBookForm(Model model){
-    model.addAttribute("bookDto",new BookDto());
-      return "/booksJsp/getPopularBookForm";
+  public String getPopularBookForm(Model model) {
+    model.addAttribute("bookDto", new BookDto());
+    return "/booksJsp/getPopularBookForm";
   }
+
   @PostMapping("/getPopularBook")
-  public String getPopularBook(@ModelAttribute("book")Book book,Model model){
+  public String getPopularBook(@ModelAttribute("book") Book book, Model model) {
     return "getPopularBook";
+  }
+
+  /**
+   * @param model
+   * @return
+   */
+  @GetMapping("/getCountBookByPeriodForm")
+  public String getCountBookByPeriodForm(Model model) {
+    model.addAttribute("bookByPeriodDto", new BookByPeriodDto());
+    return "/booksJsp/getCountBookByPeriodForm";
+  }
+
+  @PostMapping("/getCountBookByPeriod")
+  public String getCountBookByPeriod(@Valid @ModelAttribute("bookByPeriodDto") BookByPeriodDto bookByPeriodDto,Model model) {
+    try {
+      bookByPeriodDto.setCountOfBookByPeriod(bookService.getCountOfBookByPeriod(bookByPeriodDto.getDateFrom(),bookByPeriodDto.getDateTo()));
+      System.out.println(bookByPeriodDto);
+    } catch (ParseException e) {
+      e.printStackTrace();
+      return "error";
+    }
+    model.addAttribute("bookByPeriodDto",bookByPeriodDto);
+    return "booksJsp/getCountBookByPeriodForm";
   }
 }

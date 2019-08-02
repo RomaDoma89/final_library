@@ -8,9 +8,9 @@
 </head>
 <body>
 <%@include file="../menu.jsp" %>
-<form:form action="getPopularBookForm" method="post" modelAttribute="bookDto" cssStyle="text-align: center">
+<form:form action="" method="post" modelAttribute="bookDto" cssStyle="text-align: center">
     <p>Введіть назву книги :</p>
-    <br>
+    <br>${}
     <form:label path="title" style="text-align: center"  >Title </form:label>
     <form:input  path="title" value="Effective Java" style="text-align: center"/>
     <input type="submit" value="Submit"/>

@@ -21,6 +21,5 @@ public class ReaderStatisticDto {
   @NotBlank
   private String select;
   private Map<Reader, List<Book>> readerListMap;
-  // todo  change to date or not
   private Map<Reader, Date> readerDateMap;
 }
