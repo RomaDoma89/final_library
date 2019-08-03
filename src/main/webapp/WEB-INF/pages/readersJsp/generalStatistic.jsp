@@ -4,25 +4,23 @@
 <html>
 <head>
     <title>Title</title>
-    <%@include file="/WEB-INF/pages/menu.jsp" %>
 </head>
 <body>
+<%@include file="/WEB-INF/pages/menu.jsp" %>
 <table class="simple-little-table" cellspacing='0' style="text-align: center; margin: auto; margin-top: 50px">
     <thead>
     <tr>
-        <th>Автор</th>
-        <th>Назви книг</th>
-    </tr><!-- Table Header -->
+        <th>Середній час читання(днів)</th>
+        <th>Середнвй вік читачів</th>
+        <th>Кількість звернень</th>
+    </tr>
     </thead>
     <tbody>
-
     <tr>
-        <td>${author.name}</td>
-        <c:forEach var="book" items="${listBooks}">
-            <td><c:out value="${book.title}"/></td>
-        </c:forEach>
+        <td>${generalStatisticDto.avgDaysOfReading}</td>
+        <td>${generalStatisticDto.avgAgeOfReaders}</td>
+        <td>${generalStatisticDto.avgVisitOfLibrary}</td>
     </tr>
-
     </tbody>
 </table>
 </body>

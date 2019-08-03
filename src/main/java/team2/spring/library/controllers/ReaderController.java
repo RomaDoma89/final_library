@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import team2.spring.library.dto.GeneralStatisticDto;
 import team2.spring.library.dto.ReaderStatisticDto;
 import team2.spring.library.services.ReaderService;
 
@@ -27,14 +28,14 @@ public class ReaderController {
   }
 
   /**
-   * @param model set readerStatisticDto in jsp
+   * @param model  set readerStatisticDto in jsp
    * @return page with form
    */
   @GetMapping("/readerStatisticForm")
   public String findUserStatisticForm(Model model) {
-    model.addAttribute("readerStatisticDto", new ReaderStatisticDto());
-    return "readersJsp/readerStatisticForm";
-  }
+        model.addAttribute("readerStatisticDto", new ReaderStatisticDto());
+        return "readersJsp/readerStatisticForm";
+    }
 
   /**
    * @param readerStatisticDto return name of reader
@@ -48,4 +49,15 @@ public class ReaderController {
     model.addAttribute("readerStatisticDto", readerService.getUserStatistic(readerStatisticDto));
     return "readersJsp/readerStatistic";
   }
+
+  /**
+   * @param model set data in  jsp  page
+   * @return representation of general statistic
+   */
+  @GetMapping("/generalStatistic")
+  public String getGeneralStatistic(Model model) {
+    model.addAttribute("generalStatisticDto", readerService.getGeneralStatisticDto());
+    return "readersJsp/generalStatistic";
+  }
+
 }
