@@ -102,12 +102,34 @@ public class BookController {
     return "addBook";
   }
 
-  @GetMapping("/getPopularBookForm")
-  public String getPopularBookForm(Model model) {
+  /**
+   * @param model
+   * @return
+   */
+  @GetMapping("/getBookStatistic")
+  public String getBookStatistic(Model model) {
     model.addAttribute("bookStatisticDto", new BookStatisticDto());
     return "booksJsp/bookStatistic";
   }
 
+  /**
+   * @param bookStatisticDto
+   * @param model
+   * @return
+   */
+  @PostMapping("/getBookStatistic")
+  public String getBookStatistic(
+      @Valid @ModelAttribute("bookStatisticDto") BookStatisticDto bookStatisticDto, Model model) {
+    System.out.println(bookStatisticDto);
+    model.addAttribute("bookStatisticDto", bookService.getBookStatisticDto(bookStatisticDto));
+    return "booksJsp/bookStatistic";
+  }
+
+  /**
+   * @param book
+   * @param model
+   * @return
+   */
   @PostMapping("/getPopularBook")
   public String getPopularBook(@ModelAttribute("book") Book book, Model model) {
     return "getPopularBook";
@@ -119,6 +141,12 @@ public class BookController {
     return "/booksJsp/getCountBookByPeriodForm";
   }
 
+  /**
+   * @param dateFrom
+   * @param dateTo
+   * @param model
+   * @return
+   */
   @PostMapping("/getCountBookByPeriod")
   public String getCountBookByPeriod(
       @RequestParam String dateFrom, @RequestParam String dateTo, Model model) {

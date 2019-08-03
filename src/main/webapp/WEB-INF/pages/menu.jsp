@@ -23,7 +23,7 @@
                     <li><a href="readerStatisticForm">Інформація про користувача</a>
                     </li>
                     <li><a href="getCountBookByPeriodForm">Дістати список книг виданих по періоду</a></li>
-                    <li><a href="getBookStatForm">Статистика по певній книзі(к-ть використань)</a>
+                    <li><a href="getBookStatistic">Статистика по певній книзі(к-ть використань)</a>
                     </li>
                     <li><a href="getPopularBookForm">Дістати по популярності</a>
                     </li>

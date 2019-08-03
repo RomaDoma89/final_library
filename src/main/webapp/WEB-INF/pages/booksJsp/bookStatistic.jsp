@@ -8,33 +8,49 @@
 </head>
 <body>
 <%@include file="../menu.jsp" %>
-<form:form action="" method="post" modelAttribute="bookDto" cssStyle="text-align: center">
-    <p>Введіть назву книги :</p>
-    <br>${ }
-    <form:label path="title" style="text-align: center"  >Title </form:label>
-    <form:input  path="title" value="Effective Java" style="text-align: center"/>
-    <input type="submit" value="Submit"/>
-</form:form>
+
 <c:choose>
-    <c:when test="${bookDto.dateFrom==null}">
-        <form:form action="getCountBookByPeriod" modelAttribute="bookStatisticDto" method="post"
-                   style=" text-align: center; padding-top: 50px">
-            Input first date in format (yyyy-MM-dd)
+    <c:when test="${bookStatisticDto.title==null}">
+        <form:form action="getBookStatistic" method="post" modelAttribute="bookStatisticDto"
+                   cssStyle="text-align: center">
+            <p>Введіть назву книги :</p>
             <br>
-            <input type="datetime-local" name="dateFrom" required>
-            <br>
-            Input second date in format (yyyy-MM-dd)
-            <br>
-            <input type="datetime-local" name="dateTo" required>
-            <br>
-            <input type="submit" value="Submit">
+            <form:label path="title" style="text-align: center"></form:label>
+            <input path="title" value="Effective Java"  required style="text-align: center"/>
+            <input type="submit" value="Submit"/>
         </form:form>
     </c:when>
     <c:otherwise>
         <div style="text-align: center">
-            <table class="simple-little-table" cellspacing='0' style="text-align: center; margin: auto; margin-top: 50px">
-                <p>З ${bookByPeriodDto.dateFrom} по ${bookByPeriodDto.dateTo} було  видано ${bookByPeriodDto.countOfBookByPeriod}</p>
+            <table class="simple-little-table" style="text-align: center; margin: auto; margin-top: 50px">
+               <caption> Cтатистика </caption>
+                <tr>
+                    <th>Загальна </th>
+                    <th>Середня </th>
+                </tr>
+                <tr>
+                    <td>${bookStatisticDto.totalUsageCount}</td>
+                    <td>${bookStatisticDto.getAvgTimeOfUsage}</td>
+                </tr>
             </table>
+            <table class="simple-little-table" style="text-align: center; margin: auto; margin-top: 50px">
+                <caption>По примірниках</caption>
+                <tr>
+                    <th>N</th>
+                    <th>Назва</th>
+                    <th>Доступна</th>
+                    <th>Кількість замовлень</th>
+                </tr>
+                <c:forEach  var="book" items="${bookStatisticDto.getUsageCountForCopies}" varStatus="loop" >
+                    <tr>
+                        <td>${loop.index+1}</td>
+                        <td>${book.key.book.title}</td>
+                        <td>${book.key.available}</td>
+                        <td>${book.value}</td>
+                    </tr>
+                </c:forEach>
+            </table>
+
         </div>
     </c:otherwise>
 </c:choose>
