@@ -90,11 +90,10 @@ public class ReaderDao implements ReaderDaoInfs {
 
   /** @return List<Reader> */
   public List<Reader> getBlackList() {
-    try (Session session = sessionFactory.getCurrentSession()) {
-      return session
-          .createQuery("SELECT s.reader FROM Story s WHERE s.timeReturn IS NULL", Reader.class)
-          .getResultList();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return session
+        .createQuery("SELECT s.reader FROM Story s WHERE s.timeReturn IS NULL", Reader.class)
+        .getResultList();
   }
 
   /**
