@@ -2,14 +2,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <link rel="stylesheet" href="<c:url value="/resources/style.css"/>" type="text/css">
+    <link rel="stylesheet" href="<c:url value="/resources/css/errorStyle.css"/>" type="text/css">
     <title>Error</title>
-    <jsp:include page="menu.jsp"/>
 </head>
 <body>
-<div style="text-align: center" >
-    <h1 >Input data is not correct, please try again</h1>
-    <img src="${pageContext.request.contextPath}/resources/homer_doh.png">
+
+<div id="notfound">
+    <div class="notfound">
+        <div class="notfound-404">
+            <h1>Oops!</h1>
+        </div>
+        <h2>404 - Page not found</h2>
+        <p>The page you are looking for might have been removed had its name changed or is temporarily unavailable.</p>
+        <a href="/">Go To Homepage</a>
+    </div>
 </div>
+
 </body>
 </html>

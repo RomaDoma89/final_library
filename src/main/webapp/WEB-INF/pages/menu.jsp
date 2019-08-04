@@ -5,7 +5,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="<c:url value="/resources/style.css"/> " type="text/css">
+    <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/> " type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Cuprum" rel="stylesheet">
     <title>Tom menu</title>
 </head>
@@ -30,9 +30,9 @@
                     <li><a href="getBlackList">Отримати "чорний список" користувачів</a></li>
                     <li><a href="generalStatistic">Статистика по читачам</a>
                     </li>
-                    <li><a href="inputAvgAge">Ортимати середній вік читачів</a>
+                    <li><a href="readerAvgForm">Ортимати середній вік читачів</a>
                     </li>
-                    <li><a href="inputInfo">Вивести дані по назві книжки, кількість екземплярів з інформацією про
+                    <li><a href="getCopiesInfoForm">Вивести дані по назві книжки, кількість екземплярів з інформацією про
                         них</a></li>
 
                 </ul>

@@ -9,6 +9,7 @@ import team2.spring.library.dto.BookDto;
 import team2.spring.library.dto.BookStatisticDto;
 import team2.spring.library.entities.Author;
 import team2.spring.library.entities.Book;
+import team2.spring.library.entities.Copy;
 
 import java.text.ParseException;
 import java.util.List;
@@ -53,11 +54,13 @@ public class BookServiceImpl implements BookService {
   @Override
   public long getCountOfBookByPeriod(BookByPeriodDto bookByPeriodDto) throws ParseException {
     System.out.println(bookByPeriodDto);
-    if (bookByPeriodDto.getDateFrom().compareTo(bookByPeriodDto.getDateTo()) > 0 || bookByPeriodDto.getDateFrom().compareTo(bookByPeriodDto.getDateTo()) == 0) {
+    if (bookByPeriodDto.getDateFrom().compareTo(bookByPeriodDto.getDateTo()) > 0
+        || bookByPeriodDto.getDateFrom().compareTo(bookByPeriodDto.getDateTo()) == 0) {
       throw new ParseException("date to is lover then date from ", 0);
     }
-    //Dont be angry  ,I`m working in them
-//    bookByPeriodDto.setCountOfBookByPeriod(bookDaoInfs.getCountOfBookByPeriod(bookByPeriodDto.getDateFrom(),bookByPeriodDto.getDateTo()));
+    // Dont be angry  ,I`m working in them
+    //
+    // bookByPeriodDto.setCountOfBookByPeriod(bookDaoInfs.getCountOfBookByPeriod(bookByPeriodDto.getDateFrom(),bookByPeriodDto.getDateTo()));
     return 0;
   }
 
@@ -74,5 +77,14 @@ public class BookServiceImpl implements BookService {
     bookStatisticDto.setTotalUsageCount(
         bookDaoInfs.getTotalUsageCount(bookStatisticDto.getTitle()));
     return bookStatisticDto;
+  }
+
+  /**
+   * @param book object which need for searching copies
+   * @return List of copies
+   */
+  @Override
+  public List<Copy> getCopiesInfo(Book book) {
+    return bookDaoInfs.getCopiesInfo(book.getTitle());
   }
 }

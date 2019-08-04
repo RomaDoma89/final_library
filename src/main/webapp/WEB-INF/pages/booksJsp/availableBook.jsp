@@ -4,7 +4,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
-<link rel="stylesheet" href="<c:url value="/resources/tableCss.css"/>" type="text/css">
+<link rel="stylesheet" href="<c:url value="/resources/css/tableCss.css"/>" type="text/css">
 
 <html>
 <head>

@@ -2,6 +2,7 @@ package team2.spring.library.entities;
 
 import lombok.*;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ public class Book {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", unique = true, nullable = false)
   private int id;
-
+  @NotBlank
   @Column(name = "title", length = 225, unique = true, nullable = false)
   private String title;
 
