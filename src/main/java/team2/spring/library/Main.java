@@ -123,9 +123,9 @@ public class Main {
     Log.debug(TAG, Double.toString(avg));
 
     // an average age of readers by list of books belongs to a specific author.
-    double avgAgeByAuthor = readerDao.getAvgAgeByAuthor(
-            bookDao.findBooksByAuthor(
-                    authorDao.findByName("Joshua Bloch")));
+    double avgAgeByAuthor =
+        readerDao.getAvgAgeByAuthor(
+            bookDao.findBooksByAuthor(authorDao.findByName("Joshua Bloch")));
     Log.debug(TAG, String.valueOf(avgAgeByAuthor));
 
     // popular book
@@ -137,5 +137,9 @@ public class Main {
     // using period
     Map<Reader, LocalDate> getUsingPeriod = readerDao.getUsingPeriod();
     Log.debug(TAG, getUsingPeriod.toString());
+
+    //  count of visiting
+    long avgCountOfVisiting = storyDao.getCountOfVisiting(firstPeriod, secondPeriod);
+    Log.debug(TAG, Long.toString(avgCountOfVisiting));
   }
 }

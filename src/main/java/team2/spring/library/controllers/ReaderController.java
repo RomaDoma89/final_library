@@ -48,4 +48,14 @@ public class ReaderController {
     model.addAttribute("readerStatisticDto", readerService.getUserStatistic(readerStatisticDto));
     return "readersJsp/readerStatistic";
   }
+
+  /**
+   * @param model set data in jsp page
+   * @return representation of general statistic
+   */
+  @GetMapping("/generalStatistic")
+  public String getGeneralStatistic(Model model) {
+    model.addAttribute("generalStatisticDto", readerService.getGeneralStatisticDto());
+    return "readersJsp/generalStatistic";
+  }
 }

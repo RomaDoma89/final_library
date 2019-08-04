@@ -1,5 +1,6 @@
 package team2.spring.library.services;
 
+import team2.spring.library.dto.GeneralStatisticDto;
 import team2.spring.library.dto.ReaderStatisticDto;
 import team2.spring.library.entities.Reader;
 
@@ -11,4 +12,6 @@ public interface ReaderService {
   List<Reader> getBlackList();
 
   ReaderStatisticDto getUserStatistic(ReaderStatisticDto readerStatisticDto);
+
+  public GeneralStatisticDto getGeneralStatisticDto();
 }

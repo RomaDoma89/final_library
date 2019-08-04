@@ -9,6 +9,7 @@ import team2.spring.library.dao.interfaces.StoryDaoInfs;
 import team2.spring.library.entities.Story;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 
 @Transactional
@@ -66,5 +67,25 @@ public class StoryDao implements StoryDaoInfs {
     Story story = session.find(Story.class, id);
     session.delete(story);
     return (null == session.find(Story.class, id));
+  }
+
+  /**
+   * Find count of visiting by period
+   *
+   * @param firstPeriod
+   * @param secondPeriod
+   * @return Long
+   */
+  @Override
+  public Long getCountOfVisiting(LocalDate firstPeriod, LocalDate secondPeriod) {
+    Session session = sessionFactory.openSession();
+    return session
+        .createQuery(
+            "SELECT COUNT(s.timeTake) FROM Story s"
+                + " WHERE s.timeTake BETWEEN :firstPeriod AND :secondPeriod",
+            Long.class)
+        .setParameter("firstPeriod", firstPeriod)
+        .setParameter("secondPeriod", secondPeriod)
+        .getSingleResult();
   }
 }
