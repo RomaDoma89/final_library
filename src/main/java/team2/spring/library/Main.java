@@ -37,11 +37,11 @@ public class Main {
 
     Log.debug(TAG, "Create spring_library scheme!");
 
-    BookDaoInfs bookDao = new BookDao(sessionFactory);
-    AuthorDaoInfs authorDao = new AuthorDao(sessionFactory);
-    ReaderDaoInfs readerDao = new ReaderDao(sessionFactory);
-    CopyDaoInfs copyDao = new CopyDao(sessionFactory);
-    StoryDaoInfs storyDao = new StoryDao(sessionFactory);
+    BookDaoInfs bookDao = new BookDao();
+    AuthorDaoInfs authorDao = new AuthorDao();
+    ReaderDaoInfs readerDao = new ReaderDao();
+    CopyDaoInfs copyDao = new CopyDao();
+    StoryDaoInfs storyDao = new StoryDao();
 
     // all books
     List<Book> books = bookDao.findAll();

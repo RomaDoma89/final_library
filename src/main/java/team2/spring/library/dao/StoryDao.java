@@ -1,14 +1,15 @@
 package team2.spring.library.dao;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import javax.transaction.Transactional;
-import java.util.List;
-
 import team2.spring.library.dao.interfaces.StoryDaoInfs;
 import team2.spring.library.entities.Story;
+
+import javax.transaction.Transactional;
+import java.util.List;
 
 @Transactional
 @Repository
@@ -18,29 +19,26 @@ public class StoryDao implements StoryDaoInfs {
   private SessionFactory sessionFactory;
 
   @Autowired
-  public StoryDao(SessionFactory sessionFactory) {
+  public void setSessionFactory(SessionFactory sessionFactory) {
     this.sessionFactory = sessionFactory;
   }
 
   @Override
-  public int insert(Story story) {
-    try (Session session = sessionFactory.openSession()) {
-      return (int) session.save(story);
-    }
+  public int insert(Story story) throws HibernateException, IllegalArgumentException {
+    Session session = sessionFactory.getCurrentSession();
+    return (int) session.save(story);
   }
 
   @Override
   public Story findById(int id) {
-    try (Session session = sessionFactory.openSession()) {
-      return session.find(Story.class, id);
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return session.find(Story.class, id);
   }
 
   @Override
   public List<Story> findAll() {
-    try (Session session = sessionFactory.openSession()) {
-      return session.createQuery("SELECT s FROM Story s", Story.class).list();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return session.createQuery("SELECT s FROM Story s", Story.class).list();
   }
 
   /**
@@ -51,10 +49,9 @@ public class StoryDao implements StoryDaoInfs {
    */
   @Override
   public Story update(Story story) {
-    try (Session session = sessionFactory.openSession()) {
-      session.update(story);
-      return session.find(Story.class, story.getId());
-    }
+    Session session = sessionFactory.getCurrentSession();
+    session.update(story);
+    return session.find(Story.class, story.getId());
   }
 
   /**
@@ -65,10 +62,9 @@ public class StoryDao implements StoryDaoInfs {
    */
   @Override
   public boolean delete(int id) {
-    try (Session session = sessionFactory.openSession()) {
-      Story story = session.find(Story.class, id);
-      session.delete(story);
-      return (null == session.find(Story.class, id));
-    }
+    Session session = sessionFactory.getCurrentSession();
+    Story story = session.find(Story.class, id);
+    session.delete(story);
+    return (null == session.find(Story.class, id));
   }
 }

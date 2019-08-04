@@ -1,7 +1,9 @@
 package team2.spring.library.dao;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import team2.spring.library.dao.interfaces.BookDaoInfs;
@@ -22,30 +24,27 @@ public class BookDao implements BookDaoInfs {
   private static final String TAG = BookDao.class.getName();
   private SessionFactory sessionFactory;
 
-  //  @Autowired
-  public BookDao(SessionFactory sessionFactory) {
+  @Autowired
+  public void setSessionFactory(SessionFactory sessionFactory) {
     this.sessionFactory = sessionFactory;
   }
 
   @Override
-  public int insert(Book book) {
-    try (Session session = sessionFactory.openSession()) {
-      return (int) session.save(book);
-    }
+  public int insert(Book book) throws HibernateException, IllegalArgumentException {
+    Session session = sessionFactory.getCurrentSession();
+    return (int) session.save(book);
   }
 
   @Override
   public Book findById(int id) {
-    try (Session session = sessionFactory.openSession()) {
-      return session.find(Book.class, id);
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return session.find(Book.class, id);
   }
 
   @Override
   public List<Book> findAll() {
-    try (Session session = sessionFactory.openSession()) {
-      return session.createQuery("SELECT b FROM Book b", Book.class).list();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return session.createQuery("SELECT b FROM Book b", Book.class).list();
   }
 
   /**
@@ -56,10 +55,9 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public Book update(Book book) {
-    try (Session session = sessionFactory.openSession()) {
-      session.update(book);
-      return session.find(Book.class, book.getId());
-    }
+    Session session = sessionFactory.getCurrentSession();
+    session.update(book);
+    return session.find(Book.class, book.getId());
   }
 
   /**
@@ -70,11 +68,10 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public boolean delete(int id) {
-    try (Session session = sessionFactory.openSession()) {
-      Book book = session.find(Book.class, id);
-      session.delete(book);
-      return (null == session.find(Book.class, id));
-    }
+    Session session = sessionFactory.getCurrentSession();
+    Book book = session.find(Book.class, id);
+    session.delete(book);
+    return (null == session.find(Book.class, id));
   }
 
   /**
@@ -85,20 +82,18 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public Book findByTitle(String title) {
-    try (Session session = sessionFactory.openSession()) {
-      return findBookByTitle(session, title);
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return findBookByTitle(session, title);
   }
 
   @Override
   public List<Book> findBooksByAuthor(Author author) {
-    try (Session session = sessionFactory.openSession()) {
-      TypedQuery<Book> query =
-          session.createQuery(
-              "SELECT b FROM Author a LEFT JOIN a.books b WHERE a = :author", Book.class);
-      query.setParameter("author", author);
-      return query.getResultList();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    TypedQuery<Book> query =
+        session.createQuery(
+            "SELECT b FROM Author a LEFT JOIN a.books b WHERE a = :author", Book.class);
+    query.setParameter("author", author);
+    return query.getResultList();
   }
 
   /**
@@ -109,17 +104,16 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public long isBookAvailable(String title) {
-    try (Session session = sessionFactory.openSession()) {
-      Book book = findBookByTitle(session, title);
-      TypedQuery<Long> query =
-          session.createQuery(
-              "SELECT count(c) FROM Copy c "
-                  + "JOIN c.book b WHERE b = :book AND c.available =: available",
-              Long.class);
-      query.setParameter("book", book);
-      query.setParameter("available", true);
-      return query.getSingleResult();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    Book book = findBookByTitle(session, title);
+    TypedQuery<Long> query =
+        session.createQuery(
+            "SELECT count(c) FROM Copy c "
+                + "JOIN c.book b WHERE b = :book AND c.available =: available",
+            Long.class);
+    query.setParameter("book", book);
+    query.setParameter("available", true);
+    return query.getSingleResult();
   }
 
   /**
@@ -131,15 +125,14 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public long getCountOfBookByPeriod(LocalDate fromDate, LocalDate toDate) {
-    try (Session session = sessionFactory.openSession()) {
-      TypedQuery<Long> query =
-          session.createQuery(
-              "SELECT count(s.book) FROM Story s WHERE s.timeTake BETWEEN :fromDate AND :toDate",
-              Long.class);
-      query.setParameter("fromDate", fromDate);
-      query.setParameter("toDate", toDate);
-      return query.getSingleResult();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    TypedQuery<Long> query =
+        session.createQuery(
+            "SELECT count(s.book) FROM Story s WHERE s.timeTake BETWEEN :fromDate AND :toDate",
+            Long.class);
+    query.setParameter("fromDate", fromDate);
+    query.setParameter("toDate", toDate);
+    return query.getSingleResult();
   }
 
   /**
@@ -150,12 +143,11 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public List<Copy> getCopiesInfo(String title) {
-    try (Session session = sessionFactory.openSession()) {
-      return session
-          .createQuery("SELECT c FROM Copy c WHERE c.book.title = ?1", Copy.class)
-          .setParameter(1, title)
-          .getResultList();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return session
+        .createQuery("SELECT c FROM Copy c WHERE c.book.title = ?1", Copy.class)
+        .setParameter(1, title)
+        .getResultList();
   }
 
   /**
@@ -166,14 +158,17 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public double getReaderAvgByBook(String title) {
-    try (Session session = sessionFactory.openSession()) {
-      return (double)
-          session
-              .createQuery(
-                  "SELECT AVG (YEAR(current_date) - YEAR(s.reader.birthday)) FROM Story s WHERE s.book.title = ?1")
-              .setParameter(1, title)
-              .getSingleResult();
+    Session session = sessionFactory.getCurrentSession();
+    double avgAge = 0;
+    Book book = findBookByTitle(session, title);
+    if (null != book) {
+      TypedQuery<Double> query = session.createQuery(
+              "SELECT avg(YEAR(current_date) - YEAR (s.reader.birthday)) FROM Story s WHERE s.book = :book",
+              Double.class)
+              .setParameter("book", book);
+      avgAge = query.getSingleResult();
     }
+    return avgAge;
   }
 
   /**
@@ -185,32 +180,31 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public Map<Book, Long> getPopular(LocalDate firstPeriod, LocalDate secondPeriod) {
-    try (Session session = sessionFactory.openSession()) {
-      Map<Book, Long> resultMap = new HashMap<>();
+    Session session = sessionFactory.getCurrentSession();
+    Map<Book, Long> resultMap = new HashMap<>();
 
-      List<Book> bookList =
-          session
-              .createQuery(
-                  "SELECT DISTINCT s.book FROM Story s "
-                      + "WHERE s.timeTake between :date1 AND :date2",
-                  Book.class)
-              .setParameter("date1", firstPeriod)
-              .setParameter("date2", secondPeriod)
-              .list();
-      if (bookList != null) {
-        for (Book book : bookList) {
-          Long count =
-              session
-                  .createQuery(
-                      "SELECT count(s.timeTake) " + "FROM Story s" + " WHERE s.book = :book",
-                      Long.class)
-                  .setParameter("book", book)
-                  .getSingleResult();
-          resultMap.put(book, count);
-        }
+    List<Book> bookList =
+        session
+            .createQuery(
+                "SELECT DISTINCT s.book FROM Story s "
+                    + "WHERE s.timeTake between :date1 AND :date2",
+                Book.class)
+            .setParameter("date1", firstPeriod)
+            .setParameter("date2", secondPeriod)
+            .list();
+    if (bookList != null) {
+      for (Book book : bookList) {
+        Long count =
+            session
+                .createQuery(
+                    "SELECT count(s.timeTake) " + "FROM Story s" + " WHERE s.book = :book",
+                    Long.class)
+                .setParameter("book", book)
+                .getSingleResult();
+        resultMap.put(book, count);
       }
-      return resultMap;
     }
+    return resultMap;
   }
 
   /**
@@ -223,13 +217,12 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public long getTotalUsageCount(String title) {
-    try (Session session = sessionFactory.openSession()) {
-      Book book = findBookByTitle(session, title);
-      return session
-          .createQuery("SELECT count(s.book) FROM Story s WHERE s.book = :book", Long.class)
-          .setParameter("book", book)
-          .uniqueResult();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    Book book = findBookByTitle(session, title);
+    return session
+        .createQuery("SELECT count(s.book) FROM Story s WHERE s.book = :book", Long.class)
+        .setParameter("book", book)
+        .uniqueResult();
   }
 
   /**
@@ -241,29 +234,28 @@ public class BookDao implements BookDaoInfs {
    * @return how many times the book has taken.
    */
   public Map<Copy, Long> getUsageCountForCopies(String title) {
-    try (Session session = sessionFactory.openSession()) {
-      Map<Copy, Long> resultMap = new HashMap<>();
+    Session session = sessionFactory.getCurrentSession();
+    Map<Copy, Long> resultMap = new HashMap<>();
 
-      Book book = findBookByTitle(session, title);
+    Book book = findBookByTitle(session, title);
 
-      List<Copy> copies =
-          session
-              .createQuery("SELECT c FROM Copy c WHERE c.book = :book", Copy.class)
-              .setParameter("book", book)
-              .list();
+    List<Copy> copies =
+        session
+            .createQuery("SELECT c FROM Copy c WHERE c.book = :book", Copy.class)
+            .setParameter("book", book)
+            .list();
 
-      if (null != copies) {
-        for (Copy copy : copies) {
-          Long count =
-              session
-                  .createQuery("SELECT count(s.id) FROM Story s WHERE s.copy = :copy", Long.class)
-                  .setParameter("copy", copy)
-                  .uniqueResult();
-          resultMap.put(copy, count);
-        }
+    if (null != copies) {
+      for (Copy copy : copies) {
+        Long count =
+            session
+                .createQuery("SELECT count(s.id) FROM Story s WHERE s.copy = :copy", Long.class)
+                .setParameter("copy", copy)
+                .uniqueResult();
+        resultMap.put(copy, count);
       }
-      return resultMap;
     }
+    return resultMap;
   }
 
   /**
@@ -275,17 +267,16 @@ public class BookDao implements BookDaoInfs {
    * @return an average time of reading.
    */
   public Double getAvgTimeOfUsage(String title) {
-    try (Session session = sessionFactory.openSession()) {
-      Book book = findBookByTitle(session, title);
-      List<Integer> days =
-          session
-              .createQuery(
-                  "SELECT (DATEDIFF(s.timeReturn, s.timeTake)) FROM Story s WHERE s.book = :book AND s.timeReturn IS NOT NULL",
-                  Integer.class)
-              .setParameter("book", book)
-              .list();
-      return days.stream().mapToInt(i -> i).average().orElse(0);
-    }
+    Session session = sessionFactory.getCurrentSession();
+    Book book = findBookByTitle(session, title);
+    List<Integer> days =
+        session
+            .createQuery(
+                "SELECT (DATEDIFF(s.timeReturn, s.timeTake)) FROM Story s WHERE s.book = :book AND s.timeReturn IS NOT NULL",
+                Integer.class)
+            .setParameter("book", book)
+            .list();
+    return days.stream().mapToInt(i -> i).average().orElse(0);
   }
 
   /**

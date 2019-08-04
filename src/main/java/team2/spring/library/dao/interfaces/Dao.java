@@ -1,5 +1,7 @@
 package team2.spring.library.dao.interfaces;
 
+import org.hibernate.HibernateException;
+
 import java.util.List;
 
 /**
@@ -15,7 +17,7 @@ public interface Dao<E> {
    * @param entity an object to insert..
    * @return id of the inserted entity.
    */
-  int insert(E entity);
+  int insert(E entity) throws HibernateException, IllegalArgumentException;
 
   /**
    * Finds and an entity by id parameter
