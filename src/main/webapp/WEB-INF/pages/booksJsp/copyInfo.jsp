@@ -17,17 +17,17 @@
 <table class="simple-little-table" cellspacing='0' style="text-align: center; margin: auto; margin-top: 50px">
     <thead>
     <tr>
-        <th>ID </th>
-        <th>Ім'я</th>
-        <th>Дата народження</th>
+        <th>Серійний номер примірника</th>
+        <th>Назва книги</th>
+        <th>Чи доступна</th>
     </tr><!-- Table Header -->
     </thead>
     <tbody>
-    <c:forEach var="per" items="${readerBlackList}">
+    <c:forEach var="per" items="${list}">
         <tr>
             <td><c:out value="${per.id}"/></td>
-            <td><c:out value="${per.name}"/></td>
-            <td><c:out value="${per.birthday}"/></td>
+            <td><c:out value="${per.book.title}"/></td>
+            <td><c:out value="${per.available}"/></td>
         </tr>
     </c:forEach>
     </tbody>

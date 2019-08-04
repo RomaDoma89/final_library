@@ -17,20 +17,10 @@
 <table class="simple-little-table" cellspacing='0' style="text-align: center; margin: auto; margin-top: 50px">
     <thead>
     <tr>
-        <th>ID </th>
-        <th>Ім'я</th>
-        <th>Дата народження</th>
+        <th>Середній вік читачів по вказаній книзі: ${readerAvgDto.avgByBook}</th>
+        <th>Середній вік читачів по вказаному автору: ${readerAvgDto.avgByAuthor}</th>
     </tr><!-- Table Header -->
     </thead>
-    <tbody>
-    <c:forEach var="per" items="${readerBlackList}">
-        <tr>
-            <td><c:out value="${per.id}"/></td>
-            <td><c:out value="${per.name}"/></td>
-            <td><c:out value="${per.birthday}"/></td>
-        </tr>
-    </c:forEach>
-    </tbody>
 </table>
 
 </body>

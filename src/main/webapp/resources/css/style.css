@@ -1,5 +1,6 @@
 body{
- background: url("back.jpg");
+ background: url("/resources/img/background-balance-commerce-583846.jpg");
+ background-size: 100%;
 }
 header{
  margin-top: 0px;
