@@ -21,10 +21,14 @@ public class Author {
   @Column(name = "name", length = 100, unique = true, nullable = false)
   private String name;
 
-  @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
+  @ManyToMany(cascade = {CascadeType.ALL}, mappedBy = "authors", fetch = FetchType.LAZY)
   private Set<Book> books = new HashSet<>();
 
   public Author(String name) {
+    this.name = name;
+  }
+
+  public Author(int id, String name) {
     this.name = name;
   }
 

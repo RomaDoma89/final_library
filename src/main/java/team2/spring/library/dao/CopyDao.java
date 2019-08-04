@@ -1,14 +1,13 @@
 package team2.spring.library.dao;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import team2.spring.library.dao.interfaces.CopyDaoInfs;
-import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Copy;
 
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -20,29 +19,26 @@ public class CopyDao implements CopyDaoInfs {
   private SessionFactory sessionFactory;
 
   @Autowired
-  public CopyDao(SessionFactory sessionFactory) {
+  public void setSessionFactory(SessionFactory sessionFactory) {
     this.sessionFactory = sessionFactory;
   }
 
   @Override
-  public int insert(Copy copy) {
-    try (Session session = sessionFactory.openSession()) {
-      return (int) session.save(copy);
-    }
+  public int insert(Copy copy) throws HibernateException, IllegalArgumentException {
+    Session session = sessionFactory.getCurrentSession();
+    return (int) session.save(copy);
   }
 
   @Override
   public Copy findById(int id) {
-    try (Session session = sessionFactory.openSession()) {
-      return session.find(Copy.class, id);
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return session.find(Copy.class, id);
   }
 
   @Override
   public List<Copy> findAll() {
-    try (Session session = sessionFactory.openSession()) {
-      return session.createQuery("SELECT c FROM Copy c", Copy.class).list();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return session.createQuery("SELECT c FROM Copy c", Copy.class).list();
   }
 
   /**
@@ -53,10 +49,9 @@ public class CopyDao implements CopyDaoInfs {
    */
   @Override
   public Copy update(Copy copy) {
-    try (Session session = sessionFactory.openSession()) {
-      session.update(copy);
-      return session.find(Copy.class, copy.getId());
-    }
+    Session session = sessionFactory.getCurrentSession();
+    session.update(copy);
+    return session.find(Copy.class, copy.getId());
   }
 
   /**
@@ -67,25 +62,9 @@ public class CopyDao implements CopyDaoInfs {
    */
   @Override
   public boolean delete(int id) {
-    try (Session session = sessionFactory.openSession()) {
-      Copy copy = session.find(Copy.class, id);
-      session.delete(copy);
-      return (null == session.find(Copy.class, id));
-    }
-  }
-
-  @Override
-  public List<Copy> getAllCopies(Book book) throws NoResultException {
-    return null;
-  }
-
-  @Override
-  public List<Copy> getAvailableCopies(Book book) throws NoResultException {
-    return null;
-  }
-
-  @Override
-  public List<Copy> getUnavailableCopies(Book book) throws NoResultException {
-    return null;
+    Session session = sessionFactory.getCurrentSession();
+    Copy copy = session.find(Copy.class, id);
+    session.delete(copy);
+    return (null == session.find(Copy.class, id));
   }
 }

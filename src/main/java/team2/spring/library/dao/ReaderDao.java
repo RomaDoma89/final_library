@@ -1,15 +1,16 @@
 package team2.spring.library.dao;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import team2.spring.library.Log;
 import team2.spring.library.dao.interfaces.ReaderDaoInfs;
 import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Reader;
 
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -26,29 +27,26 @@ public class ReaderDao implements ReaderDaoInfs {
   private SessionFactory sessionFactory;
 
   @Autowired
-  public ReaderDao(SessionFactory sessionFactory) {
+  public void setSessionFactory(SessionFactory sessionFactory) {
     this.sessionFactory = sessionFactory;
   }
 
   @Override
-  public int insert(Reader reader) {
-    try (Session session = sessionFactory.openSession()) {
-      return (int) session.save(reader);
-    }
+  public int insert(Reader reader) throws HibernateException, IllegalArgumentException {
+    Session session = sessionFactory.getCurrentSession();
+    return (int) session.save(reader);
   }
 
   @Override
   public Reader findById(int id) {
-    try (Session session = sessionFactory.openSession()) {
-      return session.find(Reader.class, id);
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return session.find(Reader.class, id);
   }
 
   @Override
   public List<Reader> findAll() {
-    try (Session session = sessionFactory.openSession()) {
-      return session.createQuery("SELECT r FROM Reader r", Reader.class).list();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return session.createQuery("SELECT r FROM Reader r", Reader.class).list();
   }
 
   /**
@@ -59,10 +57,9 @@ public class ReaderDao implements ReaderDaoInfs {
    */
   @Override
   public Reader update(Reader reader) {
-    try (Session session = sessionFactory.openSession()) {
-      session.update(reader);
-      return session.find(Reader.class, reader.getId());
-    }
+    Session session = sessionFactory.getCurrentSession();
+    session.update(reader);
+    return session.find(Reader.class, reader.getId());
   }
 
   /**
@@ -73,11 +70,10 @@ public class ReaderDao implements ReaderDaoInfs {
    */
   @Override
   public boolean delete(int id) {
-    try (Session session = sessionFactory.openSession()) {
-      Reader reader = session.find(Reader.class, id);
-      session.delete(reader);
-      return (null == session.find(Reader.class, id));
-    }
+    Session session = sessionFactory.getCurrentSession();
+    Reader reader = session.find(Reader.class, id);
+    session.delete(reader);
+    return (null == session.find(Reader.class, id));
   }
 
   /**
@@ -88,18 +84,16 @@ public class ReaderDao implements ReaderDaoInfs {
    */
   @Override
   public List<Reader> findByName(String name) throws NoResultException {
-    try (Session session = sessionFactory.openSession()) {
-      return findReaderByName(session, name);
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return findReaderByName(session, name);
   }
 
   /** @return List<Reader> */
   public List<Reader> getBlackList() {
-    try (Session session = sessionFactory.openSession()) {
-      return session
-          .createQuery("SELECT s.reader FROM Story s WHERE s.timeReturn IS NULL", Reader.class)
-          .getResultList();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return session
+        .createQuery("SELECT s.reader FROM Story s WHERE s.timeReturn IS NULL", Reader.class)
+        .getResultList();
   }
 
   /**
@@ -111,19 +105,18 @@ public class ReaderDao implements ReaderDaoInfs {
   public Map<Reader, List<Book>> listOfTookBook(String readerName) {
     Map<Reader, List<Book>> readerBooks = new HashMap<>();
 
-    try (Session session = sessionFactory.openSession()) {
-      List<Reader> readers = findReaderByName(session, readerName);
-      if (null != readers) {
-        for (Reader reader : readers) {
-          TypedQuery<Book> query =
-              session.createQuery(
-                  "SELECT b FROM Story s JOIN s.book b WHERE s.reader = :reader GROUP BY b.id",
-                  Book.class);
-          query.setParameter("reader", reader);
-          List<Book> books = query.getResultList();
-          if (null != books) {
-            readerBooks.put(reader, books);
-          }
+    Session session = sessionFactory.getCurrentSession();
+    List<Reader> readers = findReaderByName(session, readerName);
+    if (null != readers) {
+      for (Reader reader : readers) {
+        TypedQuery<Book> query =
+            session.createQuery(
+                "SELECT b FROM Story s JOIN s.book b WHERE s.reader = :reader GROUP BY b.id",
+                Book.class);
+        query.setParameter("reader", reader);
+        List<Book> books = query.getResultList();
+        if (null != books) {
+          readerBooks.put(reader, books);
         }
       }
     }
@@ -139,20 +132,19 @@ public class ReaderDao implements ReaderDaoInfs {
   public Map<Reader, List<Book>> listOfNotReturnedBook(String readerName) {
     Map<Reader, List<Book>> readerBooks = new HashMap<>();
 
-    try (Session session = sessionFactory.openSession()) {
-      List<Reader> readers = findReaderByName(session, readerName);
+    Session session = sessionFactory.getCurrentSession();
+    List<Reader> readers = findReaderByName(session, readerName);
 
-      if (null != readers) {
-        for (Reader reader : readers) {
-          TypedQuery<Book> query =
-              session.createQuery(
-                  "SELECT b FROM Story s JOIN s.book b WHERE s.reader = :reader AND s.timeReturn IS NULL",
-                  Book.class);
-          query.setParameter("reader", reader);
-          List<Book> books = query.getResultList();
-          if (null != books) {
-            readerBooks.put(reader, books);
-          }
+    if (null != readers) {
+      for (Reader reader : readers) {
+        TypedQuery<Book> query =
+            session.createQuery(
+                "SELECT b FROM Story s JOIN s.book b WHERE s.reader = :reader AND s.timeReturn IS NULL",
+                Book.class);
+        query.setParameter("reader", reader);
+        List<Book> books = query.getResultList();
+        if (null != books) {
+          readerBooks.put(reader, books);
         }
       }
     }
@@ -168,17 +160,16 @@ public class ReaderDao implements ReaderDaoInfs {
   public Map<Reader, LocalDate> findRegistrationDate(String readerName) {
     Map<Reader, LocalDate> readerRegistryDate = new HashMap<>();
 
-    try (Session session = sessionFactory.openSession()) {
-      List<Reader> readers = findReaderByName(session, readerName);
-      if (null != readers) {
-        for (Reader reader : readers) {
-          TypedQuery<LocalDate> query =
-              session.createQuery(
-                  "SELECT min(s.timeTake) FROM Story s JOIN s.reader r WHERE r = :reader",
-                  LocalDate.class);
-          query.setParameter("reader", reader);
-          readerRegistryDate.put(reader, query.getSingleResult());
-        }
+    Session session = sessionFactory.getCurrentSession();
+    List<Reader> readers = findReaderByName(session, readerName);
+    if (null != readers) {
+      for (Reader reader : readers) {
+        TypedQuery<LocalDate> query =
+            session.createQuery(
+                "SELECT min(s.timeTake) FROM Story s JOIN s.reader r WHERE r = :reader",
+                LocalDate.class);
+        query.setParameter("reader", reader);
+        readerRegistryDate.put(reader, query.getSingleResult());
       }
     }
     return readerRegistryDate;
@@ -191,12 +182,11 @@ public class ReaderDao implements ReaderDaoInfs {
    */
   @Override
   public double getAvgReader() {
-    try (Session session = sessionFactory.openSession()) {
-      return (double)
-          session
-              .createQuery("SELECT AVG (YEAR(current_date) - YEAR(r.birthday)) FROM Reader r")
-              .getSingleResult();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return (double)
+        session
+            .createQuery("SELECT AVG (YEAR(current_date) - YEAR(r.birthday)) FROM Reader r")
+            .getSingleResult();
   }
 
   // 9.2 TASK TODO remove this staff
@@ -210,43 +200,46 @@ public class ReaderDao implements ReaderDaoInfs {
    * @return an average age of readers of the specific author.
    */
   @Override
-  public double getAvgAgeByAuthor(List<Book> books) {
-    try (Session session = sessionFactory.openSession()) {
-      return session
-          .createQuery(
-              "SELECT AVG(YEAR(current_date) - YEAR(s.reader.birthday)) "
-                  + "FROM Story s WHERE s.book IN (:books)",
-              Double.class)
-          .setParameter("books", books)
-          .uniqueResult();
+  public double getAvgAgeByAuthor(List<Book> books) throws PersistenceException {
+    Session session = sessionFactory.getCurrentSession();
+    double avgAge = 0;
+    if (null != books) {
+      avgAge =
+          session
+              .createQuery(
+                  "SELECT AVG(YEAR(current_date) - YEAR(s.reader.birthday)) "
+                      + "FROM Story s WHERE s.book IN (:books)",
+                  Double.class)
+              .setParameter("books", books)
+              .uniqueResult();
     }
+    return avgAge;
   }
 
   /**
-   * Method to find time of using library from registration day to now
+   * Method to find time of using library from registration day to now for each reader.
    *
-   * @return Map<Reader, LocalDate>
+   * @return Map<Reader, LocalDate> of readers and their registration dates.
    */
   @Override
   public Map<Reader, LocalDate> getUsingPeriod() {
-    try (Session session = sessionFactory.openSession()) {
-      Map<Reader, LocalDate> resultMap = new HashMap<>();
-      List<Reader> listOfReaders =
-          session.createQuery("SELECT DISTINCT s.reader FROM Story s", Reader.class).list();
+    Session session = sessionFactory.getCurrentSession();
+    Map<Reader, LocalDate> resultMap = new HashMap<>();
+    List<Reader> listOfReaders =
+        session.createQuery("SELECT DISTINCT s.reader FROM Story s", Reader.class).list();
 
-      if (listOfReaders != null) {
-        for (Reader reader : listOfReaders) {
-          LocalDate registration =
-              (LocalDate)
-                  session
-                      .createQuery("SELECT MIN(s.timeTake) FROM Story s WHERE s.reader = :reader")
-                      .setParameter("reader", reader)
-                      .getSingleResult();
-          resultMap.put(reader, registration);
-        }
+    if (listOfReaders != null) {
+      for (Reader reader : listOfReaders) {
+        LocalDate registration =
+            (LocalDate)
+                session
+                    .createQuery("SELECT MIN(s.timeTake) FROM Story s WHERE s.reader = :reader")
+                    .setParameter("reader", reader)
+                    .getSingleResult();
+        resultMap.put(reader, registration);
       }
-      return resultMap;
     }
+    return resultMap;
   }
 
   /**
