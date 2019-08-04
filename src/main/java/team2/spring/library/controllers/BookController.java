@@ -164,4 +164,25 @@ public class BookController {
     model.addAttribute("bookByPeriodDto", bookByPeriodDto);
     return "booksJsp/getCountBookByPeriodForm";
   }
+
+  /**
+   * @param model set data in jsp page
+   * @return jsp page with form
+   */
+  @GetMapping("/getCopiesInfoForm")
+  public String getCopiesInfoForm(Model model) {
+    model.addAttribute("book", new Book());
+    return "booksJsp/copyInfoForm";
+  }
+
+  /**
+   * @param book contains info which need for response
+   * @param model set data in jsp page
+   * @return jsp page witj response
+   */
+  @PostMapping("/getCopiesInfo")
+  public String getCopiesInfo(@Valid @ModelAttribute("book") Book book, Model model) {
+    model.addAttribute("list", bookService.getCopiesInfo(book));
+    return "booksJsp/copyInfo";
+  }
 }

@@ -2,10 +2,14 @@ package team2.spring.library.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import team2.spring.library.dao.interfaces.AuthorDaoInfs;
 import team2.spring.library.dao.interfaces.BookDaoInfs;
 import team2.spring.library.dao.interfaces.ReaderDaoInfs;
 import team2.spring.library.dto.GeneralStatisticDto;
+import team2.spring.library.dto.ReaderAvgDto;
 import team2.spring.library.dto.ReaderStatisticDto;
+import team2.spring.library.entities.Author;
+import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Reader;
 
 import java.util.List;
@@ -15,6 +19,7 @@ import java.util.List;
 public class ReaderServiceImpl implements ReaderService {
   ReaderDaoInfs readerDaoInfs;
   BookDaoInfs bookDaoInfs;
+  AuthorDaoInfs authorDaoInfs;
 
   /**
    * Finds a reader by given name.
@@ -61,12 +66,34 @@ public class ReaderServiceImpl implements ReaderService {
     }
   }
 
-  /**
-   *  @return statistics about  average age of readers
-   *
-   */
+  /** @return statistics about average age of readers */
   public GeneralStatisticDto getGeneralStatisticDto() {
     GeneralStatisticDto generalStatisticDto = new GeneralStatisticDto();
     generalStatisticDto.setAvgAgeOfReaders(readerDaoInfs.getAvgReader());
-  return generalStatisticDto;}
+    return generalStatisticDto;
+  }
+
+  /**
+   * @param author object which need for searching average age bu author
+   * @return double
+   */
+  @Override
+  public double getAvgAgeByAuthor(Author author) {
+    Author authorToFind = authorDaoInfs.findByName(author.getName());
+    List<Book> list = bookDaoInfs.findBooksByAuthor(authorToFind);
+    return readerDaoInfs.getAvgAgeByAuthor(list);
+  }
+
+  /**
+   * @param author object which need for searching average age bu author
+   * @param book object which need for searching average age bu author
+   * @return ReaderAvgDto
+   */
+  @Override
+  public ReaderAvgDto getBothAvg(Author author, Book book) {
+    ReaderAvgDto readerAvgDto = new ReaderAvgDto();
+    readerAvgDto.setAvgByBook(Math.round(bookDaoInfs.getReaderAvgByBook(book.getTitle())));
+    readerAvgDto.setAvgByAuthor(Math.round(getAvgAgeByAuthor(author)));
+    return readerAvgDto;
+  }
 }
