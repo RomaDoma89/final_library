@@ -121,7 +121,6 @@ public class BookController {
   @PostMapping("/getBookStatistic")
   public String getBookStatistic(
       @Valid @ModelAttribute("bookStatisticDto") BookStatisticDto bookStatisticDto, Model model) {
-    System.out.println(bookStatisticDto);
     model.addAttribute("bookStatisticDto", bookService.getBookStatisticDto(bookStatisticDto));
     return "booksJsp/bookStatistic";
   }
@@ -174,8 +173,6 @@ public class BookController {
   @PostMapping("/getCountBookByPeriod")
   public String getCountBookByPeriod(
       @RequestParam String dateFrom, @RequestParam String dateTo, Model model) {
-    System.out.println(dateFrom);
-    System.out.println(dateTo);
     BookByPeriodDto bookByPeriodDto = new BookByPeriodDto();
     bookByPeriodDto.setDateFrom(LocalDate.parse(dateFrom));
     bookByPeriodDto.setDateTo(LocalDate.parse(dateTo));
