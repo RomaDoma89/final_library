@@ -27,6 +27,16 @@ public class ReaderServiceImpl implements ReaderService {
   AuthorDaoInfs authorDaoInfs;
 
   /**
+   * Finds all readers.
+   *
+   * @return list of the available readers.
+   */
+  @Override
+  public List<Reader> getAllReaders() {
+    return readerDaoInfs.findAll();
+  }
+
+  /**
    * Finds a reader by given name.
    *
    * @param name of the reader.

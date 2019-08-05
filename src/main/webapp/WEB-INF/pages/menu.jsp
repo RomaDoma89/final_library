@@ -14,6 +14,7 @@
     <nav class="dws-menu">
         <ul>
             <li><a href="allBooks"><i class="fa fa-home"></i>Всі книги</a></li>
+            <li><a href="allReaders"><i class="fa fa-home"></i>Всі читачі</a></li>
             <li><a href="#"></i>Пошук за параметром</a>
                 <ul>
                     <li><a href="availableBookForm">Знайти чи доступна книга</a>

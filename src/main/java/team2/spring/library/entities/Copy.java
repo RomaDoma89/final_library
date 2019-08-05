@@ -27,12 +27,4 @@ public class Copy {
     this.book = book;
     this.available = available;
   }
-
-  @Override
-  public String toString() {
-    return "Copy{" +
-            "id=" + id +
-            ", available=" + available +
-            '}';
-  }
 }

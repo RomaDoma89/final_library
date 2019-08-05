@@ -31,9 +31,4 @@ public class Author {
   public Author(int id, String name) {
     this.name = name;
   }
-
-  @Override
-  public String toString() {
-    return "Author{" + "id=" + id + ", name='" + name + '\'' + '}';
-  }
 }

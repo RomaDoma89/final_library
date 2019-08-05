@@ -31,30 +31,28 @@ public class ReaderDao implements ReaderDaoInfs {
     this.sessionFactory = sessionFactory;
   }
 
+  /** {@inheritDoc} */
   @Override
   public int insert(Reader reader) throws HibernateException, IllegalArgumentException {
     Session session = sessionFactory.getCurrentSession();
     return (int) session.save(reader);
   }
 
+  /** {@inheritDoc} */
   @Override
   public Reader findById(int id) {
     Session session = sessionFactory.getCurrentSession();
     return session.find(Reader.class, id);
   }
 
+  /** {@inheritDoc} */
   @Override
   public List<Reader> findAll() {
     Session session = sessionFactory.getCurrentSession();
     return session.createQuery("SELECT r FROM Reader r", Reader.class).list();
   }
 
-  /**
-   * Updates an entity in database.
-   *
-   * @param reader with updated fields.
-   * @return updated entity.
-   */
+  /** {@inheritDoc} */
   @Override
   public Reader update(Reader reader) {
     Session session = sessionFactory.getCurrentSession();
@@ -62,12 +60,7 @@ public class ReaderDao implements ReaderDaoInfs {
     return session.find(Reader.class, reader.getId());
   }
 
-  /**
-   * Deletes an entity with given <code>id</code> from database.
-   *
-   * @param id of the entity to delete.
-   * @return true if the entity was successfully deleted.
-   */
+  /** {@inheritDoc} */
   @Override
   public boolean delete(int id) {
     Session session = sessionFactory.getCurrentSession();
@@ -88,12 +81,16 @@ public class ReaderDao implements ReaderDaoInfs {
     return findReaderByName(session, name);
   }
 
-  /** @return List<Reader> */
+  /**
+   * Finds all readers who have one or more not returned book.
+   *
+   * @return List<Reader> list of readers.
+   */
   public List<Reader> getBlackList() {
     Session session = sessionFactory.getCurrentSession();
     return session
         .createQuery("SELECT s.reader FROM Story s WHERE s.timeReturn IS NULL", Reader.class)
-        .getResultList();
+        .list();
   }
 
   /**
@@ -176,23 +173,19 @@ public class ReaderDao implements ReaderDaoInfs {
   }
 
   /**
-   * Return average by reader
+   * Finds an average age of all readers.
    *
-   * @return
+   * @return double value.
    */
   @Override
   public double getAvgReader() {
     Session session = sessionFactory.getCurrentSession();
-    return (double)
-        session
-            .createQuery("SELECT AVG (YEAR(current_date) - YEAR(r.birthday)) FROM Reader r")
-            .getSingleResult();
+    return session
+        .createQuery(
+            "SELECT AVG (YEAR(current_date) - YEAR(r.birthday)) FROM Reader r", Double.class)
+        .getSingleResult();
   }
 
-  // 9.2 TASK TODO remove this staff
-  // 1. Author a = authorDao.findAuthorByName;
-  // 2. List<Book> books = bookDao.findBooksByAuthor(author);
-  // 3. THIS METHOD
   /**
    * Finds an average age of readers by list of books belongs to a specific author.
    *

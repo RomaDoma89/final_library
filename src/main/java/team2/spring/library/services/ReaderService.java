@@ -11,6 +11,9 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface ReaderService {
+
+  List<Reader> getAllReaders();
+
   List<Reader> findByName(String name);
 
   List<Reader> getBlackList();

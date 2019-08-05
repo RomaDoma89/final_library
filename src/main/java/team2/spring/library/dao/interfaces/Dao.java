@@ -12,15 +12,18 @@ import java.util.List;
 public interface Dao<E> {
 
   /**
-   * Inserts an entity object.
+   * Inserts an entity object to a db
    *
-   * @param entity an object to insert..
-   * @return id of the inserted entity.
+   * @param entity to insert.
+   * @return the id of the inserted entity.
+   * @throws HibernateException in cases when the object is not fully initialized or inserted more
+   *     than once.
+   * @throws IllegalArgumentException if the entity is null
    */
   int insert(E entity) throws HibernateException, IllegalArgumentException;
 
   /**
-   * Finds and an entity by id parameter
+   * Finds an entity by id parameter
    *
    * @param id of the desired entity.
    * @return the found entity.
