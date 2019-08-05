@@ -126,7 +126,7 @@ public class ReaderDaoTest {
   public void updateTest() {
     int id = readerDao.insert(new Reader(READER_NAME, READER_BIRTH));
     Reader reader = readerDao.findById(id);
-    reader.setName(READER_NAME+READER_NAME);
+    reader.setName(READER_NAME + READER_NAME);
     Reader updated = readerDao.update(reader);
     Assert.assertEquals(updated.getName(), reader.getName());
     readerDao.delete(id);

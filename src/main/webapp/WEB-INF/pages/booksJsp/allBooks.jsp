@@ -32,11 +32,18 @@
                     ${author.name} /
                 </c:forEach>
             </td>
+            <td><form:form action="deleteBook" method="post" modelAttribute="bookDto" cssStyle="text-align: start">
+                <input type="submit" value="Видалити"/>
+                <input type="hidden" name="title" value=${book.title} />
+                <input type="hidden" name="id" value=${book.id} />
+            </form:form></td>
         </tr>
     </c:forEach>
     </tbody>
 </table>
-
+<br>
+<h1><p style="color: #ff958e; text-align: center;">Увага! Операція "Видалити" призводить до видалення ВСІЄЇ інформації про копії книги та історію її
+    видання читачам.</p></h1>
 
 </body>
 </html>

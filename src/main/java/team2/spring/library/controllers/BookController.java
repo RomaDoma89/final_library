@@ -1,6 +1,7 @@
 package team2.spring.library.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,7 @@ public class BookController {
   @GetMapping("/allBooks")
   public String findAllBook(Model model) {
     model.addAttribute("listBook", bookService.findAll());
+    model.addAttribute("bookDto", new BookDto());
     return "booksJsp/allBooks";
   }
 
@@ -178,11 +180,27 @@ public class BookController {
   /**
    * @param book contains info which need for response
    * @param model set data in jsp page
-   * @return jsp page witj response
+   * @return jsp page with response
    */
   @PostMapping("/getCopiesInfo")
   public String getCopiesInfo(@Valid @ModelAttribute("book") Book book, Model model) {
     model.addAttribute("list", bookService.getCopiesInfo(book));
     return "booksJsp/copyInfo";
+  }
+
+  /**
+   * @param bookDto from page with input title form
+   * @param model set dto in jsp
+   * @return page with available book
+   */
+  @PostMapping("/deleteBook")
+  public String deleteBook(@Valid @ModelAttribute("bookDto") BookDto bookDto, Model model) {
+    try {
+      model.addAttribute("listBook", bookService.deleteBook(bookDto.getId()));
+    } catch (IllegalArgumentException | DataIntegrityViolationException e) {
+      model.addAttribute("listBook", bookService.findAll());
+      return "booksJsp/allBooks";
+    }
+    return "booksJsp/allBooks";
   }
 }

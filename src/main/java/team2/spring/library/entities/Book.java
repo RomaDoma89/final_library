@@ -21,11 +21,11 @@ public class Book {
   @Column(name = "title", length = 225, unique = true, nullable = false)
   private String title;
 
-  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
   @JoinTable(
       name = "book_author",
-      joinColumns = {@JoinColumn(name = "id_book", nullable = false)},
-      inverseJoinColumns = {@JoinColumn(name = "id_author", nullable = false)})
+      joinColumns = {@JoinColumn(name = "id_book", nullable = false, updatable = false)},
+      inverseJoinColumns = {@JoinColumn(name = "id_author", nullable = false, updatable = false)})
   private Set<Author> authors = new HashSet<>();
 
   public Book(String title) {

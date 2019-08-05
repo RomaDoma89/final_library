@@ -81,7 +81,7 @@ public class BookDaoTest {
   public void updateTest() {
     int id = bookDao.insert(new Book(BOOK_TITLE));
     Book book = bookDao.findById(id);
-    book.setTitle(BOOK_TITLE+BOOK_TITLE);
+    book.setTitle(BOOK_TITLE + BOOK_TITLE);
     Book updated = bookDao.update(book);
     Assert.assertEquals(updated.getTitle(), book.getTitle());
     bookDao.delete(id);
@@ -128,7 +128,7 @@ public class BookDaoTest {
 
   @Test
   public void findBooksByNullAuthorTest() {
-    List<Book> books =  bookDao.findBooksByAuthor(null);
+    List<Book> books = bookDao.findBooksByAuthor(null);
     Assert.assertTrue(books.isEmpty());
   }
 
@@ -146,13 +146,13 @@ public class BookDaoTest {
 
   @Test
   public void getCopiesInfoNonExistingTest() {
-    List< Copy > copies = bookDao.getCopiesInfo(BOOK_TITLE);
+    List<Copy> copies = bookDao.getCopiesInfo(BOOK_TITLE);
     Assert.assertTrue(copies.isEmpty());
   }
 
   @Test
   public void getCopiesInfoNullTest() {
-    List< Copy > copies = bookDao.getCopiesInfo(null);
+    List<Copy> copies = bookDao.getCopiesInfo(null);
     Assert.assertTrue(copies.isEmpty());
   }
 

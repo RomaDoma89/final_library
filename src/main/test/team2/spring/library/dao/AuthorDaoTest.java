@@ -123,4 +123,9 @@ public class AuthorDaoTest {
     Author found = authorDao.findByName(AUTHOR_NAME);
     Assert.assertNull(found);
   }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void deleteTest() {
+    authorDao.delete(0);
+  }
 }
