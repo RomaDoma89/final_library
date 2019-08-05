@@ -11,9 +11,7 @@ import team2.spring.library.entities.Copy;
 
 import javax.persistence.TypedQuery;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Transactional
 @Repository
@@ -181,12 +179,12 @@ public class BookDao implements BookDaoInfs {
    *
    * @param firstPeriod
    * @param secondPeriod
-   * @return Map<Book, Long>
+   * @return TreeMap<Long, Book>
    */
   @Override
-  public Map<Book, Long> getPopular(LocalDate firstPeriod, LocalDate secondPeriod) {
+  public TreeMap<Long, Book> getPopular(LocalDate firstPeriod, LocalDate secondPeriod) {
     try (Session session = sessionFactory.openSession()) {
-      Map<Book, Long> resultMap = new HashMap<>();
+      TreeMap<Long, Book> resultMap = new TreeMap<>(Collections.reverseOrder());
 
       List<Book> bookList =
           session
@@ -206,7 +204,7 @@ public class BookDao implements BookDaoInfs {
                       Long.class)
                   .setParameter("book", book)
                   .getSingleResult();
-          resultMap.put(book, count);
+          resultMap.put(count, book);
         }
       }
       return resultMap;

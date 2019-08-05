@@ -8,7 +8,9 @@ import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Copy;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.TreeMap;
 
 public interface BookService {
   BookDto isBookAvailable(BookDto bookDto);
@@ -26,4 +28,12 @@ public interface BookService {
    * @return List of copies
    */
   List<Copy> getCopiesInfo(Book book);
+
+  /**
+   * @param firstDate start date
+   * @param secondDate end date
+   * @return TreeMap<Long, Book>
+   * @throws ParseException if date is not valid
+   */
+  TreeMap<Long, Book> getPopular(LocalDate firstDate, LocalDate secondDate) throws ParseException;
 }

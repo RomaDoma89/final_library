@@ -131,7 +131,7 @@ public class Main {
     // popular book
     LocalDate firstPeriod = LocalDate.of(2019, Calendar.FEBRUARY, 11);
     LocalDate secondPeriod = LocalDate.of(2019, Calendar.AUGUST, 11);
-    Map<Book, Long> popular = bookDao.getPopular(firstPeriod, secondPeriod);
+    TreeMap<Long, Book> popular = bookDao.getPopular(firstPeriod, secondPeriod);
     Log.debug(TAG, popular.toString());
 
     // using period
