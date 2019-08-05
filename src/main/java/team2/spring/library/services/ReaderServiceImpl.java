@@ -12,7 +12,12 @@ import team2.spring.library.entities.Author;
 import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Reader;
 
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -77,9 +82,24 @@ public class ReaderServiceImpl implements ReaderService {
   }
 
   /** @return statistics about average age of readers */
-  public GeneralStatisticDto getGeneralStatisticDto() {
-    GeneralStatisticDto generalStatisticDto = new GeneralStatisticDto();
+  public GeneralStatisticDto getGeneralStatisticDto(GeneralStatisticDto generalStatisticDto)
+      throws ParseException {
+    LocalDate localDateNow = LocalDate.now();
+    if (generalStatisticDto.getDateFrom().compareTo(generalStatisticDto.getDateTo()) > 0
+        || generalStatisticDto.getDateFrom().compareTo(generalStatisticDto.getDateTo()) == 0) {
+      throw new ParseException("date to is lover then date from ", 0);
+    }
+    Map<Reader, LocalDate> readerLocalDateMap = readerDaoInfs.getUsingPeriod();
+    Map<Reader, Long> readerLongMap =new HashMap<>();
+    readerLocalDateMap.forEach(
+        (reader, localDate) ->
+            readerLongMap.put(reader, ChronoUnit.DAYS.between(localDate, localDateNow)));
+    generalStatisticDto.setAvgVisitOfLibrary(readerLongMap);
+
     generalStatisticDto.setAvgAgeOfReaders(readerDaoInfs.getAvgReader());
+    generalStatisticDto.setAvgDaysOfReading(
+        readerDaoInfs.getCountOfVisiting(
+            generalStatisticDto.getDateFrom(), generalStatisticDto.getDateTo()));
     return generalStatisticDto;
   }
 

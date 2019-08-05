@@ -212,7 +212,7 @@ public class BookDaoTest {
 
   @Test
   public void getPopularNullDatesTest() {
-    Map<Book, Long> bookCountMap = bookDao.getPopular(null, null);
+    Map<Long, Book> bookCountMap = bookDao.getPopular(null, null);
     Assert.assertTrue(bookCountMap.isEmpty());
   }
 }

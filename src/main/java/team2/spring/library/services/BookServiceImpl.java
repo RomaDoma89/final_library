@@ -13,14 +13,15 @@ import team2.spring.library.entities.Copy;
 import team2.spring.library.entities.Story;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.TreeMap;
 
 @Service
 @AllArgsConstructor
 public class BookServiceImpl implements BookService {
   private AuthorDaoInfs authorDao;
   private BookDaoInfs bookDao;
-  private ReaderDaoInfs readerDao;
   private StoryDaoInfs storyDao;
   private CopyDaoInfs copyDao;
 
@@ -57,14 +58,11 @@ public class BookServiceImpl implements BookService {
    */
   @Override
   public long getCountOfBookByPeriod(BookByPeriodDto bookByPeriodDto) throws ParseException {
-    System.out.println(bookByPeriodDto);
     if (bookByPeriodDto.getDateFrom().compareTo(bookByPeriodDto.getDateTo()) > 0
         || bookByPeriodDto.getDateFrom().compareTo(bookByPeriodDto.getDateTo()) == 0) {
-      throw new ParseException("date to is lover then date from ", 0);
+      throw new ParseException("Date to is lower then date from ", 0);
     }
-    // Dont be angry  ,I`m working in them
-    //
-    // bookByPeriodDto.setCountOfBookByPeriod(bookDaoInfs.getCountOfBookByPeriod(bookByPeriodDto.getDateFrom(),bookByPeriodDto.getDateTo()));
+     bookByPeriodDto.setCountOfBookByPeriod(bookDao.getCountOfBookByPeriod(bookByPeriodDto.getDateFrom(),bookByPeriodDto.getDateTo()));
     return 0;
   }
 
@@ -96,18 +94,31 @@ public class BookServiceImpl implements BookService {
   public List<Book> deleteBook(int id) throws IllegalArgumentException, DataIntegrityViolationException {
     Book book = bookDao.findById(id);
     if (null != book) {
-
       List<Story> stories = storyDao.findByBook(book);
       for (Story s : stories) {
         storyDao.delete(s.getId());
       }
-
       List<Copy> copies = copyDao.findByBook(book);
       for (Copy c : copies) {
         copyDao.delete(c.getId());
       }
+      bookDao.delete(id);
     }
-    bookDao.delete(id);
     return bookDao.findAll();
+  }
+
+  /**
+   * @param firstDate start date
+   * @param secondDate end date
+   * @return TreeMap<Long, Book>
+   * @throws ParseException if date is not valid
+   */
+  @Override
+  public TreeMap<Long, Book> getPopular(LocalDate firstDate, LocalDate secondDate)
+      throws ParseException {
+    if (firstDate.compareTo(secondDate) > 0 || firstDate.compareTo(secondDate) == 0) {
+      throw new ParseException("Input date is invalid, it's lower than ", 0);
+    }
+    return bookDao.getPopular(firstDate, secondDate);
   }
 }

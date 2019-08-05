@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<link rel="stylesheet" href="<c:url value="/resources/css/tableCss.css"/>" type="text/css">
+
 <html>
 <head>
     <title>Title</title>
@@ -13,17 +15,16 @@
     <c:when test="${bookStatisticDto.title==null}">
         <form:form action="getBookStatistic" method="post" modelAttribute="bookStatisticDto"
                    cssStyle="text-align: center">
-            <p>Введіть назву книги :</p>
+            <p style="color: gainsboro" >Введіть назву книги :</p>
             <br>
-            <form:label path="title" style="text-align: center"></form:label>
-            <input path="title" value="Effective Java"  required style="text-align: center"/>
+            <input name="title" value="Effective Java"  required style="text-align: center"/>
             <input type="submit" value="Submit"/>
         </form:form>
     </c:when>
     <c:otherwise>
-        <div style="text-align: center">
+
             <table class="simple-little-table" style="text-align: center; margin: auto; margin-top: 50px">
-               <caption> Cтатистика </caption>
+               <caption><h3 style="color: gainsboro">Cтатистика</h3>  </caption>
                 <tr>
                     <th>Загальна </th>
                     <th>Середня </th>
@@ -34,7 +35,7 @@
                 </tr>
             </table>
             <table class="simple-little-table" style="text-align: center; margin: auto; margin-top: 50px">
-                <caption>По примірниках</caption>
+                <caption><h3 style="color: gainsboro">По примірниках</h3></caption>
                 <tr>
                     <th>N</th>
                     <th>Назва</th>
@@ -51,7 +52,6 @@
                 </c:forEach>
             </table>
 
-        </div>
     </c:otherwise>
 </c:choose>
 </body>

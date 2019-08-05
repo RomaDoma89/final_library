@@ -9,7 +9,9 @@ import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Copy;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.TreeMap;
 
 public interface BookService {
   BookDto isBookAvailable(BookDto bookDto);
@@ -35,4 +37,12 @@ public interface BookService {
    * @return list of the existed book after the deletion.
    */
   List<Book> deleteBook(int id) throws IllegalArgumentException, DataIntegrityViolationException;
+
+  /**
+   * @param firstDate start date
+   * @param secondDate end date
+   * @return TreeMap<Long, Book>
+   * @throws ParseException if date is not valid
+   */
+  TreeMap<Long, Book> getPopular(LocalDate firstDate, LocalDate secondDate) throws ParseException;
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import team2.spring.library.dto.BookByPeriodDto;
 import team2.spring.library.dto.BookDto;
+import team2.spring.library.dto.BookPopularDto;
 import team2.spring.library.dto.BookStatisticDto;
 import team2.spring.library.entities.Author;
 import team2.spring.library.entities.Book;
@@ -122,19 +123,41 @@ public class BookController {
   @PostMapping("/getBookStatistic")
   public String getBookStatistic(
       @Valid @ModelAttribute("bookStatisticDto") BookStatisticDto bookStatisticDto, Model model) {
-    System.out.println(bookStatisticDto);
     model.addAttribute("bookStatisticDto", bookService.getBookStatisticDto(bookStatisticDto));
     return "booksJsp/bookStatistic";
   }
 
   /**
-   * @param book
-   * @param model
-   * @return
+   * Find popular input form
+   *
+   * @param model set data in jsp page
+   * @return jsp page
+   */
+  @GetMapping("/getPopularBook")
+  public String getPopularBook(Model model) {
+    return "/booksJsp/popularBookForm";
+  }
+
+  /**
+   * Find popular jsp page
+   *
+   * @param dateFrom start date
+   * @param dateTo end date
+   * @param model set data in jsp page
+   * @return jsp page
    */
   @PostMapping("/getPopularBook")
-  public String getPopularBook(@ModelAttribute("book") Book book, Model model) {
-    return "getPopularBook";
+  public String getPopularBook(
+      @RequestParam String dateFrom, @RequestParam String dateTo, Model model) {
+    BookPopularDto bookPopularDto = new BookPopularDto();
+    try {
+      bookPopularDto.setMap(
+          bookService.getPopular(LocalDate.parse(dateFrom), LocalDate.parse(dateTo)));
+    } catch (ParseException e) {
+      return "error";
+    }
+    model.addAttribute("map", bookPopularDto);
+    return "/booksJsp/popular";
   }
 
   /** @return */
@@ -152,8 +175,6 @@ public class BookController {
   @PostMapping("/getCountBookByPeriod")
   public String getCountBookByPeriod(
       @RequestParam String dateFrom, @RequestParam String dateTo, Model model) {
-    System.out.println(dateFrom);
-    System.out.println(dateTo);
     BookByPeriodDto bookByPeriodDto = new BookByPeriodDto();
     bookByPeriodDto.setDateFrom(LocalDate.parse(dateFrom));
     bookByPeriodDto.setDateTo(LocalDate.parse(dateTo));

@@ -26,10 +26,10 @@
                     <li><a href="getCountBookByPeriodForm">Дістати список книг виданих по періоду</a></li>
                     <li><a href="getBookStatistic">Статистика по певній книзі(к-ть використань)</a>
                     </li>
-                    <li><a href="getPopularBookForm">Дістати по популярності</a>
+                    <li><a href="getPopularBook">Дістати по популярності</a>
                     </li>
                     <li><a href="getBlackList">Отримати "чорний список" користувачів</a></li>
-                    <li><a href="generalStatistic">Статистика по читачам</a>
+                    <li><a href="generalStatisticForm">Статистика по читачам</a>
                     </li>
                     <li><a href="readerAvgForm">Ортимати середній вік читачів</a>
                     </li>
@@ -41,7 +41,6 @@
             <li><a href="#"></i>Додати книгу</a>
             </li>
             <li><a href="#"></i>Оновити інформацію</a></li>
-            <li><a href="error"></i>Видалити книгу</a></li>
         </ul>
     </nav>
 </header>

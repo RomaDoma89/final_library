@@ -11,10 +11,12 @@
 </head>
 <body>
 <%@include file="../menu.jsp" %>
-<form:form action="availableBook" method="post" modelAttribute="bookDto" cssStyle="text-align: center">
-    <p style="color: gainsboro">Введіть назву книги :</p>
+<form:form  action="getPopularBook" method="post" style="text-align: center; margin-top: 50px">
+    <p style="color: gainsboro">Введіть період для пошуку: </p>
+    <input type="date"  name="dateFrom" required>
     <br>
-    <input name="title" value="Effective Java" required  style="text-align: center"/>
+    <input type="date" name="dateTo" required >
+    <br>
     <input type="submit" value="Submit"/>
 </form:form>
 </body>

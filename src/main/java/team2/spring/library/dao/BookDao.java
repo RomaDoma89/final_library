@@ -14,9 +14,7 @@ import team2.spring.library.entities.Copy;
 
 import javax.persistence.TypedQuery;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The class implements {@link BookDaoInfs interface}. Contains CRUD operations for {@link Book
@@ -195,16 +193,16 @@ public class BookDao implements BookDaoInfs {
   }
 
   /**
-   * Return list of books and their counter of reading.
+   * Return list of books and their counter of reading
    *
    * @param firstPeriod start of the period.
    * @param secondPeriod end of the period.
-   * @return Map<Book, Long> a map of books and the number of times they were taken.
+   * @return TreeMap<Long, Book> a map of books and the number of times they were taken
    */
   @Override
-  public Map<Book, Long> getPopular(LocalDate firstPeriod, LocalDate secondPeriod) {
+  public TreeMap<Long, Book> getPopular(LocalDate firstPeriod, LocalDate secondPeriod) {
     Session session = sessionFactory.getCurrentSession();
-    Map<Book, Long> resultMap = new HashMap<>();
+    TreeMap<Long, Book> resultMap = new TreeMap<>(Collections.reverseOrder());
 
     List<Book> bookList =
         session
@@ -224,7 +222,7 @@ public class BookDao implements BookDaoInfs {
                     Long.class)
                 .setParameter("book", book)
                 .getSingleResult();
-        resultMap.put(book, count);
+        resultMap.put(count, book);
       }
     }
     return resultMap;
