@@ -18,20 +18,16 @@
     <thead>
     <tr>
         <th>#</th>
-        <th>Назва</th>
-        <th>Автори</th>
+        <th>Ім'я</th>
+        <th>Народився</th>
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="book" items="${listBook}" varStatus="loop">
+    <c:forEach var="reader" items="${listReader}" varStatus="loop">
         <tr>
             <td>${loop.index+1}</td>
-            <td>${book.title}</td>
-            <td> /
-                <c:forEach var="author" items="${book.authors}" varStatus="loop">
-                    ${author.name} /
-                </c:forEach>
-            </td>
+            <td>${reader.name}</td>
+            <td>${reader.birthday}</td>
         </tr>
     </c:forEach>
     </tbody>

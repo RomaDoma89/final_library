@@ -18,13 +18,23 @@ public class ReaderController {
   private ReaderService readerService;
 
   /**
+   * @param model set list of all readers in jsp
+   * @return page with list of all readers
+   */
+  @GetMapping("/allReaders")
+  public String getAllReaders(Model model) {
+    model.addAttribute("listReader", readerService.getAllReaders());
+    return "readersJsp/allReaders";
+  }
+
+  /**
    * @param model set black list of reader in jsp
    * @return page with black list of reader
    */
   @GetMapping("/getBlackList")
   public String getBlackList(Model model) {
     model.addAttribute("readerBlackList", readerService.getBlackList());
-    return "/readersJsp/getBlackList";
+    return "readersJsp/getBlackList";
   }
 
   /**

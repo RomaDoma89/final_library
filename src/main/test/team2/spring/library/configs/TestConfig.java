@@ -10,15 +10,45 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import team2.spring.library.dao.*;
+import team2.spring.library.dao.interfaces.AuthorDaoInfs;
+import team2.spring.library.dao.interfaces.BookDaoInfs;
+import team2.spring.library.dao.interfaces.CopyDaoInfs;
+import team2.spring.library.dao.interfaces.StoryDaoInfs;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan(basePackages = "team2.spring.library")
+@ComponentScan(basePackages = "team2.spring.library.dao")
 @EnableTransactionManagement
 @PropertySource(value = "classpath:hibernate.properties")
-public class HibernateConfig {
+public class TestConfig {
+
+  @Bean
+  public AuthorDaoInfs getAuthorDao() {
+    return new AuthorDao();
+  }
+
+  @Bean
+  public BookDaoInfs getBookDao() {
+    return new BookDao();
+  }
+
+  @Bean
+  public CopyDaoInfs getCopyDao() {
+    return new CopyDao();
+  }
+
+  @Bean
+  public ReaderDao getReaderDao() {
+    return new ReaderDao();
+  }
+
+  @Bean
+  public StoryDaoInfs getStoryDao() {
+    return new StoryDao();
+  }
 
   private Environment environment;
 
@@ -59,7 +89,7 @@ public class HibernateConfig {
   }
 
   @Bean
-  public HibernateTransactionManager getTransactionManager() {
+  public HibernateTransactionManager transactionManager() {
     HibernateTransactionManager transactionManager = new HibernateTransactionManager();
     transactionManager.setSessionFactory(sessionFactory().getObject());
     return transactionManager;

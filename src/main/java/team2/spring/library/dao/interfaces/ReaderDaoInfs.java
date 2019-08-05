@@ -3,6 +3,7 @@ package team2.spring.library.dao.interfaces;
 import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Reader;
 
+import javax.persistence.PersistenceException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public interface ReaderDaoInfs extends Dao<Reader> {
 
   double getAvgReader();
 
-  double getAvgAgeByAuthor(List<Book> books);
+  double getAvgAgeByAuthor(List<Book> books) throws PersistenceException;
 
   Map<Reader, LocalDate> getUsingPeriod();
 }

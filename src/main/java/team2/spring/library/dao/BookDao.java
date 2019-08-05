@@ -1,7 +1,9 @@
 package team2.spring.library.dao;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import team2.spring.library.dao.interfaces.BookDaoInfs;
@@ -13,6 +15,10 @@ import javax.persistence.TypedQuery;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * The class implements {@link BookDaoInfs interface}. Contains CRUD operations for {@link Book
+ * entity class}
+ */
 @Transactional
 @Repository
 public class BookDao implements BookDaoInfs {
@@ -20,30 +26,37 @@ public class BookDao implements BookDaoInfs {
   private static final String TAG = BookDao.class.getName();
   private SessionFactory sessionFactory;
 
-  //  @Autowired
-  public BookDao(SessionFactory sessionFactory) {
+  /**
+   * Autowired dependency. Provides a <code>SessionFactory</code> implementation.
+   *
+   * @param sessionFactory implementation
+   */
+  @Autowired
+  public void setSessionFactory(SessionFactory sessionFactory) {
     this.sessionFactory = sessionFactory;
   }
 
+  /** {@inheritDoc} */
   @Override
-  public int insert(Book book) {
-    try (Session session = sessionFactory.openSession()) {
-      return (int) session.save(book);
-    }
+  public int insert(Book book) throws HibernateException, IllegalArgumentException {
+    Session session = sessionFactory.getCurrentSession();
+    return (int) session.save(book);
   }
 
+  /** {@inheritDoc} */
   @Override
   public Book findById(int id) {
-    try (Session session = sessionFactory.openSession()) {
-      return session.find(Book.class, id);
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return session.find(Book.class, id);
   }
 
+  /** {@inheritDoc} */
   @Override
   public List<Book> findAll() {
-    try (Session session = sessionFactory.openSession()) {
-      return session.createQuery("SELECT b FROM Book b", Book.class).list();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return session
+        .createQuery("SELECT DISTINCT b FROM Book b LEFT JOIN FETCH b.authors", Book.class)
+        .list();
   }
 
   /**
@@ -54,10 +67,9 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public Book update(Book book) {
-    try (Session session = sessionFactory.openSession()) {
-      session.update(book);
-      return session.find(Book.class, book.getId());
-    }
+    Session session = sessionFactory.getCurrentSession();
+    session.update(book);
+    return session.find(Book.class, book.getId());
   }
 
   /**
@@ -68,11 +80,10 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public boolean delete(int id) {
-    try (Session session = sessionFactory.openSession()) {
-      Book book = session.find(Book.class, id);
-      session.delete(book);
-      return (null == session.find(Book.class, id));
-    }
+    Session session = sessionFactory.getCurrentSession();
+    Book book = session.find(Book.class, id);
+    session.delete(book);
+    return (null == session.find(Book.class, id));
   }
 
   /**
@@ -83,20 +94,24 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public Book findByTitle(String title) {
-    try (Session session = sessionFactory.openSession()) {
-      return findBookByTitle(session, title);
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return findBookByTitle(session, title);
   }
 
+  /**
+   * Finds all books by <code>Author</code>.
+   *
+   * @param author to find books.
+   * @return list of books by this author.
+   */
   @Override
   public List<Book> findBooksByAuthor(Author author) {
-    try (Session session = sessionFactory.openSession()) {
-      TypedQuery<Book> query =
-          session.createQuery(
-              "SELECT b FROM Author a LEFT JOIN a.books b WHERE a = :author", Book.class);
-      query.setParameter("author", author);
-      return query.getResultList();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    TypedQuery<Book> query =
+        session.createQuery(
+            "SELECT b FROM Author a LEFT JOIN a.books b WHERE a = :author", Book.class);
+    query.setParameter("author", author);
+    return query.getResultList();
   }
 
   /**
@@ -107,21 +122,20 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public long isBookAvailable(String title) {
-    try (Session session = sessionFactory.openSession()) {
-      Book book = findBookByTitle(session, title);
-      TypedQuery<Long> query =
-          session.createQuery(
-              "SELECT count(c) FROM Copy c "
-                  + "JOIN c.book b WHERE b = :book AND c.available =: available",
-              Long.class);
-      query.setParameter("book", book);
-      query.setParameter("available", true);
-      return query.getSingleResult();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    Book book = findBookByTitle(session, title);
+    TypedQuery<Long> query =
+        session.createQuery(
+            "SELECT count(c) FROM Copy c "
+                + "JOIN c.book b WHERE b = :book AND c.available =: available",
+            Long.class);
+    query.setParameter("book", book);
+    query.setParameter("available", true);
+    return query.getSingleResult();
   }
 
   /**
-   * Finds how many books in the library have been took over a period of time
+   * Finds how many books in the library have been took over a period of time.
    *
    * @param fromDate start of the period.
    * @param toDate end of the period.
@@ -129,49 +143,52 @@ public class BookDao implements BookDaoInfs {
    */
   @Override
   public long getCountOfBookByPeriod(LocalDate fromDate, LocalDate toDate) {
-    try (Session session = sessionFactory.openSession()) {
-      TypedQuery<Long> query =
-          session.createQuery(
-              "SELECT count(s.book) FROM Story s WHERE s.timeTake BETWEEN :fromDate AND :toDate",
-              Long.class);
-      query.setParameter("fromDate", fromDate);
-      query.setParameter("toDate", toDate);
-      return query.getSingleResult();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    TypedQuery<Long> query =
+        session.createQuery(
+            "SELECT count(s.book) FROM Story s WHERE s.timeTake BETWEEN :fromDate AND :toDate",
+            Long.class);
+    query.setParameter("fromDate", fromDate);
+    query.setParameter("toDate", toDate);
+    return query.getSingleResult();
   }
 
   /**
-   * Find all copies of book and return total info about copy
+   * Find all copies of book and return total info about copy.
    *
-   * @param title
-   * @return List<Copy>
+   * @param title of a book to find its copies.
+   * @return List<Copy> list of copies of the book.
    */
   @Override
   public List<Copy> getCopiesInfo(String title) {
-    try (Session session = sessionFactory.openSession()) {
-      return session
-          .createQuery("SELECT c FROM Copy c WHERE c.book.title = ?1", Copy.class)
-          .setParameter(1, title)
-          .getResultList();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    return session
+        .createQuery("SELECT c FROM Copy c WHERE c.book.title = :title", Copy.class)
+        .setParameter("title", title)
+        .getResultList();
   }
 
   /**
-   * Find average age of readers whose have read this book
+   * Find average age of readers whose have read this book.
    *
-   * @param title
-   * @return double
+   * @param title of a book to find.
+   * @return double value of average age of readers of the book.
    */
   @Override
   public double getReaderAvgByBook(String title) {
-    try (Session session = sessionFactory.openSession()) {
-      return (double)
+    Session session = sessionFactory.getCurrentSession();
+    double avgAge = 0;
+    Book book = findBookByTitle(session, title);
+    if (null != book) {
+      TypedQuery<Double> query =
           session
               .createQuery(
-                  "SELECT AVG (YEAR(current_date) - YEAR(s.reader.birthday)) FROM Story s WHERE s.book.title = ?1")
-              .setParameter(1, title)
-              .getSingleResult();
+                  "SELECT avg(YEAR(current_date) - YEAR (s.reader.birthday)) FROM Story s WHERE s.book = :book",
+                  Double.class)
+              .setParameter("book", book);
+      avgAge = query.getSingleResult();
     }
+    return avgAge;
   }
 
   /**
@@ -209,81 +226,94 @@ public class BookDao implements BookDaoInfs {
       }
       return resultMap;
     }
+    List<Book> bookList =
+        session
+            .createQuery(
+                "SELECT DISTINCT s.book FROM Story s "
+                    + "WHERE s.timeTake between :date1 AND :date2",
+                Book.class)
+            .setParameter("date1", firstPeriod)
+            .setParameter("date2", secondPeriod)
+            .list();
+    if (bookList != null) {
+      for (Book book : bookList) {
+        Long count =
+            session
+                .createQuery(
+                    "SELECT count(s.timeTake) " + "FROM Story s" + " WHERE s.book = :book",
+                    Long.class)
+                .setParameter("book", book)
+                .getSingleResult();
+        resultMap.put(book, count);
+      }
+    }
+    return resultMap;
   }
 
   /**
    * Finds a book by given title and counts how many times the book has been taken.
-   *
-   * <p>5. Скільки разів брали певну книжку (в загальному)
    *
    * @param title of book to find.
    * @return how many times the book has taken.
    */
   @Override
   public long getTotalUsageCount(String title) {
-    try (Session session = sessionFactory.openSession()) {
-      Book book = findBookByTitle(session, title);
-      return session
-          .createQuery("SELECT count(s.book) FROM Story s WHERE s.book = :book", Long.class)
-          .setParameter("book", book)
-          .uniqueResult();
-    }
+    Session session = sessionFactory.getCurrentSession();
+    Book book = findBookByTitle(session, title);
+    return session
+        .createQuery("SELECT count(s.book) FROM Story s WHERE s.book = :book", Long.class)
+        .setParameter("book", book)
+        .uniqueResult();
   }
 
   /**
    * Finds a book by given title and counts how many times the book has been taken.
    *
-   * <p>5. Скільки разів брали певну книжку ( по примірникам)
-   *
    * @param title of book to find.
    * @return how many times the book has taken.
    */
   public Map<Copy, Long> getUsageCountForCopies(String title) {
-    try (Session session = sessionFactory.openSession()) {
-      Map<Copy, Long> resultMap = new HashMap<>();
+    Session session = sessionFactory.getCurrentSession();
+    Map<Copy, Long> resultMap = new HashMap<>();
 
-      Book book = findBookByTitle(session, title);
+    Book book = findBookByTitle(session, title);
 
-      List<Copy> copies =
-          session
-              .createQuery("SELECT c FROM Copy c WHERE c.book = :book", Copy.class)
-              .setParameter("book", book)
-              .list();
+    List<Copy> copies =
+        session
+            .createQuery("SELECT c FROM Copy c WHERE c.book = :book", Copy.class)
+            .setParameter("book", book)
+            .list();
 
-      if (null != copies) {
-        for (Copy copy : copies) {
-          Long count =
-              session
-                  .createQuery("SELECT count(s.id) FROM Story s WHERE s.copy = :copy", Long.class)
-                  .setParameter("copy", copy)
-                  .uniqueResult();
-          resultMap.put(copy, count);
-        }
+    if (null != copies) {
+      for (Copy copy : copies) {
+        Long count =
+            session
+                .createQuery("SELECT count(s.id) FROM Story s WHERE s.copy = :copy", Long.class)
+                .setParameter("copy", copy)
+                .uniqueResult();
+        resultMap.put(copy, count);
       }
-      return resultMap;
     }
+    return resultMap;
   }
 
   /**
    * Finds a book by given title and counts an average time of reading.
    *
-   * <p>5. Скільки разів брали певну книжку ( СЕРЕДНІЙ ЧАС ЧИТАННЯ)
-   *
    * @param title of book to find.
    * @return an average time of reading.
    */
   public Double getAvgTimeOfUsage(String title) {
-    try (Session session = sessionFactory.openSession()) {
-      Book book = findBookByTitle(session, title);
-      List<Integer> days =
-          session
-              .createQuery(
-                  "SELECT (DATEDIFF(s.timeReturn, s.timeTake)) FROM Story s WHERE s.book = :book AND s.timeReturn IS NOT NULL",
-                  Integer.class)
-              .setParameter("book", book)
-              .list();
-      return days.stream().mapToInt(i -> i).average().orElse(0);
-    }
+    Session session = sessionFactory.getCurrentSession();
+    Book book = findBookByTitle(session, title);
+    List<Integer> days =
+        session
+            .createQuery(
+                "SELECT (DATEDIFF(s.timeReturn, s.timeTake)) FROM Story s WHERE s.book = :book AND s.timeReturn IS NOT NULL",
+                Integer.class)
+            .setParameter("book", book)
+            .list();
+    return days.stream().mapToInt(i -> i).average().orElse(0);
   }
 
   /**
