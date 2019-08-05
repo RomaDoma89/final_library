@@ -32,27 +32,21 @@ public class AuthorDao implements AuthorDaoInfs {
     this.sessionFactory = sessionFactory;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public int insert(Author author) throws HibernateException, IllegalArgumentException {
     Session session = sessionFactory.getCurrentSession();
     return (int) session.save(author);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public Author findById(int id) {
     Session session = sessionFactory.getCurrentSession();
     return session.find(Author.class, id);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public List<Author> findAll() {
     Session session = sessionFactory.getCurrentSession();
