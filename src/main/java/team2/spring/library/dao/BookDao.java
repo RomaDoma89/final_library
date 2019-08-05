@@ -194,9 +194,9 @@ public class BookDao implements BookDaoInfs {
   /**
    * Return list of books and their counter of reading
    *
-   * @param firstPeriod
-   * @param secondPeriod
-   * @return TreeMap<Long, Book>
+   * @param firstPeriod start of the period.
+   * @param secondPeriod end of the period.
+   * @return TreeMap<Long, Book> a map of books and the number of times they were taken
    */
   @Override
   public TreeMap<Long, Book> getPopular(LocalDate firstPeriod, LocalDate secondPeriod) {
