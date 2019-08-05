@@ -6,5 +6,4 @@ import java.time.LocalDate;
 
 public interface StoryDaoInfs extends Dao<Story> {
 
-    Long getCountOfVisiting(LocalDate firstPeriod, LocalDate secondPeriod);
 }
