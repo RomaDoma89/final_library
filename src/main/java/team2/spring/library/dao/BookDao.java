@@ -44,7 +44,7 @@ public class BookDao implements BookDaoInfs {
   @Override
   public List<Book> findAll() {
     Session session = sessionFactory.getCurrentSession();
-    return session.createQuery("SELECT b FROM Book b", Book.class).list();
+    return session.createQuery("SELECT DISTINCT b FROM Book b LEFT JOIN FETCH b.authors", Book.class).list();
   }
 
   /**
@@ -162,9 +162,11 @@ public class BookDao implements BookDaoInfs {
     double avgAge = 0;
     Book book = findBookByTitle(session, title);
     if (null != book) {
-      TypedQuery<Double> query = session.createQuery(
-              "SELECT avg(YEAR(current_date) - YEAR (s.reader.birthday)) FROM Story s WHERE s.book = :book",
-              Double.class)
+      TypedQuery<Double> query =
+          session
+              .createQuery(
+                  "SELECT avg(YEAR(current_date) - YEAR (s.reader.birthday)) FROM Story s WHERE s.book = :book",
+                  Double.class)
               .setParameter("book", book);
       avgAge = query.getSingleResult();
     }

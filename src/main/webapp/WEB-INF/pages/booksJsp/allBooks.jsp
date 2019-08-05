@@ -11,22 +11,28 @@
     <title>Available book</title>
 </head>
 <body>
-<%@include file="../menu.jsp"%>
+<%@include file="../menu.jsp" %>
 
 
-  <table class="simple-little-table" cellspacing='0' style="text-align: center; margin: auto; margin-top: 50px">
+<table class="simple-little-table" cellspacing='0' style="text-align: center; margin: auto; margin-top: 50px">
     <thead>
     <tr>
-      <th>#</th>
-      <th>Назва</th>
+        <th>#</th>
+        <th>Назва</th>
+        <th>Автори</th>
     </tr>
     </thead>
     <tbody>
-    <c:forEach  var="book" items="${listBook}" varStatus="loop" >
-      <tr>
-        <td>${loop.index+1}</td>
-        <td>${book.title}</td>
-      </tr>
+    <c:forEach var="book" items="${listBook}" varStatus="loop">
+        <tr>
+            <td>${loop.index+1}</td>
+            <td>${book.title}</td>
+            <td> /
+                <c:forEach var="author" items="${book.authors}" varStatus="loop">
+                    ${author.name} /
+                </c:forEach>
+            </td>
+        </tr>
     </c:forEach>
     </tbody>
 </table>
