@@ -11,6 +11,10 @@ import team2.spring.library.entities.Author;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * The class implements {@link AuthorDaoInfs interface}. Contains CRUD operations for {@link Author
+ * entity class}
+ */
 @Repository
 @Transactional
 public class AuthorDao implements AuthorDaoInfs {
@@ -18,23 +22,37 @@ public class AuthorDao implements AuthorDaoInfs {
   private static final String TAG = AuthorDao.class.getName();
   private SessionFactory sessionFactory;
 
+  /**
+   * Autowired dependency. Provides a <code>SessionFactory</code> implementation.
+   *
+   * @param sessionFactory implementation
+   */
   @Autowired
   public void setSessionFactory(SessionFactory sessionFactory) {
     this.sessionFactory = sessionFactory;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public int insert(Author author) throws HibernateException, IllegalArgumentException {
     Session session = sessionFactory.getCurrentSession();
     return (int) session.save(author);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Author findById(int id) {
     Session session = sessionFactory.getCurrentSession();
     return session.find(Author.class, id);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public List<Author> findAll() {
     Session session = sessionFactory.getCurrentSession();
