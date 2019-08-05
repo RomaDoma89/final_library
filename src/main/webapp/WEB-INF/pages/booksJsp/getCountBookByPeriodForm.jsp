@@ -12,11 +12,11 @@
     <c:when test="${bookByPeriodDto.dateFrom==null}">
         <form:form action="getCountBookByPeriod" method="post"
                    style=" text-align: center; padding-top: 50px">
-            Input first date in format
+            <p style="color: gainsboro">Input first date in format
             <br>
                 <input type="date" name="dateFrom" required>
             <br>
-            Input second date in format
+            <p style="color: gainsboro">Input second date in format
             <br>
                 <input type="date" name="dateTo" required>
             <br>

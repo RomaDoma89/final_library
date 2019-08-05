@@ -69,23 +69,5 @@ public class StoryDao implements StoryDaoInfs {
     return (null == session.find(Story.class, id));
   }
 
-  /**
-   * Find count of visiting by period
-   *
-   * @param firstPeriod
-   * @param secondPeriod
-   * @return Long
-   */
-  @Override
-  public Long getCountOfVisiting(LocalDate firstPeriod, LocalDate secondPeriod) {
-    Session session = sessionFactory.openSession();
-    return session
-        .createQuery(
-            "SELECT COUNT(s.timeTake) FROM Story s"
-                + " WHERE s.timeTake BETWEEN :firstPeriod AND :secondPeriod",
-            Long.class)
-        .setParameter("firstPeriod", firstPeriod)
-        .setParameter("secondPeriod", secondPeriod)
-        .getSingleResult();
-  }
+
 }

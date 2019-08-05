@@ -241,6 +241,25 @@ public class ReaderDao implements ReaderDaoInfs {
     }
     return resultMap;
   }
+  /**
+   * Find count of visiting by period
+   *
+   * @param firstPeriod
+   * @param secondPeriod
+   * @return Long
+   */
+  @Override
+  public long getCountOfVisiting(LocalDate firstPeriod, LocalDate secondPeriod) {
+    Session session = sessionFactory.openSession();
+    return session
+            .createQuery(
+                    "SELECT COUNT(s.timeTake) FROM Story s"
+                            + " WHERE s.timeTake BETWEEN :firstPeriod AND :secondPeriod",
+                    Long.class)
+            .setParameter("firstPeriod", firstPeriod)
+            .setParameter("secondPeriod", secondPeriod)
+            .getSingleResult();
+  }
 
   /**
    * Finds all readers by the given name. Uses an instance of the session.

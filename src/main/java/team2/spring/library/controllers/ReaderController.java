@@ -6,11 +6,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import team2.spring.library.dto.GeneralStatisticDto;
 import team2.spring.library.dto.ReaderAvgDto;
 import team2.spring.library.dto.ReaderStatisticDto;
 import team2.spring.library.services.ReaderService;
 
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.time.LocalDate;
 
 @Controller
 @AllArgsConstructor
@@ -51,12 +55,29 @@ public class ReaderController {
   }
 
   /**
+   * @param model
+   * @return
+   */
+  @GetMapping("/generalStatisticForm")
+  public String generalStatisticForm(Model model) {
+    return "readersJsp/generalStatistic";
+  }
+  /**
    * @param model set data in jsp page
    * @return representation of general statistic
    */
-  @GetMapping("/generalStatistic")
-  public String getGeneralStatistic(Model model) {
-    model.addAttribute("generalStatisticDto", readerService.getGeneralStatisticDto());
+  @PostMapping("/generalStatistic")
+  public String getGeneralStatistic(@RequestParam String dateFrom, @RequestParam String dateTo, Model model) {
+    GeneralStatisticDto generalStatisticDto=new GeneralStatisticDto();
+    generalStatisticDto.setDateFrom(LocalDate.parse(dateFrom));
+    generalStatisticDto.setDateTo(LocalDate.parse(dateTo));
+    try {
+      generalStatisticDto=readerService.getGeneralStatisticDto(generalStatisticDto);
+    } catch (ParseException e) {
+      e.printStackTrace();
+      return "error";
+    }
+    model.addAttribute("generalStatisticDto", generalStatisticDto);
     return "readersJsp/generalStatistic";
   }
 

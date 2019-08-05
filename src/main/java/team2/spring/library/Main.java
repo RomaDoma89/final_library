@@ -139,7 +139,8 @@ public class Main {
     Log.debug(TAG, getUsingPeriod.toString());
 
     //  count of visiting
-    long avgCountOfVisiting = storyDao.getCountOfVisiting(firstPeriod, secondPeriod);
+
+    long avgCountOfVisiting = readerDao.getCountOfVisiting(firstPeriod, secondPeriod);
     Log.debug(TAG, Long.toString(avgCountOfVisiting));
   }
 }

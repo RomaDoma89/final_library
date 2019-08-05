@@ -28,7 +28,7 @@
                     <li><a href="getPopularBookForm">Дістати по популярності</a>
                     </li>
                     <li><a href="getBlackList">Отримати "чорний список" користувачів</a></li>
-                    <li><a href="generalStatistic">Статистика по читачам</a>
+                    <li><a href="generalStatisticForm">Статистика по читачам</a>
                     </li>
                     <li><a href="readerAvgForm">Ортимати середній вік читачів</a>
                     </li>

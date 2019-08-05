@@ -11,12 +11,11 @@
 </head>
 <body>
 <%@include file="../menu.jsp" %>
-    <form:form action="availableBook" method="post" modelAttribute="bookDto" cssStyle="text-align: center">
-        <p>Введіть назву книги :</p>
-        <br>
-        <form:label path="title" style="text-align: center"  >Title </form:label>
-        <form:input  path="title" value="Effective Java" style="text-align: center"/>
-        <input type="submit" value="Submit"/>
-    </form:form>
+<form:form action="availableBook" method="post" modelAttribute="bookDto" cssStyle="text-align: center">
+    <p style="color: gainsboro">Введіть назву книги :</p>
+    <br>
+    <input name="title" value="Effective Java" required  style="text-align: center"/>
+    <input type="submit" value="Submit"/>
+</form:form>
 </body>
 </html>

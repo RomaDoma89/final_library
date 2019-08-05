@@ -22,6 +22,8 @@ public interface ReaderDaoInfs extends Dao<Reader> {
 
   double getAvgReader();
 
+  long getCountOfVisiting(LocalDate firstPeriod, LocalDate secondPeriod);
+
   double getAvgAgeByAuthor(List<Book> books) throws PersistenceException;
 
   Map<Reader, LocalDate> getUsingPeriod();
