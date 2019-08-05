@@ -17,6 +17,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The class implements {@link BookDaoInfs interface}. Contains CRUD operations for {@link Book
+ * entity class}
+ */
 @Transactional
 @Repository
 public class BookDao implements BookDaoInfs {
@@ -24,27 +28,37 @@ public class BookDao implements BookDaoInfs {
   private static final String TAG = BookDao.class.getName();
   private SessionFactory sessionFactory;
 
+  /**
+   * Autowired dependency. Provides a <code>SessionFactory</code> implementation.
+   *
+   * @param sessionFactory implementation
+   */
   @Autowired
   public void setSessionFactory(SessionFactory sessionFactory) {
     this.sessionFactory = sessionFactory;
   }
 
+  /** {@inheritDoc} */
   @Override
   public int insert(Book book) throws HibernateException, IllegalArgumentException {
     Session session = sessionFactory.getCurrentSession();
     return (int) session.save(book);
   }
 
+  /** {@inheritDoc} */
   @Override
   public Book findById(int id) {
     Session session = sessionFactory.getCurrentSession();
     return session.find(Book.class, id);
   }
 
+  /** {@inheritDoc} */
   @Override
   public List<Book> findAll() {
     Session session = sessionFactory.getCurrentSession();
-    return session.createQuery("SELECT b FROM Book b", Book.class).list();
+    return session
+        .createQuery("SELECT DISTINCT b FROM Book b LEFT JOIN FETCH b.authors", Book.class)
+        .list();
   }
 
   /**
@@ -86,6 +100,12 @@ public class BookDao implements BookDaoInfs {
     return findBookByTitle(session, title);
   }
 
+  /**
+   * Finds all books by <code>Author</code>.
+   *
+   * @param author to find books.
+   * @return list of books by this author.
+   */
   @Override
   public List<Book> findBooksByAuthor(Author author) {
     Session session = sessionFactory.getCurrentSession();
@@ -117,7 +137,7 @@ public class BookDao implements BookDaoInfs {
   }
 
   /**
-   * Finds how many books in the library have been took over a period of time
+   * Finds how many books in the library have been took over a period of time.
    *
    * @param fromDate start of the period.
    * @param toDate end of the period.
@@ -136,25 +156,25 @@ public class BookDao implements BookDaoInfs {
   }
 
   /**
-   * Find all copies of book and return total info about copy
+   * Find all copies of book and return total info about copy.
    *
-   * @param title
-   * @return List<Copy>
+   * @param title of a book to find its copies.
+   * @return List<Copy> list of copies of the book.
    */
   @Override
   public List<Copy> getCopiesInfo(String title) {
     Session session = sessionFactory.getCurrentSession();
     return session
-        .createQuery("SELECT c FROM Copy c WHERE c.book.title = ?1", Copy.class)
-        .setParameter(1, title)
+        .createQuery("SELECT c FROM Copy c WHERE c.book.title = :title", Copy.class)
+        .setParameter("title", title)
         .getResultList();
   }
 
   /**
-   * Find average age of readers whose have read this book
+   * Find average age of readers whose have read this book.
    *
-   * @param title
-   * @return double
+   * @param title of a book to find.
+   * @return double value of average age of readers of the book.
    */
   @Override
   public double getReaderAvgByBook(String title) {
@@ -162,9 +182,11 @@ public class BookDao implements BookDaoInfs {
     double avgAge = 0;
     Book book = findBookByTitle(session, title);
     if (null != book) {
-      TypedQuery<Double> query = session.createQuery(
-              "SELECT avg(YEAR(current_date) - YEAR (s.reader.birthday)) FROM Story s WHERE s.book = :book",
-              Double.class)
+      TypedQuery<Double> query =
+          session
+              .createQuery(
+                  "SELECT avg(YEAR(current_date) - YEAR (s.reader.birthday)) FROM Story s WHERE s.book = :book",
+                  Double.class)
               .setParameter("book", book);
       avgAge = query.getSingleResult();
     }
@@ -172,11 +194,11 @@ public class BookDao implements BookDaoInfs {
   }
 
   /**
-   * Return list of books and their counter of reading
+   * Return list of books and their counter of reading.
    *
-   * @param firstPeriod
-   * @param secondPeriod
-   * @return Map<Book, Long>
+   * @param firstPeriod start of the period.
+   * @param secondPeriod end of the period.
+   * @return Map<Book, Long> a map of books and the number of times they were taken.
    */
   @Override
   public Map<Book, Long> getPopular(LocalDate firstPeriod, LocalDate secondPeriod) {
@@ -210,8 +232,6 @@ public class BookDao implements BookDaoInfs {
   /**
    * Finds a book by given title and counts how many times the book has been taken.
    *
-   * <p>5. Скільки разів брали певну книжку (в загальному)
-   *
    * @param title of book to find.
    * @return how many times the book has taken.
    */
@@ -227,8 +247,6 @@ public class BookDao implements BookDaoInfs {
 
   /**
    * Finds a book by given title and counts how many times the book has been taken.
-   *
-   * <p>5. Скільки разів брали певну книжку ( по примірникам)
    *
    * @param title of book to find.
    * @return how many times the book has taken.
@@ -260,8 +278,6 @@ public class BookDao implements BookDaoInfs {
 
   /**
    * Finds a book by given title and counts an average time of reading.
-   *
-   * <p>5. Скільки разів брали певну книжку ( СЕРЕДНІЙ ЧАС ЧИТАННЯ)
    *
    * @param title of book to find.
    * @return an average time of reading.

@@ -42,13 +42,4 @@ public class Story {
     this.copy = copy;
     this.timeTake = timeTake;
   }
-
-  @Override
-  public String toString() {
-    return "Story{" +
-            "id=" + id +
-            ", timeTake=" + timeTake +
-            ", timeReturn=" + timeReturn +
-            '}';
-  }
 }
