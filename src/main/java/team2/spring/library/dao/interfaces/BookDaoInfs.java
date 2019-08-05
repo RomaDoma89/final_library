@@ -7,6 +7,7 @@ import team2.spring.library.entities.Copy;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public interface BookDaoInfs extends Dao<Book> {
 
@@ -28,5 +29,10 @@ public interface BookDaoInfs extends Dao<Book> {
 
   double getReaderAvgByBook(String title);
 
-  Map<Book, Long> getPopular(LocalDate firstPeriod, LocalDate secondPeriod);
+  /**
+   * @param firstPeriod start date
+   * @param secondPeriod end date
+   * @return TreeMap<Long, Book> - sorted map with results
+   */
+  TreeMap<Long, Book> getPopular(LocalDate firstPeriod, LocalDate secondPeriod);
 }

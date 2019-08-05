@@ -12,7 +12,9 @@ import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Copy;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.TreeMap;
 
 @Service
 @AllArgsConstructor
@@ -55,7 +57,7 @@ public class BookServiceImpl implements BookService {
   public long getCountOfBookByPeriod(BookByPeriodDto bookByPeriodDto) throws ParseException {
     if (bookByPeriodDto.getDateFrom().compareTo(bookByPeriodDto.getDateTo()) > 0
         || bookByPeriodDto.getDateFrom().compareTo(bookByPeriodDto.getDateTo()) == 0) {
-      throw new ParseException("date to is lover then date from ", 0);
+      throw new ParseException("Date to is lower then date from ", 0);
     }
      bookByPeriodDto.setCountOfBookByPeriod(bookDaoInfs.getCountOfBookByPeriod(bookByPeriodDto.getDateFrom(),bookByPeriodDto.getDateTo()));
     return 0;
@@ -83,5 +85,20 @@ public class BookServiceImpl implements BookService {
   @Override
   public List<Copy> getCopiesInfo(Book book) {
     return bookDaoInfs.getCopiesInfo(book.getTitle());
+  }
+
+  /**
+   * @param firstDate start date
+   * @param secondDate end date
+   * @return TreeMap<Long, Book>
+   * @throws ParseException if date is not valid
+   */
+  @Override
+  public TreeMap<Long, Book> getPopular(LocalDate firstDate, LocalDate secondDate)
+      throws ParseException {
+    if (firstDate.compareTo(secondDate) > 0 || firstDate.compareTo(secondDate) == 0) {
+      throw new ParseException("Input date is invalid, it's lower than ", 0);
+    }
+    return bookDaoInfs.getPopular(firstDate, secondDate);
   }
 }
