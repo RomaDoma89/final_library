@@ -226,28 +226,6 @@ public class BookDao implements BookDaoInfs {
       }
       return resultMap;
     }
-    List<Book> bookList =
-        session
-            .createQuery(
-                "SELECT DISTINCT s.book FROM Story s "
-                    + "WHERE s.timeTake between :date1 AND :date2",
-                Book.class)
-            .setParameter("date1", firstPeriod)
-            .setParameter("date2", secondPeriod)
-            .list();
-    if (bookList != null) {
-      for (Book book : bookList) {
-        Long count =
-            session
-                .createQuery(
-                    "SELECT count(s.timeTake) " + "FROM Story s" + " WHERE s.book = :book",
-                    Long.class)
-                .setParameter("book", book)
-                .getSingleResult();
-        resultMap.put(book, count);
-      }
-    }
-    return resultMap;
   }
 
   /**
