@@ -26,8 +26,8 @@ public class BookServiceImpl implements BookService {
   private CopyDaoInfs copyDao;
 
   /**
-   * @param bookDto
-   * @return
+   * @param bookDto dto witch contain book title what is looking for
+   * @return bookDto with information of available book status
    */
   @Override
   public BookDto isBookAvailable(BookDto bookDto) {
@@ -35,15 +35,15 @@ public class BookServiceImpl implements BookService {
     return bookDto;
   }
 
-  /** @return */
+  /** @return List with all book in library */
   @Override
   public List<Book> findAll() {
     return bookDao.findAll();
   }
 
   /**
-   * @param author
-   * @return
+   * @param author witch contain name
+   * @return list books written by author
    */
   @Override
   public List<Book> findBooksByAuthor(Author author) {
@@ -52,9 +52,9 @@ public class BookServiceImpl implements BookService {
   }
 
   /**
-   * @param bookByPeriodDto
-   * @return
-   * @throws ParseException
+   * @param bookByPeriodDto contain two date star and end of period
+   * @return amount of ordered book in library by chosen period
+   * @throws ParseException throw exception that input date is not correct
    */
   @Override
   public long getCountOfBookByPeriod(BookByPeriodDto bookByPeriodDto) throws ParseException {
@@ -62,22 +62,21 @@ public class BookServiceImpl implements BookService {
         || bookByPeriodDto.getDateFrom().compareTo(bookByPeriodDto.getDateTo()) == 0) {
       throw new ParseException("Date to is lower then date from ", 0);
     }
-     bookByPeriodDto.setCountOfBookByPeriod(bookDao.getCountOfBookByPeriod(bookByPeriodDto.getDateFrom(),bookByPeriodDto.getDateTo()));
-    return 0;
+    bookByPeriodDto.setCountOfBookByPeriod(
+        bookDao.getCountOfBookByPeriod(bookByPeriodDto.getDateFrom(), bookByPeriodDto.getDateTo()));
+    return bookByPeriodDto.getCountOfBookByPeriod();
   }
 
   /**
-   * @param bookStatisticDto
-   * @return
+   * @param bookStatisticDto contain book title
+   * @return return BookStatisticDto with statistic of book
    */
   @Override
   public BookStatisticDto getBookStatisticDto(BookStatisticDto bookStatisticDto) {
-    bookStatisticDto.setGetAvgTimeOfUsage(
-        bookDao.getAvgTimeOfUsage(bookStatisticDto.getTitle()));
+    bookStatisticDto.setGetAvgTimeOfUsage(bookDao.getAvgTimeOfUsage(bookStatisticDto.getTitle()));
     bookStatisticDto.setGetUsageCountForCopies(
         bookDao.getUsageCountForCopies(bookStatisticDto.getTitle()));
-    bookStatisticDto.setTotalUsageCount(
-        bookDao.getTotalUsageCount(bookStatisticDto.getTitle()));
+    bookStatisticDto.setTotalUsageCount(bookDao.getTotalUsageCount(bookStatisticDto.getTitle()));
     return bookStatisticDto;
   }
 
@@ -90,8 +89,15 @@ public class BookServiceImpl implements BookService {
     return bookDao.getCopiesInfo(book.getTitle());
   }
 
+  /**
+   * Tries to delete a book by id.
+   *
+   * @param id of the book.
+   * @return list of the existed book after the deletion.
+   */
   @Override
-  public List<Book> deleteBook(int id) throws IllegalArgumentException, DataIntegrityViolationException {
+  public List<Book> deleteBook(int id)
+      throws IllegalArgumentException, DataIntegrityViolationException {
     Book book = bookDao.findById(id);
     if (null != book) {
       List<Story> stories = storyDao.findByBook(book);

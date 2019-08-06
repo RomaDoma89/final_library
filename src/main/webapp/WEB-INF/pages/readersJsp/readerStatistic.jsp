@@ -18,7 +18,7 @@
 
 <c:if test="${readerStatisticDto.select =='read'}">
     <div style="text-align: center">
-        <h1>Прочитані книги </h1>
+        <h1 style="color: gainsboro">Прочитані книги </h1>
     </div>
 </c:if>
 
@@ -43,12 +43,12 @@
 
 <c:if test="${readerStatisticDto.select =='ordered'}">
     <div style="text-align: center">
-        <h1>Не повернуті</h1>
+        <h1 style="color: gainsboro">Не повернуті</h1>
     </div>
 </c:if>
 <c:forEach items="${readerStatisticDto.readerListMap}" var="reder">
     <div style="text-align: center">
-        <h1>Читач: ${reder.key.name}</h1>
+        <h1 style="color: gainsboro" >Читач: ${reder.key.name}</h1>
     </div>
 
     <table class="simple-little-table" cellspacing='0' style="text-align: center; margin: auto; margin-top: 50px">
