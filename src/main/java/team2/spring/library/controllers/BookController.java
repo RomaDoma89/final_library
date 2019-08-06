@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import team2.spring.library.dto.BookByPeriodDto;
 import team2.spring.library.dto.BookDto;
 import team2.spring.library.dto.BookPopularDto;
@@ -91,31 +88,7 @@ public class BookController {
     return "booksJsp/booksByAuthor";
   }
 
-  /**
-   * Redirect on page with form for add new book in library
-   *
-   * @param model set book entity in jsp page
-   * @return page with form gor add new book in library
-   */
-  @GetMapping("/addBookForm")
-  public String addBookForm(Model model) {
-    model.addAttribute("book", new Book());
-    return "addBookForm";
-  }
 
-  /**
-   * Return page with recently added book
-   *
-   * @param book added book
-   * @param model return book witch was added on page
-   * @return new book on jsp
-   */
-  @PostMapping("/addBook")
-  public String addBook(@ModelAttribute("book") Book book, Model model) {
-
-    model.addAttribute("book", book);
-    return "addBook";
-  }
 
   /**
    * Get statistic about book by title
@@ -246,6 +219,31 @@ public class BookController {
       model.addAttribute("listBook", bookService.findAll());
       return "booksJsp/allBooks";
     }
+    return "booksJsp/allBooks";
+  }
+
+  /**
+   * To get all info which need for add book to db
+   * @param model set object
+   * @return jsp page with form
+   */
+  @GetMapping("/addBookForm")
+  public String addBookForm(Model model) {
+    model.addAttribute("bookDto", new BookDto());
+    return "booksJsp/addNewBook";
+  }
+
+  /**
+   * Add book to db
+   *
+   * @param bookDto object with info
+   * @param model set id of created book
+   * @return allBooks
+   */
+  @PostMapping("/addBook")
+  public String addBook(@ModelAttribute("bookDto") BookDto bookDto, Model model) {
+    bookService.insert(bookDto);
+    model.addAttribute("listBook", bookService.findAll());
     return "booksJsp/allBooks";
   }
 }

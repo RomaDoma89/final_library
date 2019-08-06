@@ -14,4 +14,5 @@ public class BookDto {
     @NotBlank
     private String title;
     private long available;
+    private String authors;
 }

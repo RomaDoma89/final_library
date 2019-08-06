@@ -1,5 +1,6 @@
 package team2.spring.library.services;
 
+import org.hibernate.HibernateException;
 import org.springframework.dao.DataIntegrityViolationException;
 import team2.spring.library.dto.BookByPeriodDto;
 import team2.spring.library.dto.BookDto;
@@ -65,4 +66,12 @@ public interface BookService {
    * @throws ParseException if date is not valid
    */
   TreeMap<Long, Book> getPopular(LocalDate firstDate, LocalDate secondDate) throws ParseException;
+
+  /**
+   * @param bookDto object with info
+   * @return id of created book
+   * @throws HibernateException
+   * @throws IllegalArgumentException
+   */
+  int insert(BookDto bookDto) throws HibernateException, IllegalArgumentException;
 }
