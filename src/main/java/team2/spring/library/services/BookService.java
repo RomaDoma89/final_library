@@ -14,14 +14,32 @@ import java.util.List;
 import java.util.TreeMap;
 
 public interface BookService {
+  /**
+   * @param bookDto dto witch contain book title what is looking for
+   * @return bookDto with information of available book status
+   */
   BookDto isBookAvailable(BookDto bookDto);
 
+  /** @return List with all book in library */
   List<Book> findAll();
 
+  /**
+   * @param author witch contain name
+   * @return list books written by author
+   */
   List<Book> findBooksByAuthor(Author author);
 
+  /**
+   * @param bookByPeriodDto contain two date star and end of period
+   * @return amount of ordered book in library by chosen period
+   * @throws ParseException throw exception that input date is not correct
+   */
   long getCountOfBookByPeriod(BookByPeriodDto bookByPeriodDto) throws ParseException;
 
+  /**
+   * @param bookStatisticDto contain book title
+   * @return return BookStatisticDto with statistic of book
+   */
   BookStatisticDto getBookStatisticDto(BookStatisticDto bookStatisticDto);
 
   /**

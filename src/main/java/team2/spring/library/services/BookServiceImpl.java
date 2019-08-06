@@ -26,8 +26,8 @@ public class BookServiceImpl implements BookService {
   private CopyDaoInfs copyDao;
 
   /**
-   * @param bookDto
-   * @return
+   * @param bookDto dto witch contain book title what is looking for
+   * @return bookDto with information of available book status
    */
   @Override
   public BookDto isBookAvailable(BookDto bookDto) {
@@ -35,15 +35,15 @@ public class BookServiceImpl implements BookService {
     return bookDto;
   }
 
-  /** @return */
+  /** @return List with all book in library */
   @Override
   public List<Book> findAll() {
     return bookDao.findAll();
   }
 
   /**
-   * @param author
-   * @return
+   * @param author witch contain name
+   * @return list books written by author
    */
   @Override
   public List<Book> findBooksByAuthor(Author author) {
@@ -52,9 +52,9 @@ public class BookServiceImpl implements BookService {
   }
 
   /**
-   * @param bookByPeriodDto
-   * @return
-   * @throws ParseException
+   * @param bookByPeriodDto contain two date star and end of period
+   * @return amount of ordered book in library by chosen period
+   * @throws ParseException throw exception that input date is not correct
    */
   @Override
   public long getCountOfBookByPeriod(BookByPeriodDto bookByPeriodDto) throws ParseException {
@@ -64,12 +64,12 @@ public class BookServiceImpl implements BookService {
     }
     bookByPeriodDto.setCountOfBookByPeriod(
         bookDao.getCountOfBookByPeriod(bookByPeriodDto.getDateFrom(), bookByPeriodDto.getDateTo()));
-    return 0;
+    return bookByPeriodDto.getCountOfBookByPeriod();
   }
 
   /**
-   * @param bookStatisticDto
-   * @return
+   * @param bookStatisticDto contain book title
+   * @return return BookStatisticDto with statistic of book
    */
   @Override
   public BookStatisticDto getBookStatisticDto(BookStatisticDto bookStatisticDto) {
