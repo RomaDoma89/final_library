@@ -236,11 +236,11 @@ public class ReaderDao implements ReaderDaoInfs {
     return resultMap;
   }
   /**
-   * Find count of visiting by period
+   * Find count of visiting by period.
    *
-   * @param firstPeriod
-   * @param secondPeriod
-   * @return Long
+   * @param firstPeriod start of the period.
+   * @param secondPeriod end of the period.
+   * @return count of visiting the library.
    */
   @Override
   public long getCountOfVisiting(LocalDate firstPeriod, LocalDate secondPeriod) {
