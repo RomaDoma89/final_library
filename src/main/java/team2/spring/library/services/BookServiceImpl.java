@@ -62,7 +62,8 @@ public class BookServiceImpl implements BookService {
         || bookByPeriodDto.getDateFrom().compareTo(bookByPeriodDto.getDateTo()) == 0) {
       throw new ParseException("Date to is lower then date from ", 0);
     }
-     bookByPeriodDto.setCountOfBookByPeriod(bookDao.getCountOfBookByPeriod(bookByPeriodDto.getDateFrom(),bookByPeriodDto.getDateTo()));
+    bookByPeriodDto.setCountOfBookByPeriod(
+        bookDao.getCountOfBookByPeriod(bookByPeriodDto.getDateFrom(), bookByPeriodDto.getDateTo()));
     return 0;
   }
 
@@ -72,12 +73,10 @@ public class BookServiceImpl implements BookService {
    */
   @Override
   public BookStatisticDto getBookStatisticDto(BookStatisticDto bookStatisticDto) {
-    bookStatisticDto.setGetAvgTimeOfUsage(
-        bookDao.getAvgTimeOfUsage(bookStatisticDto.getTitle()));
+    bookStatisticDto.setGetAvgTimeOfUsage(bookDao.getAvgTimeOfUsage(bookStatisticDto.getTitle()));
     bookStatisticDto.setGetUsageCountForCopies(
         bookDao.getUsageCountForCopies(bookStatisticDto.getTitle()));
-    bookStatisticDto.setTotalUsageCount(
-        bookDao.getTotalUsageCount(bookStatisticDto.getTitle()));
+    bookStatisticDto.setTotalUsageCount(bookDao.getTotalUsageCount(bookStatisticDto.getTitle()));
     return bookStatisticDto;
   }
 
@@ -90,8 +89,17 @@ public class BookServiceImpl implements BookService {
     return bookDao.getCopiesInfo(book.getTitle());
   }
 
+  /**
+   * Deletes a book with given <code>id</code> from database.
+   *
+   * @param id of the book to delete.
+   * @return list of the existed book after the deletion.
+   * @throws IllegalArgumentException if an book with the id is not exists.
+   * @throws DataIntegrityViolationException if an book with the id is not exists.
+   */
   @Override
-  public List<Book> deleteBook(int id) throws IllegalArgumentException, DataIntegrityViolationException {
+  public List<Book> deleteBook(int id)
+      throws IllegalArgumentException, DataIntegrityViolationException {
     Book book = bookDao.findById(id);
     if (null != book) {
       List<Story> stories = storyDao.findByBook(book);

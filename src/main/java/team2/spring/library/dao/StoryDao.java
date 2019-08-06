@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 import team2.spring.library.dao.interfaces.StoryDaoInfs;
 import team2.spring.library.entities.Book;
+import team2.spring.library.entities.Reader;
 import team2.spring.library.entities.Story;
 
 import javax.transaction.Transactional;
@@ -68,6 +69,11 @@ public class StoryDao implements StoryDaoInfs {
     return (null == session.find(Story.class, id));
   }
 
+  /**
+   * Finds all reader stories where book is equals to a given.
+   * @param book to find by.
+   * @return list of stories for the book.
+   */
   @Override
   public List<Story> findByBook(Book book) {
     Session session = sessionFactory.getCurrentSession();
@@ -75,6 +81,21 @@ public class StoryDao implements StoryDaoInfs {
         .createQuery("SELECT s FROM Story s WHERE s.book = :book", Story.class)
         .setParameter("book", book)
         .list();
+  }
+
+  /**
+   * Finds all reader stories where book is equals to a given.
+   *
+   * @param reader to find by.
+   * @return list of stories for the book.
+   */
+  @Override
+  public List<Story> findByReader(Reader reader) {
+    Session session = sessionFactory.getCurrentSession();
+    return session
+            .createQuery("SELECT s FROM Story s WHERE s.reader = :reader", Story.class)
+            .setParameter("reader", reader)
+            .list();
   }
 
   /**

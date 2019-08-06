@@ -1,5 +1,6 @@
 package team2.spring.library.services;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import team2.spring.library.dto.GeneralStatisticDto;
 import team2.spring.library.dto.ReaderAvgDto;
 import team2.spring.library.dto.ReaderStatisticDto;
@@ -20,7 +21,8 @@ public interface ReaderService {
 
   ReaderStatisticDto getUserStatistic(ReaderStatisticDto readerStatisticDto);
 
-  GeneralStatisticDto getGeneralStatisticDto( GeneralStatisticDto generalStatisticDto)throws ParseException;
+  GeneralStatisticDto getGeneralStatisticDto(GeneralStatisticDto generalStatisticDto)
+      throws ParseException;
 
   /**
    * @param author object which need for searching average age bu author
@@ -31,7 +33,17 @@ public interface ReaderService {
   /**
    * @param author object which need for searching average age bu author
    * @param book object which need for searching average age bu author
-   * @return  ReaderAvgDto - object which contains average age by author and by book
+   * @return ReaderAvgDto - object which contains average age by author and by book
    */
   ReaderAvgDto getBothAvg(Author author, Book book);
+
+  /**
+   * Tries to delete a reader by id.
+   *
+   * @param id of the reader.
+   * @return list of the existed reader after the deletion.
+   * @throws IllegalArgumentException if a reader with the id is not exists.
+   * @throws DataIntegrityViolationException if a reader with the id is not exists.
+   */
+  List<Reader> deleteReader(int id) throws IllegalArgumentException, DataIntegrityViolationException;
 }

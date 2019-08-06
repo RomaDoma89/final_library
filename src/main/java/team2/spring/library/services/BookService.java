@@ -35,6 +35,8 @@ public interface BookService {
    *
    * @param id of the book.
    * @return list of the existed book after the deletion.
+   * @throws IllegalArgumentException if an book with the id is not exists.
+   * @throws DataIntegrityViolationException if an book with the id is not exists.
    */
   List<Book> deleteBook(int id) throws IllegalArgumentException, DataIntegrityViolationException;
 
