@@ -9,17 +9,20 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>Add book</title>
     <%@include file="/WEB-INF/pages/menu.jsp" %>
 </head>
 <body>
-<form:form action="readerAvg" method="post" modelAttribute="readerAvgDto" class="ui-form ">
+<form:form action="addBook" method="post" modelAttribute="bookDto" class="ui-form ">
     <h3></h3>
     <div class="form-row">
-        <form:input path="book.title" value="Effective Java"/> <label>Назва</label>
+        <form:input path="title"/> <label>Назва</label>
     </div>
     <div class="form-row">
-        <form:input path="author.name" value="Arthur van Hoff"/><label>Ім'я автора</label>
+        <form:input path="authors"/><label>Ім'я автора</label>
+    </div>
+    <div class="form-row">
+        <form:input path="available"/><label>Скільки є примірників</label>
     </div>
     <p><input type="submit" value="Далі"></p>
 </form:form>

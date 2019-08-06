@@ -1,6 +1,7 @@
 package team2.spring.library.services;
 
 import lombok.AllArgsConstructor;
+import org.hibernate.HibernateException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import team2.spring.library.dao.interfaces.*;
@@ -14,7 +15,9 @@ import team2.spring.library.entities.Story;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 
 @Service
@@ -128,6 +131,47 @@ public class BookServiceImpl implements BookService {
       throw new ParseException("Input date is invalid, it's lower than ", 0);
     }
     return bookDao.getPopular(firstDate, secondDate);
+  }
+
+  /**
+   * Method to add new book into database
+   *
+   * @param bookDto
+   * @return id book
+   * @throws HibernateException
+   * @throws IllegalArgumentException
+   */
+  @Override
+  public int insert(BookDto bookDto) throws HibernateException, IllegalArgumentException {
+    Book book = new Book();
+    Author author = authorDao.findByName(bookDto.getAuthors());
+    Set<Author> authors = new HashSet<>();
+    Set<Book> books = new HashSet<>();
+    if (author != null) {
+      authors.add(author);
+      book.setAuthors(authors);
+      book.setTitle(bookDto.getTitle());
+      book.setId(bookDao.insert(book));
+    } else {
+      author.setBooks(books);
+      author.setName(bookDto.getAuthors());
+      author.setId(authorDao.insert(author));
+      authors.add(author);
+      book.setAuthors(authors);
+      book.setTitle(bookDto.getTitle());
+      book.setId(bookDao.insert(book));
+    }
+    books.add(book);
+    author.setBooks(books);
+    authorDao.update(author);
+
+    for (long i = 0; i < bookDto.getAvailable(); i++) {
+      Copy copy = new Copy();
+      copy.setBook(book);
+      copy.setAvailable(true);
+      copyDao.insert(copy);
+    }
+    return book.getId();
   }
 
   /**
