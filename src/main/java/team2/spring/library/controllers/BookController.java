@@ -248,4 +248,16 @@ public class BookController {
     }
     return "booksJsp/allBooks";
   }
+
+  @PostMapping("/updateBookForm")
+  public String updateBookForm(@ModelAttribute("bookDto") BookDto bookDto, Model model) {
+    model.addAttribute("bookDto", bookDto);
+    return "booksJsp/updateBook";
+  }
+
+  @PostMapping("/updateBook")
+  public String updateBook(@ModelAttribute("bookDto") BookDto bookDto, Model model) {
+    model.addAttribute("book", bookService.update(bookDto));
+    return "booksJsp/updateBook";
+  }
 }

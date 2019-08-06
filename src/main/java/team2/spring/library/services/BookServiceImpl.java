@@ -129,4 +129,16 @@ public class BookServiceImpl implements BookService {
     }
     return bookDao.getPopular(firstDate, secondDate);
   }
+
+  /**
+   * Update book title
+   *
+   * @param bookDto set new title in entity
+   * @return updated book
+   */
+  public Book update(BookDto bookDto) {
+    Book byId = bookDao.findById(bookDto.getId());
+    byId.setTitle(bookDto.getTitle());
+    return bookDao.update(byId);
+  }
 }
