@@ -63,4 +63,12 @@ public interface BookService {
    * @throws ParseException if date is not valid
    */
   TreeMap<Long, Book> getPopular(LocalDate firstDate, LocalDate secondDate) throws ParseException;
+
+  /**
+   * Update book title
+   *
+   * @param bookDto set new title in entity
+   * @return updated book
+   */
+  Book update(BookDto bookDto);
 }
