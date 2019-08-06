@@ -90,10 +90,12 @@ public class BookServiceImpl implements BookService {
   }
 
   /**
-   * Tries to delete a book by id.
+   * Deletes a book with given <code>id</code> from database.
    *
-   * @param id of the book.
+   * @param id of the book to delete.
    * @return list of the existed book after the deletion.
+   * @throws IllegalArgumentException if an book with the id is not exists.
+   * @throws DataIntegrityViolationException if an book with the id is not exists.
    */
   @Override
   public List<Book> deleteBook(int id)

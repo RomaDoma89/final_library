@@ -1,6 +1,7 @@
 package team2.spring.library.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import team2.spring.library.dto.GeneralStatisticDto;
 import team2.spring.library.dto.ReaderAvgDto;
+import team2.spring.library.dto.ReaderDto;
 import team2.spring.library.dto.ReaderStatisticDto;
 import team2.spring.library.services.ReaderService;
 
@@ -30,6 +32,7 @@ public class ReaderController {
   @GetMapping("/allReaders")
   public String getAllReaders(Model model) {
     model.addAttribute("listReader", readerService.getAllReaders());
+    model.addAttribute("readerDto", new ReaderDto());
     return "readersJsp/allReaders";
   }
 
@@ -129,5 +132,21 @@ public class ReaderController {
     model.addAttribute(
         "readerAvgDto", readerService.getBothAvg(readerAvgDto.getAuthor(), readerAvgDto.getBook()));
     return "readersJsp/readerAvg";
+  }
+
+  /**
+   * @param readerDto from page with input title form
+   * @param model set dto in jsp
+   * @return page with available book
+   */
+  @PostMapping("/deleteReader")
+  public String deleteBook(@Valid @ModelAttribute("readerDto") ReaderDto readerDto, Model model) {
+    try {
+      model.addAttribute("listReader", readerService.deleteReader(readerDto.getId()));
+    } catch (IllegalArgumentException | DataIntegrityViolationException e) {
+      model.addAttribute("listReader", readerService.getAllReaders());
+      return "readersJsp/allReaders";
+    }
+    return "readersJsp/allReaders";
   }
 }

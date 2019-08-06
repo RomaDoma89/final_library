@@ -28,11 +28,18 @@
             <td>${loop.index+1}</td>
             <td>${reader.name}</td>
             <td>${reader.birthday}</td>
+            <td><form:form action="deleteReader" method="post" modelAttribute="readerDto" cssStyle="text-align: start">
+                <input type="submit" value="Видалити"/>
+                <input type="hidden" name="name" value=${reader.name}/>
+                <input type="hidden" name="id" value=${reader.id}/>
+            </form:form></td>
         </tr>
     </c:forEach>
     </tbody>
 </table>
-
+<br>
+<h1><p style="color: #ff958e; text-align: center;">Увага! Операція "Видалити" призводить до видалення ВСІЄЇ інформації
+    про читачя та історію його звернень.</p></h1>
 
 </body>
 </html>
