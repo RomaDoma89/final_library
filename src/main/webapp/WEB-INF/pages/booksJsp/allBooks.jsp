@@ -23,7 +23,7 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="book" items="${listBook}" varStatus="loop">
+    <c:forEach var="book" items="${listBook}" varStatus="loop"  >
         <tr>
             <td>${loop.index+1}</td>
             <td>${book.title}</td>
@@ -32,6 +32,11 @@
                     ${author.name} /
                 </c:forEach>
             </td>
+            <td><form:form action="updateBookForm" method="post" modelAttribute="bookDto" cssStyle="text-align: start">
+                <input type="hidden" name="id" value=${book.id} />
+                <textarea hidden value="${book.title}" name="title">${book.title}</textarea>
+                <input type="submit" value="Оновити"/>
+            </form:form></td>
             <td><form:form action="deleteBook" method="post" modelAttribute="bookDto" cssStyle="text-align: start">
                 <input type="submit" value="Видалити"/>
                 <input type="hidden" name="title" value=${book.title} />

@@ -1,9 +1,11 @@
 package team2.spring.library.entities;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +20,6 @@ public class Book {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", unique = true, nullable = false)
   private int id;
-  @NotBlank
   @Column(name = "title", length = 225, unique = true, nullable = false)
   private String title;
 

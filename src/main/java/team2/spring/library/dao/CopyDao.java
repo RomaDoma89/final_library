@@ -72,6 +72,11 @@ public class CopyDao implements CopyDaoInfs {
     return (null == session.find(Copy.class, id));
   }
 
+  /**
+   * Finds all copies of the given book.
+   * @param book to find copies.
+   * @return list of the book copies.
+   */
   @Override
   public List<Copy> findByBook(Book book) {
     Session session = sessionFactory.getCurrentSession();

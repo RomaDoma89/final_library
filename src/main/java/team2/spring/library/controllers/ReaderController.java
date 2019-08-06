@@ -140,7 +140,7 @@ public class ReaderController {
    * @return page with available book
    */
   @PostMapping("/deleteReader")
-  public String deleteBook(@Valid @ModelAttribute("readerDto") ReaderDto readerDto, Model model) {
+  public String deleteBook(@ModelAttribute("readerDto") ReaderDto readerDto, Model model) {
     try {
       model.addAttribute("listReader", readerService.deleteReader(readerDto.getId()));
     } catch (IllegalArgumentException | DataIntegrityViolationException e) {

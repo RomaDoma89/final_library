@@ -74,4 +74,12 @@ public interface BookService {
    * @throws IllegalArgumentException
    */
   int insert(BookDto bookDto) throws HibernateException, IllegalArgumentException;
+
+  /**
+   * Update book title
+   *
+   * @param bookDto set new title in entity
+   * @return updated book
+   */
+  Book update(BookDto bookDto);
 }
