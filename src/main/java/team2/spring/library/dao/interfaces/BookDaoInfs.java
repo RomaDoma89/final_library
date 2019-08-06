@@ -13,6 +13,8 @@ public interface BookDaoInfs extends Dao<Book> {
 
   Book findByTitle(String title);
 
+  Book findById(int id);
+
   List<Book> findBooksByAuthor(Author author);
 
   long isBookAvailable(String title);
