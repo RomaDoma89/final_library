@@ -8,7 +8,7 @@
 
 <html>
 <head>
-    <title>Available book</title>
+    <title>Readers</title>
 </head>
 <body>
 <%@include file="../menu.jsp" %>
@@ -29,9 +29,8 @@
             <td>${reader.name}</td>
             <td>${reader.birthday}</td>
             <td><form:form action="deleteReader" method="post" modelAttribute="readerDto" cssStyle="text-align: start">
-                <input type="submit" value="Видалити"/>
-                <input type="hidden" name="name" value=${reader.name}/>
-                <input type="hidden" name="id" value=${reader.id}/>
+                <input type="submit" value="Видалити" />
+                <input type="hidden" name="id" value=${reader.id} />
             </form:form></td>
         </tr>
     </c:forEach>
