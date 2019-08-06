@@ -19,6 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *
+ */
 @Service
 @AllArgsConstructor
 public class ReaderServiceImpl implements ReaderService {
@@ -81,7 +84,12 @@ public class ReaderServiceImpl implements ReaderService {
     }
   }
 
-  /** @return statistics about average age of readers */
+
+  /**
+   * @param generalStatisticDto  retrieve GeneralStatisticDto with start and end of chosen  statistic period
+   * @return  GeneralStatisticDto with all  required  data
+   * @throws ParseException throw exception  that input date is  not correct
+   */
   public GeneralStatisticDto getGeneralStatisticDto(GeneralStatisticDto generalStatisticDto)
       throws ParseException {
     LocalDate localDateNow = LocalDate.now();

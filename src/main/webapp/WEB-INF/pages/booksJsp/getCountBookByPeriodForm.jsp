@@ -26,7 +26,7 @@
     <c:otherwise>
         <div style="text-align: center">
         <table class="simple-little-table" cellspacing='0' style="text-align: center; margin: auto; margin-top: 50px">
-            <p>З ${bookByPeriodDto.dateFrom} по ${bookByPeriodDto.dateTo} було  видано ${bookByPeriodDto.countOfBookByPeriod}</p>
+            <p style="color: gainsboro">З ${bookByPeriodDto.dateFrom} по ${bookByPeriodDto.dateTo} було  видано ${bookByPeriodDto.countOfBookByPeriod}</p>
         </table>
         </div>
     </c:otherwise>

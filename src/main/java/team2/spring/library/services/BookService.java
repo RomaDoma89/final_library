@@ -14,35 +14,55 @@ import java.util.List;
 import java.util.TreeMap;
 
 public interface BookService {
-  BookDto isBookAvailable(BookDto bookDto);
+    /**
+     * @param bookDto dto witch  contain  book title what is  looking for
+     * @return bookDto with information of available book status
+     */
+    BookDto isBookAvailable(BookDto bookDto);
 
-  List<Book> findAll();
+    /**
+     * @return List  with all  book  in library
+     */
+    List<Book> findAll();
 
-  List<Book> findBooksByAuthor(Author author);
+    /**
+     * @param author witch contain  name
+     * @return list  books written  by author
+     */
+    List<Book> findBooksByAuthor(Author author);
 
-  long getCountOfBookByPeriod(BookByPeriodDto bookByPeriodDto) throws ParseException;
+    /**
+     * @param bookByPeriodDto contain  two date   star  and end of period
+     * @return amount of ordered book  in library  by  chosen period
+     * @throws ParseException throw exception  that input date is  not correct
+     */
+    long getCountOfBookByPeriod(BookByPeriodDto bookByPeriodDto) throws ParseException;
 
-  BookStatisticDto getBookStatisticDto(BookStatisticDto bookStatisticDto);
+    /**
+     * @param bookStatisticDto contain book title
+     * @return return BookStatisticDto  with  statistic of  book
+     */
+    BookStatisticDto getBookStatisticDto(BookStatisticDto bookStatisticDto);
 
-  /**
-   * @param book object which need for searching copies
-   * @return List of copies
-   */
-  List<Copy> getCopiesInfo(Book book);
+    /**
+     * @param book object which need for searching copies
+     * @return List of copies
+     */
+    List<Copy> getCopiesInfo(Book book);
 
-  /**
-   * Tries to delete a book by id.
-   *
-   * @param id of the book.
-   * @return list of the existed book after the deletion.
-   */
-  List<Book> deleteBook(int id) throws IllegalArgumentException, DataIntegrityViolationException;
+    /**
+     * Tries to delete a book by id.
+     *
+     * @param id of the book.
+     * @return list of the existed book after the deletion.
+     */
+    List<Book> deleteBook(int id) throws IllegalArgumentException, DataIntegrityViolationException;
 
-  /**
-   * @param firstDate start date
-   * @param secondDate end date
-   * @return TreeMap<Long, Book>
-   * @throws ParseException if date is not valid
-   */
-  TreeMap<Long, Book> getPopular(LocalDate firstDate, LocalDate secondDate) throws ParseException;
+    /**
+     * @param firstDate  start date
+     * @param secondDate end date
+     * @return TreeMap<Long, Book>
+     * @throws ParseException if date is not valid
+     */
+    TreeMap<Long, Book> getPopular(LocalDate firstDate, LocalDate secondDate) throws ParseException;
 }
