@@ -20,7 +20,7 @@ public interface ReaderService {
 
   ReaderStatisticDto getUserStatistic(ReaderStatisticDto readerStatisticDto);
 
-  public GeneralStatisticDto getGeneralStatisticDto( GeneralStatisticDto generalStatisticDto)throws ParseException;
+  GeneralStatisticDto getGeneralStatisticDto( GeneralStatisticDto generalStatisticDto)throws ParseException;
 
   /**
    * @param author object which need for searching average age bu author

@@ -1,6 +1,7 @@
 package team2.spring.library.dao.interfaces;
 
 import org.hibernate.HibernateException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 
@@ -50,6 +51,8 @@ public interface Dao<E> {
    *
    * @param id of the entity to delete.
    * @return true if the entity was successfully deleted.
+   * @throws IllegalArgumentException if an entity with the id is not exists.
+   * @throws DataIntegrityViolationException if an entity with the id is not exists.
    */
-  boolean delete(int id);
+  boolean delete(int id) throws IllegalArgumentException, DataIntegrityViolationException;
 }

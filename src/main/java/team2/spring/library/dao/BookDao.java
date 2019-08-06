@@ -4,6 +4,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import team2.spring.library.dao.interfaces.BookDaoInfs;
@@ -79,7 +80,7 @@ public class BookDao implements BookDaoInfs {
    * @return true if the entity was successfully deleted.
    */
   @Override
-  public boolean delete(int id) {
+  public boolean delete(int id) throws IllegalArgumentException, DataIntegrityViolationException {
     Session session = sessionFactory.getCurrentSession();
     Book book = session.find(Book.class, id);
     session.delete(book);

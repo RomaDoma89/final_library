@@ -17,7 +17,7 @@ public class Copy {
   private int id;
 
   @ManyToOne
-  @JoinColumn(name = "book", nullable = false)
+  @JoinColumn(name = "book", nullable = false, updatable = false)
   private Book book;
 
   @Column(name = "available", columnDefinition = "BIT", length = 1)

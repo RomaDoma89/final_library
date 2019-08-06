@@ -1,15 +1,16 @@
 package team2.spring.library.services;
 
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import team2.spring.library.dao.interfaces.AuthorDaoInfs;
-import team2.spring.library.dao.interfaces.BookDaoInfs;
+import team2.spring.library.dao.interfaces.*;
 import team2.spring.library.dto.BookByPeriodDto;
 import team2.spring.library.dto.BookDto;
 import team2.spring.library.dto.BookStatisticDto;
 import team2.spring.library.entities.Author;
 import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Copy;
+import team2.spring.library.entities.Story;
 
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -19,8 +20,10 @@ import java.util.TreeMap;
 @Service
 @AllArgsConstructor
 public class BookServiceImpl implements BookService {
-  private AuthorDaoInfs authorDaoInfs;
-  private BookDaoInfs bookDaoInfs;
+  private AuthorDaoInfs authorDao;
+  private BookDaoInfs bookDao;
+  private StoryDaoInfs storyDao;
+  private CopyDaoInfs copyDao;
 
   /**
    * @param bookDto
@@ -28,14 +31,14 @@ public class BookServiceImpl implements BookService {
    */
   @Override
   public BookDto isBookAvailable(BookDto bookDto) {
-    bookDto.setAvailable(bookDaoInfs.isBookAvailable(bookDto.getTitle()));
+    bookDto.setAvailable(bookDao.isBookAvailable(bookDto.getTitle()));
     return bookDto;
   }
 
   /** @return */
   @Override
   public List<Book> findAll() {
-    return bookDaoInfs.findAll();
+    return bookDao.findAll();
   }
 
   /**
@@ -44,8 +47,8 @@ public class BookServiceImpl implements BookService {
    */
   @Override
   public List<Book> findBooksByAuthor(Author author) {
-    Author authorFromDao = authorDaoInfs.findByName(author.getName());
-    return bookDaoInfs.findBooksByAuthor(authorFromDao);
+    Author authorFromDao = authorDao.findByName(author.getName());
+    return bookDao.findBooksByAuthor(authorFromDao);
   }
 
   /**
@@ -59,7 +62,7 @@ public class BookServiceImpl implements BookService {
         || bookByPeriodDto.getDateFrom().compareTo(bookByPeriodDto.getDateTo()) == 0) {
       throw new ParseException("Date to is lower then date from ", 0);
     }
-     bookByPeriodDto.setCountOfBookByPeriod(bookDaoInfs.getCountOfBookByPeriod(bookByPeriodDto.getDateFrom(),bookByPeriodDto.getDateTo()));
+     bookByPeriodDto.setCountOfBookByPeriod(bookDao.getCountOfBookByPeriod(bookByPeriodDto.getDateFrom(),bookByPeriodDto.getDateTo()));
     return 0;
   }
 
@@ -70,11 +73,11 @@ public class BookServiceImpl implements BookService {
   @Override
   public BookStatisticDto getBookStatisticDto(BookStatisticDto bookStatisticDto) {
     bookStatisticDto.setGetAvgTimeOfUsage(
-        bookDaoInfs.getAvgTimeOfUsage(bookStatisticDto.getTitle()));
+        bookDao.getAvgTimeOfUsage(bookStatisticDto.getTitle()));
     bookStatisticDto.setGetUsageCountForCopies(
-        bookDaoInfs.getUsageCountForCopies(bookStatisticDto.getTitle()));
+        bookDao.getUsageCountForCopies(bookStatisticDto.getTitle()));
     bookStatisticDto.setTotalUsageCount(
-        bookDaoInfs.getTotalUsageCount(bookStatisticDto.getTitle()));
+        bookDao.getTotalUsageCount(bookStatisticDto.getTitle()));
     return bookStatisticDto;
   }
 
@@ -84,7 +87,24 @@ public class BookServiceImpl implements BookService {
    */
   @Override
   public List<Copy> getCopiesInfo(Book book) {
-    return bookDaoInfs.getCopiesInfo(book.getTitle());
+    return bookDao.getCopiesInfo(book.getTitle());
+  }
+
+  @Override
+  public List<Book> deleteBook(int id) throws IllegalArgumentException, DataIntegrityViolationException {
+    Book book = bookDao.findById(id);
+    if (null != book) {
+      List<Story> stories = storyDao.findByBook(book);
+      for (Story s : stories) {
+        storyDao.delete(s.getId());
+      }
+      List<Copy> copies = copyDao.findByBook(book);
+      for (Copy c : copies) {
+        copyDao.delete(c.getId());
+      }
+      bookDao.delete(id);
+    }
+    return bookDao.findAll();
   }
 
   /**
@@ -99,6 +119,6 @@ public class BookServiceImpl implements BookService {
     if (firstDate.compareTo(secondDate) > 0 || firstDate.compareTo(secondDate) == 0) {
       throw new ParseException("Input date is invalid, it's lower than ", 0);
     }
-    return bookDaoInfs.getPopular(firstDate, secondDate);
+    return bookDao.getPopular(firstDate, secondDate);
   }
 }

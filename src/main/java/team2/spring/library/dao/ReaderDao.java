@@ -4,6 +4,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 import team2.spring.library.dao.interfaces.ReaderDaoInfs;
 import team2.spring.library.entities.Book;
@@ -62,7 +63,7 @@ public class ReaderDao implements ReaderDaoInfs {
 
   /** {@inheritDoc} */
   @Override
-  public boolean delete(int id) {
+  public boolean delete(int id) throws IllegalArgumentException, DataIntegrityViolationException {
     Session session = sessionFactory.getCurrentSession();
     Reader reader = session.find(Reader.class, id);
     session.delete(reader);
