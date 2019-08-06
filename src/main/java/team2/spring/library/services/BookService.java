@@ -1,5 +1,6 @@
 package team2.spring.library.services;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import team2.spring.library.dto.BookByPeriodDto;
 import team2.spring.library.dto.BookDto;
 import team2.spring.library.dto.BookStatisticDto;
@@ -13,14 +14,32 @@ import java.util.List;
 import java.util.TreeMap;
 
 public interface BookService {
+  /**
+   * @param bookDto dto witch contain book title what is looking for
+   * @return bookDto with information of available book status
+   */
   BookDto isBookAvailable(BookDto bookDto);
 
+  /** @return List with all book in library */
   List<Book> findAll();
 
+  /**
+   * @param author witch contain name
+   * @return list books written by author
+   */
   List<Book> findBooksByAuthor(Author author);
 
+  /**
+   * @param bookByPeriodDto contain two date star and end of period
+   * @return amount of ordered book in library by chosen period
+   * @throws ParseException throw exception that input date is not correct
+   */
   long getCountOfBookByPeriod(BookByPeriodDto bookByPeriodDto) throws ParseException;
 
+  /**
+   * @param bookStatisticDto contain book title
+   * @return return BookStatisticDto with statistic of book
+   */
   BookStatisticDto getBookStatisticDto(BookStatisticDto bookStatisticDto);
 
   /**
@@ -28,6 +47,16 @@ public interface BookService {
    * @return List of copies
    */
   List<Copy> getCopiesInfo(Book book);
+
+  /**
+   * Tries to delete a book by id.
+   *
+   * @param id of the book.
+   * @return list of the existed book after the deletion.
+   * @throws IllegalArgumentException if an book with the id is not exists.
+   * @throws DataIntegrityViolationException if an book with the id is not exists.
+   */
+  List<Book> deleteBook(int id) throws IllegalArgumentException, DataIntegrityViolationException;
 
   /**
    * @param firstDate start date

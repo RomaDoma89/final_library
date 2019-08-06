@@ -19,15 +19,15 @@ public class Story {
   private int id;
 
   @ManyToOne
-  @JoinColumn(name = "reader", nullable = false)
+  @JoinColumn(name = "reader", nullable = false, updatable = false)
   private Reader reader;
 
   @ManyToOne
-  @JoinColumn(name = "copy", nullable = false)
+  @JoinColumn(name = "copy", nullable = false, updatable = false)
   private Copy copy;
 
   @ManyToOne
-  @JoinColumn(name = "book", nullable = false)
+  @JoinColumn(name = "book", nullable = false, updatable = false)
   private Book book;
 
   @Column(name = "time_take", nullable = false)

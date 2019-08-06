@@ -1,5 +1,6 @@
 package team2.spring.library.services;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import team2.spring.library.dto.GeneralStatisticDto;
 import team2.spring.library.dto.ReaderAvgDto;
 import team2.spring.library.dto.ReaderStatisticDto;
@@ -11,16 +12,45 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface ReaderService {
-
+  /**
+   * Finds all readers.
+   *
+   * @return list of the available readers.
+   */
   List<Reader> getAllReaders();
 
+  /**
+   * Finds a reader by given name.
+   *
+   * @param name of the reader.
+   * @return an object of the found reader.
+   */
   List<Reader> findByName(String name);
 
+  /**
+   * Method witch return black list if readers
+   *
+   * @return return black list of readers
+   */
   List<Reader> getBlackList();
 
+  /**
+   * Method witch return information about read book or not returned book or date of reader
+   * registration
+   *
+   * @param readerStatisticDto Name of reader and select with type of returned information
+   * @return Dto with certain information depends on select
+   */
   ReaderStatisticDto getUserStatistic(ReaderStatisticDto readerStatisticDto);
 
-  public GeneralStatisticDto getGeneralStatisticDto( GeneralStatisticDto generalStatisticDto)throws ParseException;
+  /**
+   * @param generalStatisticDto retrieve GeneralStatisticDto with start and end of chosen statistic
+   *     period
+   * @return GeneralStatisticDto with all required data
+   * @throws ParseException throw exception that input date is not correct
+   */
+  GeneralStatisticDto getGeneralStatisticDto(GeneralStatisticDto generalStatisticDto)
+      throws ParseException;
 
   /**
    * @param author object which need for searching average age bu author
@@ -31,7 +61,17 @@ public interface ReaderService {
   /**
    * @param author object which need for searching average age bu author
    * @param book object which need for searching average age bu author
-   * @return  ReaderAvgDto - object which contains average age by author and by book
+   * @return ReaderAvgDto - object which contains average age by author and by book
    */
   ReaderAvgDto getBothAvg(Author author, Book book);
+
+  /**
+   * Tries to delete a reader by id.
+   *
+   * @param id of the reader.
+   * @return list of the existed reader after the deletion.
+   * @throws IllegalArgumentException if a reader with the id is not exists.
+   * @throws DataIntegrityViolationException if a reader with the id is not exists.
+   */
+  List<Reader> deleteReader(int id) throws IllegalArgumentException, DataIntegrityViolationException;
 }

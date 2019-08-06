@@ -21,7 +21,7 @@ public class Author {
   @Column(name = "name", length = 100, unique = true, nullable = false)
   private String name;
 
-  @ManyToMany(cascade = {CascadeType.ALL}, mappedBy = "authors", fetch = FetchType.LAZY)
+  @ManyToMany(cascade = {CascadeType.REFRESH}, mappedBy = "authors", fetch = FetchType.LAZY)
   private Set<Book> books = new HashSet<>();
 
   public Author(String name) {

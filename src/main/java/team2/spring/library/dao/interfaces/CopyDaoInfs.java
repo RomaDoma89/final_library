@@ -1,5 +1,11 @@
 package team2.spring.library.dao.interfaces;
 
+import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Copy;
 
-public interface CopyDaoInfs extends Dao<Copy> {}
+import java.util.List;
+
+public interface CopyDaoInfs extends Dao<Copy> {
+
+  List<Copy> findByBook(Book book);
+}

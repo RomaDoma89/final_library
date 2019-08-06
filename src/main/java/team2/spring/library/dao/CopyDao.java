@@ -4,8 +4,10 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 import team2.spring.library.dao.interfaces.CopyDaoInfs;
+import team2.spring.library.entities.Book;
 import team2.spring.library.entities.Copy;
 
 import javax.transaction.Transactional;
@@ -63,10 +65,19 @@ public class CopyDao implements CopyDaoInfs {
 
   /** {@inheritDoc} */
   @Override
-  public boolean delete(int id) {
+  public boolean delete(int id) throws IllegalArgumentException, DataIntegrityViolationException {
     Session session = sessionFactory.getCurrentSession();
     Copy copy = session.find(Copy.class, id);
     session.delete(copy);
     return (null == session.find(Copy.class, id));
+  }
+
+  @Override
+  public List<Copy> findByBook(Book book) {
+    Session session = sessionFactory.getCurrentSession();
+    return session
+            .createQuery("SELECT c FROM Copy c WHERE c.book = :book", Copy.class)
+            .setParameter("book", book)
+            .list();
   }
 }
